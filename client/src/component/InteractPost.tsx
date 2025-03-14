@@ -28,7 +28,7 @@ const InteractPost = () => {
         color: '#94979a'
     })
     useEffect(() => {
-        console.log(currentEmoji)
+        
     }, [currentEmoji])
     const commenHandler = () => {
         setModalComment(true)
@@ -169,13 +169,13 @@ const InteractPost = () => {
             )}
             <div className="interact-post">
 
-                <div className="infomation-interact-post">
+                <div className="infomation-interact-post" style={{userSelect:'none'}}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 
                         <HomeItem img={LikePostEmoji} styleImg={{ height: '3.5vh', width: '3.5vh' }} styleContainer={{ marginBottom: '0' }} styleText={{ display: 'none' }}
 
                         />
-                        <p className="text-infomation-interact-post">sd</p>
+                        <p className="text-infomation-interact-post" >sd</p>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 

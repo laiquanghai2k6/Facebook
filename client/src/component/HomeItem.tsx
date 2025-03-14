@@ -14,7 +14,7 @@ interface HomeItemProps extends ButtonHTMLAttributes<HTMLDivElement>{
 }
 
 
-const HomeItem:React.FC<HomeItemProps> = ({children,className='',img,styleImg={height:'4vh',width:'5vh'},text,styleContainer,styleText,onClick}) => {
+const HomeItem:React.FC<HomeItemProps> = ({children,className='',img,styleImg={height:'4.5vh',width:'4.5vh'},text,styleContainer,styleText,onClick}) => {
     return (
         <div className={`left-home-items${className}`} style={styleContainer} onClick={onClick}>
             <img src={img} style={styleImg} />

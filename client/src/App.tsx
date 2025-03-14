@@ -12,6 +12,8 @@ import Video from './pages/Home/Video'
 import Shop from './pages/Home/Shop'
 import Group from './pages/Home/Group'
 import Game from './pages/Home/Game'
+import Profile from './pages/Home/Profile'
+import ProfileOther from './pages/Home/ProfileOther'
 function App() {
     
     
@@ -27,6 +29,9 @@ function App() {
       <Route path='/shop' element={<Shop />} />
       <Route path='/group' element={<Group />} />
       <Route path='/game' element={<Game />} />
+      <Route path='/profileOther' element={<ProfileOther />}/>
+
+      <Route path='/profile' element={<Profile />}/>
     </Routes>
     </div>
   )

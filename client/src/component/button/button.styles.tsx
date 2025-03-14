@@ -20,3 +20,13 @@ export const CreateButton = styled(BasicButton)`
     
     
 `
+export const CancelButton = styled(BasicButton)`
+    background-color:#3b3d3e;
+    width:30vh;
+    font-size:2.5vh;
+     &:hover {
+        background-color: #555759; 
+        
+    }
+    
+`

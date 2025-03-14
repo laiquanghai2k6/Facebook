@@ -9,7 +9,7 @@ const CloseButton:React.FC<CloseButtonProps> = ({...otherProps}) => {
     return ( 
         <img className="close-button" {...otherProps}
                         src={Close}
-                />
+        />
      );
 }
  

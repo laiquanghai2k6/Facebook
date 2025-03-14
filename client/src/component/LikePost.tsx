@@ -26,7 +26,10 @@ const LikePost:React.FC<LikePostProps> = ({emojiHandler,image,text,color,...othe
         <HomeItem {...other} className="-like" img={image} styleContainer={{ width: '100%', color:`${color}`, height: '6vh', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0' }} text={text} >
         <div className="emoji-appear">
             {EmojiArray.map((img,index)=>(
-             <EmojiPost img={img} style={{height: '5.5vh', width: '5.5vh'}} key={index} onClick={()=>emojiHandler(img)} />
+             <EmojiPost img={img} style={{height: '5.5vh', width: '5.5vh'}} key={index} onClick={(e)=>{
+                e.stopPropagation()
+                emojiHandler(img)
+             }} />
 
             ))}                       
         </div>
