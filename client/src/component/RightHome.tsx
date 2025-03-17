@@ -1,6 +1,10 @@
+import { User } from "../slices/userSlice";
 import UserImage from "./UserImage";
+type MidHomeProps = {
+    user:User
+}
 
-const RightHome = () => {
+const RightHome:React.FC<MidHomeProps> = ({user}) => {
     return (
         <div className="right-home">
             <p style={{ marginBottom: '2vh' }}>Người liên hệ</p>

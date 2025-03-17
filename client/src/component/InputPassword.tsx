@@ -1,6 +1,12 @@
-import { useState } from "react";
+import React, { ChangeEvent, ChangeEventHandler, InputHTMLAttributes, useState } from "react";
 import { FaRegEye ,FaRegEyeSlash } from "react-icons/fa";
-const InputPassword = () => {
+
+interface InputPasswordProps{
+    onChange:ChangeEventHandler<HTMLInputElement>
+    id:string
+}
+
+const InputPassword:React.FC<InputPasswordProps> = ({onChange,id}) => {
     const [isHidePassword,setIsHidePassword] = useState(true)
     const hidePasswordHandler = ()=>{
         setIsHidePassword(!isHidePassword)
@@ -8,7 +14,7 @@ const InputPassword = () => {
     return (  
         <div className="password-container">
 
-        <input className="login-input" type={isHidePassword ? "password" :"text"} />
+        <input className="login-input" id={id} type={isHidePassword ? "password" :"text"} onChange={onChange}  />
         {
             isHidePassword ? (
                 <FaRegEye className="eye-icon" onClick={hidePasswordHandler}/>

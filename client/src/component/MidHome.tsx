@@ -1,7 +1,11 @@
+import { User } from "../slices/userSlice";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
+type MidHomeProps={
+    user:User
+}
 
-const MidHome = () => {
+const MidHome:React.FC<MidHomeProps> = ({user}) => {
     return ( 
         <div className="mid-home">
             <CreatePost />

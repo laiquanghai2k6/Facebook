@@ -8,13 +8,25 @@ import FaVideo from '../assets/video.png'
 import FaStore from '../assets/market.png'
 import FaNewspaper from '../assets/feed.png'
 import HomeItem from "./HomeItem";
+import { User } from "../slices/userSlice";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../selector/userSelector";
+import DefaultImage from '../assets/default-image.png'
+import { useNavigate } from "react-router-dom";
+type LeftHomeProps={
+    user:User
+}
 
-const LeftHome = () => {
+
+const LeftHome:React.FC<LeftHomeProps> = () => {
+    const user = useSelector(selectUserInfo)
+    const navigate = useNavigate()
+    console.log(user)
     return (
         <div className="left-home">
             
-            <div className="left-home-items">
-                <UserImage height={'5vh'} width={'5vh'} />
+            <div className="left-home-items" onClick={()=>navigate('/profile')}>
+                <UserImage img={user.image == "" ? DefaultImage : user.image} height={'5vh'} width={'5vh'} />
                 <p className="left-home-text">Lại Quang Hải</p>
             </div>
             <HomeItem img={FaUsers} text="Bạn bè" styleContainer={{padding:'1vh 0'}} />

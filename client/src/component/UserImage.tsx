@@ -5,16 +5,17 @@ interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement>{
     width: number | string;
     height: number | string;
     minWidth?:number|string;
-    minHeight?:number|string
-    className?:string
+    minHeight?:number|string;
+    className?:string;
+    img?:string;
     
 }
 
-const UserImage = ({width,height,className='icon-round-background',minHeight,minWidth,children,...other}:UserImageProps) => {
+const UserImage = ({img=FacebookIcon,width,height,className='icon-round-background',minHeight,minWidth,children,...other}:UserImageProps) => {
     return ( 
         <div className={className}  style={{width:width,height:height,minHeight:minHeight,minWidth:minWidth}} {...other}>
 
-        <img src={FacebookIcon} style={{
+        <img src={img} style={{
             width: '115%',
             height: '115%',
             objectFit:'cover',

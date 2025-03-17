@@ -18,13 +18,14 @@ import Messenger from "./Messenger";
 import MessengerDown from "./MessengerDown";
 import Notification from "./Notification";
 import UserSetting from "./UserSetting";
+import { selectUserInfo } from "../selector/userSelector";
 const NavBar = () => {
     const [mesOpen,setMesOpen] = useState(false)
     const [notificationOpen,setNotificationOpen] = useState(false)
     const [userSettingOpen,setUserSettingOpen]=useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const user = useSelector(selectUserInfo)
     const currentNavigate = useSelector((state: RootState) => state.homeNavigate.currentHome)
     
     const NavigateHomeHandler = (e: string) => {

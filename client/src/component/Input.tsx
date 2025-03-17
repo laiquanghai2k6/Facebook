@@ -3,12 +3,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     type: React.HTMLInputTypeAttribute;
     className:string,
     style?:React.CSSProperties;
+    ref?:React.Ref<HTMLInputElement>
 }
 
-const Input:React.FC<InputProps> = ({className,type,style,...other}) => {
+const Input:React.FC<InputProps> = ({className,type,style,ref,...other}) => {
     return ( 
     <>
-    <input className={className} type={type} style={style} {...other} />
+    <input ref={ref} className={className} type={type} style={style} {...other} />
     </>
      );
 }
