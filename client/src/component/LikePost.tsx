@@ -23,10 +23,10 @@ interface LikePostProps extends ButtonHTMLAttributes<HTMLDivElement>{
 }
 const LikePost:React.FC<LikePostProps> = ({emojiHandler,image,text,color,...other}) => {
     return ( 
-        <HomeItem {...other} className="-like" img={image} styleContainer={{ width: '100%', color:`${color}`, height: '6vh', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0' }} text={text} >
+        <HomeItem {...other} className="-like" img={image} styleContainer={{ width: '100%', color:`${color}`, height: '3rem', justifyContent: 'center', cursor: 'pointer', gap: '0.25rem', marginBottom: '0' }} text={text} >
         <div className="emoji-appear">
             {EmojiArray.map((img,index)=>(
-             <EmojiPost img={img} style={{height: '5.5vh', width: '5.5vh'}} key={index} onClick={(e)=>{
+             <EmojiPost img={img} style={{height: '2.75rem', width: '2.75rem'}} key={index} onClick={(e)=>{
                 e.stopPropagation()
                 emojiHandler(img)
              }} />

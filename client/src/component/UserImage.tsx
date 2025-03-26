@@ -1,32 +1,62 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FacebookIcon from "../assets/FacebookIcon.png";
-
-interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement>{
+import Default from '../assets/angry.png'
+import "react-lazy-load-image-component/src/effects/blur.css";
+interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     width: number | string;
     height: number | string;
-    minWidth?:number|string;
-    minHeight?:number|string;
-    className?:string;
-    img?:string;
+    minWidth?: number | string;
+    minHeight?: number | string;
+    className?: string;
+    img?: string;
+
+}
+export const useLazyLoad = () => {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLImageElement |null>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // console.log('entry:',entry)
+                setIsVisible(entry.isIntersecting),
+            { threshold: 0.1 }
+            }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    return [ref, isVisible] as const;
+};
+const UserImage = ({ img, width, height, className = 'icon-round-background', minHeight, minWidth, children, ...other }: UserImageProps) => {
+    const [ref, isVisible] = useLazyLoad();
+    return (
+        <div className={className} style={{ width: width, height: height, minHeight: minHeight, minWidth: minWidth }} {...other}>
+            <img
+                ref={ref}
+                src={isVisible ? img : Default}
+                style={{
+                    width: '115%',
+                    height: '115%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    position: 'absolute',
+                    borderRadius: '50%',
+                    opacity: isVisible ? '1' : '0.5',
+                    transition: "opacity 0.3s"
+                }}
+                alt="Ảnh"
     
+
+            />
+            {children}
+        </div>
+    );
 }
 
-const UserImage = ({img=FacebookIcon,width,height,className='icon-round-background',minHeight,minWidth,children,...other}:UserImageProps) => {
-    return ( 
-        <div className={className}  style={{width:width,height:height,minHeight:minHeight,minWidth:minWidth}} {...other}>
-
-        <img src={img} style={{
-            width: '115%',
-            height: '115%',
-            objectFit:'cover',
-            display: 'block',
-            position:'absolute',
-            borderRadius:'50%',
-            
-        }} />
-        {children}
-    </div>
-     );
-}
- 
 export default UserImage;

@@ -7,34 +7,39 @@ import { selectUserInfo } from "../selector/userSelector";
 import { ChangeEvent, useState } from "react";
 import { requestUser } from "../service/service";
 import Spinner from "./Spinner";
+
+
 type TopProfileProps = {
 
 }
 
 const TopProfile = () => {
-    const [isLoading,setIsLoading] = useState(false)
+
     const user = useSelector(selectUserInfo)
     const dispatch = useDispatch()
+    const [loading,isLoading] = useState(false)
+
     const uploadBackground = async (e:ChangeEvent<HTMLInputElement>)=>{
         try{
 
             const data = new FormData()
             data.append('image',e.target.files?.[0] as File)
             data.append('userId',user._id)
-            setIsLoading(true)
+            isLoading(true)
             const response = await requestUser.post('/uploadBackgroundImage',data)
             dispatch(setUserBackground(response.data))
-            setIsLoading(false)
+            isLoading(false)
         }catch(e){
             alert('Tải ảnh không thành công')
         }
     }
     return (
         <div className="top-profile-container">
+            {loading && <Spinner />}
             <div className='top-profile-direct' >
                 <TopLeftProfile />
             </div>
-            {isLoading && <Spinner />}
+     
             <div className='top-profile-camera' onClick={(e)=>{
                 document.getElementById('upload-background')?.click()
             }}>

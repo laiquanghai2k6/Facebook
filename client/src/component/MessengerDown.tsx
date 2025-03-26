@@ -1,9 +1,8 @@
 import { User } from "../slices/userSlice";
 import MessengerDownCard from "./MessengerDownCard";
 type MessengerDownProps={
-    user:User
 }
-const MessengerDown:React.FC<MessengerDownProps> = ({user}) => {
+const MessengerDown:React.FC<MessengerDownProps> = () => {
     return (
         <div className="messenger-down-container">
             <MessengerDownCard keys={1}/>

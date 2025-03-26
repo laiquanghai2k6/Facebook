@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Profiler, useState } from 'react'
 
 import './App.css'
 import Login from './pages/Auth/Login'
@@ -15,16 +15,22 @@ import Game from './pages/Home/Game'
 import Profile from './pages/Home/Profile'
 import ProfileOther from './pages/Home/ProfileOther'
 import Video from './pages/Video/Video'
+
+
 function App() {
-    
+
     const user = useSelector((state:RootState)=>state.user.getUser)
     const isUser = user._id != ""
-  return (
+
+    return (
     <div className='container'>
-      
      {isUser && <NavBar /> }
+
+
     <Routes>
       <Route path='/' element={ <Login />}/>
+      <Route path='/login' element={ <Login />}/>
+
       <Route path='/register' element={<Register />} />
       <Route path='/home' element={isUser ? <Home /> :<Login /> } />
       <Route path='/video' element={isUser ? <Video /> : <Login />} />
@@ -35,8 +41,11 @@ function App() {
 
       <Route path='/profile' element={isUser ? <Profile /> : <Login />}/>
     </Routes>
+
     </div>
   )
 }
 
 export default App
+
+

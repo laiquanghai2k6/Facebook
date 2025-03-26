@@ -1,14 +1,29 @@
-const userModel = require('../Models/userModel')
+
+const userModel = require('../Models/userModel.js')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const sharp = require('sharp')
 const clientUrl = require('..')
 const { cloudinary } = require('../Cloud/clounary.js')
 const fs = require('fs')
-const { default: mongoose } = require('mongoose')
+
+const getUser = async (req,res)=>{
+    try{
+        const user = await userModel.findById(req.params.userId)
+        .select("firstName lastName image backgroundImage")
+        .lean()
+        if(!user) return res.status(400).json("Lỗi tìm người dùng")
+            return res.status(200).json(user)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json("Lỗi tìm người dùng")
+    }
+}
+
 const loginUser = async (req, res) => {
     const { email, password } = req.body
-    let user = await userModel.findOne({ email })
+    const user = await userModel.findOne({ email }).lean()
+    
     if (!user) return res.status(400).json('Người dùng không tồn tại')
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) return res.status(400).json('Sai mật khẩu')
@@ -44,7 +59,6 @@ const uploadUserImage = async (req, res) => {
         const currentUser = await userModel.findById(req.body.userId)
 
         const fileBuffer = await sharp(filePath)
-            .resize(500, 500)
             .toFormat('jpeg')
             .toBuffer();
 
@@ -70,13 +84,13 @@ const uploadUserBackground = async (req, res) => {
         const filePath = req.file.path
         const currentUser = await userModel.findById(req.body.userId)
         const fileBuffer = await sharp(filePath)
-            .resize(500, 500)
             .toFormat('jpeg')
             .toBuffer()
         await cloudinary.uploader.upload_stream({ folder: 'user_images' }, async (error, result) => {
             if(error) return res.status(400).json('Lỗi api cloudinary')
             fs.unlinkSync(req.file.path);
             currentUser.backgroundImage = result.secure_url
+            
             await currentUser.save()
             return res.status(200).json(result.secure_url)
         }).end(fileBuffer)
@@ -88,7 +102,38 @@ const uploadUserBackground = async (req, res) => {
 
 }
 
+const setUserBio = async (req,res)=>{
+    try{
+        console.log('in')
+        const currentUser = await userModel.findById(req.body.userId)
+        if(!currentUser) return res.status(400).json("Error")
+        currentUser.bio = req.body.bio
+        await currentUser.save()
+        return res.status(200).json()
+    }catch(e){
+        console.log(e)
+        return res.status(400).json()
+    }
+}
+const setUserProfileInfo = async (req,res)=>{
+    try{
+        
+        const currentUser = await userModel.findById(req.body.userId)
+        if(!currentUser) return res.status(400).json("Error")
+        const {live,from,relationship,birth,gender} = req.body
+        currentUser.live = live
+        currentUser.from = from
+        currentUser.relationship = relationship
+        currentUser.birth = birth
+        currentUser.gender = gender
+        await currentUser.save()
+        return res.status(200).json()
+    }catch(e){
+        console.log(e)
+        return res.status(400).json()
+    }
+}
 
 
 
-module.exports = { loginUser, registerUser, uploadUserImage,uploadUserBackground }
+module.exports = {getUser,setUserBio,setUserProfileInfo, loginUser, registerUser, uploadUserImage,uploadUserBackground }

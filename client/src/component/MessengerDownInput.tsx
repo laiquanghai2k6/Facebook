@@ -31,7 +31,7 @@ const MessengerDownInput:React.FC<MessengerDownInputProps> = ({keys}) => {
         <div className="messenger-down-card-input">
  
             <img src={Camera} className='messenger-down-icon-left'/>
-            <textarea rows={1}  id={`messenger-down-card-input-bar-${keys}`} className='messenger-down-card-input-bar' placeholder='Viết tin nhắn' />
+            <textarea spellCheck={false} rows={1}  id={`messenger-down-card-input-bar-${keys}`} className='messenger-down-card-input-bar' placeholder='Viết tin nhắn' />
             <img src={Send}  className='messenger-down-icon-right'  />
         </div>
      );

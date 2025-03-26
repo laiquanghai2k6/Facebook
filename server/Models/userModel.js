@@ -1,16 +1,9 @@
 
 const mongoose = require('mongoose')
 
-const postSchema = new mongoose.Schema({
-    image:{
-        type:String,
-    },
-    text:{
-        type:String
-    }
-},{
-    timestamps:true
-})
+
+
+
 
 const userSchema = new mongoose.Schema({
     lastName:{
@@ -46,18 +39,22 @@ const userSchema = new mongoose.Schema({
     live:{
         type:String,
         maxlength:100,
-        default:"",
+        default:"Chưa có",
     },
     from:{
         type:String,
         maxlength:100,
-        default:""
+        default:"Chưa có"
 
+    },
+    bio:{
+        type:String,
+        default:"",
     },
     relationship:{
         type:String,
         maxlength:100,
-        default:""
+        default:"Chưa có"
 
     },
     image:{
@@ -77,13 +74,15 @@ const userSchema = new mongoose.Schema({
         type:String,
         require:true
     },
-    post:{
-        type:[postSchema]
-    }
+    post:[{
+        type:mongoose.Schema.Types.ObjectId,ref:'Post'
+    }]
+
 
 })
 
 const userModel = mongoose.model("User",userSchema)
 
 module.exports = userModel
+
 

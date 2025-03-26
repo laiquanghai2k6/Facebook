@@ -5,17 +5,18 @@ import MidHome from "../../component/MidHome";
 import Notification from "../../component/Notification";
 import RightHome from "../../component/RightHome";
 import { RootState } from "../../store/store";
+import { useEffect } from "react";
 
 const Home = () => {
-     const currentUser = useSelector((state:RootState)=>state.user.getUser)
+
 
     return (
     <div className="home">
     
-         <LeftHome user={currentUser} />
-         <MidHome user={currentUser} />
-         <RightHome user={currentUser} />
-         <MessengerDown user={currentUser} />
+         <LeftHome  />
+         <MidHome  />
+         <RightHome  />
+         {/* <MessengerDown /> */}
          
     </div>
       );

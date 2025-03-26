@@ -11,6 +11,9 @@ export const BasicButton = styled.button`
     color:white;
     border:0px;
     cursor: pointer;
+    &:hover{
+    background-color:rgb(45, 126, 255);
+    }
     
 `
 export const CreateButton = styled(BasicButton)`

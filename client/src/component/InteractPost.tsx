@@ -11,15 +11,21 @@ import Haha from '../assets/haha.png'
 import Wow from '../assets/wow.png'
 import Sad from '../assets/sad.png'
 import Angry from '../assets/angry.png'
+import { PostType } from "../slices/postSlice";
 
 interface Emoji extends Object {
     currentEmojiString: string,
     text: string,
     color: string
 }
+type InteractPostProps = {
+    post:PostType
+    lengthComment:number |undefined
+}
 
 
-const InteractPost = () => {
+const InteractPost = ({post,lengthComment}:InteractPostProps) => {
+    
     const [modalComment, setModalComment] = useState(false)
     const [currentEmoji, setCurrentEmoji] = useState<string | null | undefined>(null)
     const [currentEmojiObject, setCurrentEmojiObject] = useState<Emoji>({
@@ -27,6 +33,46 @@ const InteractPost = () => {
         text: 'Thích',
         color: '#94979a'
     })
+   
+    const emoji = [
+        {
+            num:post.like.like,
+            emoji:'like',
+            image:LikePostEmoji
+        },
+        {
+            num:post.angry.angry,
+            emoji:'angry',
+            image:Angry
+        },
+        {
+            num:post.haha.haha,
+            emoji:'haha',
+            image:Haha
+        },
+        {
+            num:post.wow.wow,
+            emoji:'wow',
+            image:Wow
+        },
+        {
+            num:post.sad.sad,
+            emoji:'sad',
+            image:Sad
+        },
+        {
+            num:post.love.love,
+            emoji:'love',
+            image:Love
+        }
+    ]
+    const total = emoji.reduce((acc,item)=>{
+        return acc+item.num
+    },0)
+    emoji.sort((a,b)=>b?.num - a?.num)
+
+    
+
     useEffect(() => {
         
     }, [currentEmoji])
@@ -47,7 +93,6 @@ const InteractPost = () => {
             }, 1500);
         }
         if (currentEmojiObject.currentEmojiString == Like) {
-            console.log('vv')
             setCurrentEmojiObject((prev) => (
                 {
                     ...prev,
@@ -164,31 +209,33 @@ const InteractPost = () => {
     return (
         <>
             {modalComment && (
-                <ModalComment setModalComment={setModalComment} />
+                <ModalComment post={post} setModalComment={setModalComment} />
 
             )}
             <div className="interact-post">
 
                 <div className="infomation-interact-post" style={{userSelect:'none'}}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-
-                        <HomeItem img={LikePostEmoji} styleImg={{ height: '3.5vh', width: '3.5vh' }} styleContainer={{ marginBottom: '0' }} styleText={{ display: 'none' }}
-
-                        />
-                        <p className="text-infomation-interact-post" >sd</p>
+                        
+                    {emoji[0].num !=0 &&<HomeItem  className="-interact" img={emoji[0].image}   styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0', }} styleText={{ display: 'none' }} /> }
+                    {emoji[1].num!=0 && <HomeItem className="-interact"  img={emoji[1].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0',marginLeft:'-0.6rem' }} styleText={{ display: 'none' }}/>}   
+                    {emoji[2].num!=0 &&<HomeItem className="-interact"  img={ emoji[2].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0',marginLeft:'-0.6rem' }} styleText={{ display: 'none' }}/>}
+                        
+                         
+                        <p className="text-infomation-interact-post" >{total != 0 ? total : ""}</p>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:'0.25rem', marginBottom:'0.25rem' }}>
 
-                        <p className="text-infomation-interact-post">37 bình luận</p>
+                        <p  className="text-infomation-interact-post">{lengthComment} bình luận</p>
                     </div>
                 </div>
                 <div className="action-interact-post">
 
 
                     <LikePost color={currentEmojiObject.color} onClick={clickLikeHandler} emojiHandler={emojiHandler} image={currentEmojiObject.currentEmojiString} text={currentEmojiObject.text}  />
-                    <HomeItem onClick={commenHandler} img={Comment} styleContainer={{ width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0' }} text="Bình luận" />
+                    <HomeItem onClick={commenHandler} img={Comment} styleContainer={{ width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.25rem', marginBottom: '0' }} text="Bình luận" />
                     <HomeItem img={Share} styleContainer={{
-                        width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0'
+                        width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.25rem', marginBottom: '0'
 
                     }} text="Chia sẻ"
 

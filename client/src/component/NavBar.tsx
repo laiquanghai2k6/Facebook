@@ -18,6 +18,7 @@ import Messenger from "./Messenger";
 import MessengerDown from "./MessengerDown";
 import Notification from "./Notification";
 import UserSetting from "./UserSetting";
+import Default from '../assets/default-image.png'
 import { selectUserInfo } from "../selector/userSelector";
 const NavBar = () => {
     const [mesOpen,setMesOpen] = useState(false)
@@ -39,10 +40,10 @@ const NavBar = () => {
         <div className="navbar">
             <img src={FacebookIcon} alt="FacebookIcon" className="facebook-icon" style={{cursor:'pointer'}} />
             <Input type="text" className="home-input" placeholder="Search" />
-            <div className="home-icon-middle-container">
+            <div className="home-icon-middle-container" >
                 {currentNavigate == 'home' ? (
 
-                    <div className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }} >
+                    <div  className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }} >
 
                         <IoHomeOutline style={{ width: '15vh', height: '7vh' }}  />
                     </div>
@@ -120,21 +121,24 @@ const NavBar = () => {
                 {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting} />}
                 <div className="icon-round-background">
                     <div className="home-icon-right">
-                        <CgMenuGridO style={{ fontSize: '3.5vh' }} className="home-icon-right-mes4" />
+                        <CgMenuGridO style={{ fontSize: '2rem' }} className="home-icon-right-mes4" />
                     </div>
                 </div>
                 <div className="icon-round-background" onClick={()=>setMesOpen((prev)=>!prev)}>
-                    <div className="home-icon-right-mes" style={{width:'6vh'}} >
+                    <div className="home-icon-right-mes"  >
 
-                        <FaFacebookMessenger className="home-icon-right-mes2" />
+                        <FaFacebookMessenger style={{fontSize:'1.5rem'}} className="home-icon-right-mes2" />
                     </div>
                 </div>
                 <div className="icon-round-background" onClick={()=>setNotificationOpen((prev)=>!prev)}>
                     <div className="home-icon-right-noti">
-                        <IoIosNotifications style={{ fontSize: '3.5vh' }} className="home-icon-right-noti2" />
+                        <IoIosNotifications style={{ fontSize: '2rem' }} className="home-icon-right-noti2" />
                     </div>
                 </div>
-                <UserImage width={'5vh'} height={'5vh'} onClick={()=>setUserSettingOpen((prev)=>!prev)} />
+                <UserImage img={user.image == "" ? Default : user.image} width={'5vh'} height={'5vh'}
+                //  onClick={()=>setUserSettingOpen((prev)=>!prev)} 
+                onClick={()=>navigate('/profileOther')}
+                 />
 
 
             </div>

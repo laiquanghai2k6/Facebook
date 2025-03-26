@@ -9,6 +9,8 @@ import Error from "../../component/Error";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, User } from "../../slices/userSlice";
+import Spinner from "../../component/Spinner";
+;
 type loginData = {
     email:string,
     password:string,
@@ -20,6 +22,8 @@ const Login = ():JSX.Element => {
         password:'',
         error:''
     })
+    const [loading,isLoading] = useState(false)
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const navigateCreate = ()=>{
@@ -27,10 +31,13 @@ const Login = ():JSX.Element => {
     }
      const submitHandler = async ()=>{
         try{
-
+            isLoading(true)
+            console.log('loginData:',loginData)
             const {data} = await requestUser.post('/login',loginData)
             dispatch(setUser(data as User))
             setLoginData((prev)=>({...prev,error:''}))
+            isLoading(false)
+
             navigate('/home')
         }catch(e:unknown){
             if(axios.isAxiosError(e)){
@@ -40,6 +47,7 @@ const Login = ():JSX.Element => {
      }
     return (
      <div className="login">
+        {loading && <Spinner />}
         <div className="text-login-container">
         <h1 className="facebook-text-login" style={{fontWeight:'900'}}>facebook</h1>
         <br />
@@ -54,10 +62,10 @@ const Login = ():JSX.Element => {
                  />
                 <InputPassword  id="password-login" onChange={(e)=>setLoginData((prev)=>({...prev,password:e.target.value}))} />
                 {loginData.error != '' && <Error text={loginData.error} />}
-                <FacebookButton ButtonType={BUTTON_TYPE.basic} type='submit' isLoading={false} text="Log in" onClick={submitHandler}/>
-                <h4 style={{color:'#0866ff',fontWeight:'400' ,marginTop:'3vh',cursor: 'pointer'}}> Forgotten password?</h4>
+                <FacebookButton ButtonType={BUTTON_TYPE.basic} type='submit' isLoading={false} text="Đăng nhập" onClick={submitHandler}/>
+                <h4 style={{color:'#0866ff',fontWeight:'400' ,marginTop:'3vh',cursor: 'pointer'}}> Quên mật khẩu?</h4>
                 <hr style={{marginTop:'3vh' ,border: "0.5px solid #dadde1", width: "90%"}}></hr>
-                <FacebookButton onClick={navigateCreate} ButtonType={BUTTON_TYPE.create} style={{marginTop:'1vh'}} isLoading={false} text="Create new account"/>
+                <FacebookButton onClick={navigateCreate} ButtonType={BUTTON_TYPE.create} style={{marginTop:'1vh'}} isLoading={false} text="Tạo tài khoản mới"/>
                 
 
             </div>

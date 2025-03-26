@@ -8,8 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestUser } from "../service/service";
 import { setUserImage } from "../slices/userSlice";
 import Spinner from "./Spinner";
+
+
 const TopLeftProfile = ()=>{
-    const [isLoading,setIsLoading] = useState(false)
+    const [loading,isLoading] = useState(false)
+
     const user = useSelector(selectUserInfo)
     const dispatch = useDispatch()
     const openSetImage = ()=>{
@@ -22,10 +25,10 @@ const TopLeftProfile = ()=>{
             const formData = new FormData()
             formData.append('userId',user._id)
             formData.append('image',e?.target?.files?.[0] as File)
-            setIsLoading(true)
+            isLoading(true)
             const response = await requestUser.post('/uploadUserImage',formData)
             dispatch(setUserImage(response.data))
-            setIsLoading(false)
+            isLoading(false)
 
         }catch(e:any){
             alert(e.response.data)
@@ -35,8 +38,8 @@ const TopLeftProfile = ()=>{
 
     return (
         <div className='top-left-profile'>
-            {isLoading && <Spinner />}
-            <div className='icon-round-background' style={{ width: '20vh', height: '20vh', }}>
+            {loading && <Spinner />}
+            <div className='icon-round-background' style={{ width: '20vh', height: '20vh' }}>
 
                 <img src={user.image == "" ? DefaultImage : user.image} style={{
                     width: '115%',
