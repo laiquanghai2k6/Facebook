@@ -22,7 +22,7 @@ const CreatePost = ({setCreatePostModal}:CreatePostProps) => {
            
             <div style={{display:'flex',flexDirection:'row'}}>
                 <UserImage img={user.image == "" ? Default : user.image} width={'2.5rem'} height={'2.5rem'} />
-                <Input value="" type="text" className="home-input" style={{flex:'1',marginLeft:'1rem'}} height={'3.5rem'} placeholder={`${user.firstName} ${user.lastName} ơi, bạn đang nghĩ gì`}/>
+                <Input  defaultValue="" type="text" className="home-input" style={{flex:'1',marginLeft:'1rem'}} height={'3.5rem'} placeholder={`${user.firstName} ${user.lastName} ơi, bạn đang nghĩ gì`}/>
             </div>
             <Hr style={{marginTop:'0.5rem'}}/>
             <div style={{display:'flex',flexDirection:'row',justifyContent:'space-around',marginTop:'0.25rem'}}>

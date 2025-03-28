@@ -24,7 +24,7 @@ export const commentSlice = createSlice({
     initialState:initialComment,
     reducers:{
         setComment:(state,action:PayloadAction<CommentType>)=>{
-            state.comments.unshift(action.payload)
+            state.comments = [action.payload,...state.comments]
         }
     }
 })

@@ -220,7 +220,7 @@ const InteractPostComment = ({lengthComment,post}:InteractPostCommentProps) => {
                          
                         <p className="text-infomation-interact-post" >{total != 0 ? total : ""}</p>
                     </div>
-                    <div style={{ display: 'flex',marginTop:'0.5vh',marginBottom:'0.5vh', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{ display: 'flex',marginTop:'0.25rem',marginBottom:'0.25rem', flexDirection: 'row', alignItems: 'center' }}>
 
                         <p className="text-infomation-interact-post">{lengthComment} bình luận</p>
                     </div>
@@ -229,9 +229,9 @@ const InteractPostComment = ({lengthComment,post}:InteractPostCommentProps) => {
 
 
                     <LikePost color={currentEmojiObject.color} onClick={clickLikeHandler} emojiHandler={emojiHandler} image={currentEmojiObject.currentEmojiString} text={currentEmojiObject.text}  />
-                    <HomeItem  img={Comment} styleContainer={{ width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0' }} text="Bình luận" />
+                    <HomeItem  img={Comment} styleContainer={{ width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.25rem', marginBottom: '0' }} text="Bình luận" />
                     <HomeItem img={Share} styleContainer={{
-                        width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.5vh', marginBottom: '0'
+                        width: '100%', color: '#94979a', justifyContent: 'center', cursor: 'pointer', gap: '0.25rem', marginBottom: '0'
 
                     }} text="Chia sẻ"
 

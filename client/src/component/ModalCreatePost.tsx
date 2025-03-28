@@ -67,6 +67,7 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
         video.onloadeddata = () => {
             video.currentTime = 0.1;
         };
+        let imageURL =""
         video.oncanplay = () => {
             const canvas = document.createElement('canvas')
             canvas.width = video.videoWidth;
@@ -75,9 +76,8 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
             if (ctx) {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 canvas.toBlob((blob) => {
-                    const imageURL = URL.createObjectURL(blob as Blob);
+                     imageURL = URL.createObjectURL(blob as Blob);
                     setCurrentImage(imageURL);
-                     window.URL.revokeObjectURL(imageURL)
                 }, 'image/png');
                 setIsMedia(true)
                 setCurrentFile(file)
@@ -86,6 +86,9 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
         video.onerror = () => {
             alert("Lỗi tải video. Hãy thử lại với file khác.");
         };
+        return ()=>{
+            window.URL.revokeObjectURL(imageURL)
+        }
     }
     const CreatePostWithImage=async(content:string)=>{
         try{
@@ -104,7 +107,7 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
     }
     const CreatePostWithVideo = async(content:string)=>{
         try{
-
+            console.log('userId:',user._id)
             const data = new FormData()
             data.append('userId', user._id)
             data.append('video', currentFile as File)
@@ -313,6 +316,7 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
  
         }
     }
+    console.log(currentImage)
     return (
         <div className="modal-create-post-container">
             {(videoMutation.isPending || imageMutation.isPending||nomarlMutation.isPending) && <Spinner />}

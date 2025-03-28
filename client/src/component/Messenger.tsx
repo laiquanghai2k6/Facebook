@@ -12,7 +12,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
         const handleClickOutside = (event: MouseEvent) => {
             const svgElement = (event.target as Element).closest("svg")
             if (messengerRef.current) {
-              console.log(svgElement?.classList)
+         
                 if (!messengerRef.current.contains(event.target as Node) && (event.target as HTMLElement).className!="home-icon-right-mes"&&svgElement?.classList[0]!="home-icon-right-mes2") {
                     closeMessenger();
 
@@ -30,10 +30,9 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
 
 
         <div className="messenger" ref={messengerRef}>
-            <p style={{ color: 'white', fontWeight: 'bold', fontSize: '3vh' }}>Đoạn chat</p>
-            <Input className={'home-input'} type="text" style={{ width: '45vh', margin: '2vh 2.5vh 2vh 2.5vh', fontSize: '2vh' }} placeholder="Tìm kiếm trên messenger" />
+            <p style={{ color: 'white', fontWeight: 'bold', fontSize: '1.5rem' }}>Đoạn chat</p>
+            <Input className={'home-input'} type="text" style={{ width: '22.5rem', margin: '1rem 1.25rem 1rem 1.25rem', fontSize: '1rem' }} placeholder="Tìm kiếm trên messenger" />
             <div className="messenger-card-container">
-
                 <MessengerCard />
                 <MessengerCard />
                 <MessengerCard />

@@ -106,15 +106,15 @@ const Register = () => {
         <div className="register-container">
             {loading && <Spinner />}
             <div className="register">
-                <p style={{ color: '#0866ff', fontWeight: '800', fontSize: '9vh', paddingBottom: '5vh' }}>facebook</p>
+                <p style={{ color: '#0866ff', fontWeight: '800', fontSize: '4.5rem', paddingBottom: '2.5rem' }}>facebook</p>
                 <div className="register-form">
-                    <h2 style={{ marginTop: '3vh' }}>Tạo tài khoản mới</h2>
-                    <hr style={{ width: '100%', border: '0.2px solid #dadde1', marginTop: '1.5vh' }} />
+                    <h2 style={{ marginTop: '1.5rem' }}>Tạo tài khoản mới</h2>
+                    <hr style={{ width: '100%', border: '0.2px solid #dadde1', marginTop: '0.75rem' }} />
                     <div className="register-name">
-                        <Input tabIndex={1} className="login-input" onChange={(e) => changeRegisterInfo('firstName', e.target.value)} type="text" style={{ width: '30vh' }} placeholder="Họ" />
-                        <Input tabIndex={2}  className="login-input" onChange={(e) => changeRegisterInfo('lastName', e.target.value)} type="text" style={{ width: '30vh' }} placeholder="Tên" />
+                        <Input tabIndex={1} className="login-input" onChange={(e) => changeRegisterInfo('firstName', e.target.value)} type="text" style={{ width: '15rem' }} placeholder="Họ" />
+                        <Input tabIndex={2}  className="login-input" onChange={(e) => changeRegisterInfo('lastName', e.target.value)} type="text" style={{ width: '15rem' }} placeholder="Tên" />
                     </div>
-                    <p style={{ alignSelf: 'flex-start', marginLeft: '2vh', fontSize: '2.5vh' }}>
+                    <p style={{ alignSelf: 'flex-start', marginLeft: '1rem', fontSize: '1.25rem' }}>
                         Ngày sinh
                     </p>
                     <div className="date-container">
@@ -122,16 +122,22 @@ const Register = () => {
                         <Select tabIndex={4}  month={true} value={registerInfo.month} type="month" onHandler={changeRegisterInfo} length={130} start={2025} />
                         <Select tabIndex={5}  value={registerInfo.year} onHandler={changeRegisterInfo} type="year" length={130} start={2025} />
                     </div>
-                    <p style={{ alignSelf: 'flex-start', marginLeft: '2vh', fontSize: '2.5vh' }}>
+                    <p style={{ alignSelf: 'flex-start', marginLeft: '1rem', fontSize: '1.25rem' }}>
                         Giới tính
                     </p>
                     <div className="gender-container">
-                        <label tabIndex={6} className="label-gender-register">Nữ<Input value='Nữ' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '2vh', margin: '0 1vh' }} /></label>
-                        <label tabIndex={7} className="label-gender-register">Nam<Input value='Nam' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '2vh', margin: '0 1vh' }} /></label>
-                        <label tabIndex={8} className="label-gender-register">Tùy chỉnh<Input value='Tùy chọn' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '2vh', margin: '0 1vh' }} /></label>
+                        <label tabIndex={6} className="label-gender-register">Nữ<Input value='Nữ' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '1rem', margin: '0 0.5rem' }} /></label>
+                        <label tabIndex={7} className="label-gender-register">Nam<Input value='Nam' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '1rem', margin: '0 0.5rem' }} /></label>
+                        <label tabIndex={8} className="label-gender-register">Tùy chỉnh<Input value='Tùy chọn' onChange={(e) => changeRegisterInfo('gender', e.target.value)} className="register-gender" type="radio" name="gender" style={{ width: '1rem', margin: '0 0.5rem' }} /></label>
                     </div>
-                    <Input tabIndex={9}  type="email" onChange={(e) => changeRegisterInfo('email', e.target.value)} className="login-input" style={{ height: '5vh', width: '57vh', marginTop: '3vh' }} placeholder="Tài khoản email" />
-                    <Input tabIndex={10}  type="password" onChange={(e) => changeRegisterInfo('password', e.target.value)} className="login-input" style={{ height: '5vh', width: '57vh', marginBottom: '2vh' }} placeholder="Mật khẩu mới" />
+                    <div style={{padding:'0 1rem',width:'100%'}}>
+
+                    <Input tabIndex={9}  type="email" onChange={(e) => changeRegisterInfo('email', e.target.value)} className="login-input" style={{ height: '2.5rem', width:'100%', marginTop: '1.5rem' }} placeholder="Tài khoản email" />
+                    </div>
+                    <div style={{padding:'0 1rem',width:'100%'}}>
+                    <Input tabIndex={10}  type="password" onChange={(e) => changeRegisterInfo('password', e.target.value)} className="login-input" style={{ height: '2.5rem', width: '100%', marginBottom: '1rem' }} placeholder="Mật khẩu mới" />
+                    </div>
+                  
                     {error && <Error text={error} />}
                     {isFull ? (
 

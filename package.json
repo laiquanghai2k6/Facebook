@@ -13,6 +13,7 @@
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
     "sharp": "^0.33.5",
+    "socket.io": "^4.8.1",
     "styled-components": "^6.1.15",
     "validator": "^13.12.0"
   },

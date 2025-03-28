@@ -10,36 +10,41 @@ import VideoPost from "./VideoPost";
 import { CommentType } from "../slices/commentSlice";
 import { requestComment } from "../service/service";
 import Spinner from "./Spinner";
-import {useQuery} from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import LoadingPost from "./LoadingPost";
 
-interface PostProps extends HTMLAttributes<HTMLDivElement>{
-   post:PostType,
+interface PostProps extends HTMLAttributes<HTMLDivElement> {
+    post: PostType,
 
 }
-const fetchCommentLength = async (postId:string) => {
+export const fetchCommentLength = async (postId: string) => {
     const response = await requestComment.get(`/getLengthCommentOfPost/${postId}`);
     return response.data;
 };
-const Post:React.FC<PostProps>=({ post }) => {
+const Post: React.FC<PostProps> = ({ post }) => {
 
-    const {data,isLoading} = useQuery({
-        queryKey:['posts',post._id],
-        queryFn:()=>fetchCommentLength(post._id)
+    const { data, isLoading } = useQuery({
+        queryKey: ['posts', post?._id],
+        queryFn: () => fetchCommentLength(post?._id)
     })
 
     return (
-         <div className="post-container">
-        
-            {isLoading && <LoadingPost />}
-            <UserPost userId={post.userId} time={post.createdAt}/>
-            <TextPost  text={post.text} />
-            {post.video!="" && <VideoPost src={post.video} />}
-            {post.image !="" && <ImagePost img={post.image}/>}
-            <InteractPost lengthComment={data} post={post} />
-        </div>
-     
-      );
+        <>
+            {isLoading || !post ? <LoadingPost />
+                : (
+
+                    <div className="post-container">
+                        <UserPost userId={post.userId} time={post.createdAt} />
+                        <TextPost text={post.text} />
+                        {post.video != "" && <VideoPost src={post.video} />}
+                        {post.image != "" && <ImagePost img={post.image} />}
+                        <InteractPost isModal={true} type="own" lengthComment={data} post={post} />
+                    </div>
+
+                )
+            }
+        </>
+    );
 }
- 
+
 export default Post;

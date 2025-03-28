@@ -38,75 +38,78 @@ const NavBar = () => {
     const closeUserSetting = useCallback(()=>setUserSettingOpen(false),[])
     return (
         <div className="navbar">
+            <div style={{display:'flex',flexDirection:'row',alignItems:'center',width:'21vw'}}>
+
             <img src={FacebookIcon} alt="FacebookIcon" className="facebook-icon" style={{cursor:'pointer'}} />
             <Input type="text" className="home-input" placeholder="Search" />
+            </div>
             <div className="home-icon-middle-container" >
                 {currentNavigate == 'home' ? (
 
-                    <div  className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }} >
+                    <div  className="home-icon-middle-blue"  >
 
-                        <IoHomeOutline style={{ width: '15vh', height: '7vh' }}  />
+                        <IoHomeOutline style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
                 ) : (
                     <div className="home-icon-middle" onClick={() => NavigateHomeHandler('home')}>
 
-                        <IoHomeOutline style={{ width: '15vh', height: '7vh' }} />
+                        <IoHomeOutline style={{ width: '7.5rem', height: '3.5rem' }} />
                     </div>
 
                 )
                 }
                 {currentNavigate == 'video' ? (
-                    <div className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }}  >
+                    <div className="home-icon-middle" style={{ borderBottom: '0.25ren solid #0866ff',color:'#0866ff' }}  >
 
-                        <LuTvMinimalPlay style={{ width: '15vh', height: '7vh' }} />
+                        <LuTvMinimalPlay style={{ width: '7.5rem', height: '3.5rem' }} />
                     </div>
 
                 ) : (
                     <div className="home-icon-middle" onClick={() => NavigateHomeHandler('video')} >
 
-                        <LuTvMinimalPlay style={{ width: '15vh', height: '7vh' }}  />
+                        <LuTvMinimalPlay style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
                 )
                 }
                 {currentNavigate == 'shop' ? (
-                    <div className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }} >
+                    <div className="home-icon-middle" style={{ borderBottom: '0.25ren solid #0866ff',color:'#0866ff' }} >
 
-                        <CiShop style={{ width: '15vh', height: '7vh' }} />
+                        <CiShop style={{ width: '7.5rem', height: '3.5rem' }} />
                     </div>
                 ) : (
                     <div className="home-icon-middle"  onClick={() => NavigateHomeHandler('shop')}>
 
-                        <CiShop style={{ width: '15vh', height: '7vh' }} />
+                        <CiShop style={{ width: '7.5rem', height: '3.5rem' }} />
                     </div>
                 )
                 }
                 {currentNavigate == 'group' ? (
-                    <div className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }}  >
+                    <div className="home-icon-middle" style={{ borderBottom: '0.25ren solid #0866ff',color:'#0866ff' }}  >
 
-                        <MdGroups style={{ width: '15vh', height: '7vh' }}  />
+                        <MdGroups style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
                 ) : (
                     <div className="home-icon-middle"  onClick={() => NavigateHomeHandler('group')}>
 
-                        <MdGroups style={{ width: '15vh', height: '7vh' }}  />
+                        <MdGroups style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
                 )
                 }
                 {currentNavigate == 'game' ? (
-                    <div className="home-icon-middle" style={{ borderBottom: '0.5vh solid #0866ff',color:'#0866ff' }}>
+                    <div className="home-icon-middle" style={{ borderBottom: '0.25ren solid #0866ff',color:'#0866ff' }}>
 
-                        <IoGameControllerOutline style={{ width: '15vh', height: '7vh' }}  />
+                        <IoGameControllerOutline style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
 
                 ) : (
                     <div className="home-icon-middle" onClick={() => NavigateHomeHandler('game')}>
 
-                        <IoGameControllerOutline style={{ width: '15vh', height: '7vh' }}  />
+                        <IoGameControllerOutline style={{ width: '7.5rem', height: '3.5rem' }}  />
                     </div>
 
                 )
@@ -135,9 +138,9 @@ const NavBar = () => {
                         <IoIosNotifications style={{ fontSize: '2rem' }} className="home-icon-right-noti2" />
                     </div>
                 </div>
-                <UserImage img={user.image == "" ? Default : user.image} width={'5vh'} height={'5vh'}
-                //  onClick={()=>setUserSettingOpen((prev)=>!prev)} 
-                onClick={()=>navigate('/profileOther')}
+                <UserImage img={user.image == "" ? Default : user.image} width={'2.5rem'} height={'2.5rem'}
+                 onClick={()=>setUserSettingOpen((prev)=>!prev)} 
+                // onClick={()=>navigate('/profileOther')}
                  />
 
 

@@ -8,11 +8,9 @@ import { useEffect } from "react";
 
 
 const Profile = () => {
+    console.log(3)
     const dispatch = useDispatch()
-    useEffect(()=>{
-
-        dispatch(navigateHome(""))
-    },[])
+ 
     return ( 
         <div className="profile">
             <NavProfile />

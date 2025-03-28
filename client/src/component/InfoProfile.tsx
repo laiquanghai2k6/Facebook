@@ -46,30 +46,30 @@ const InfoProfile = () => {
         <div className="infor-profile-container">
             {isInfo && <ModalInfo closeInfo={closeInfo} />}
             {loading && <Spinner />}
-            <p style={{ userSelect: 'none', color: 'white', fontSize: '3vh', fontWeight: 'bold' }}>Giới thiệu</p>
-            <p style={{ userSelect: 'none', color: 'white', fontSize: '2vh', alignSelf: 'center', marginTop: '0.5vh', marginBottom: '0.5vh' }}>{bio}</p>
+            <p style={{ userSelect: 'none', color: 'white', fontSize: '1.5rem', fontWeight: 'bold' }}>Giới thiệu</p>
+            <p style={{ userSelect: 'none', color: 'white', fontSize: '1rem', alignSelf: 'center', marginTop: '0.25rem', marginBottom: '0.25rem' }}>{bio}</p>
 
             {isBio ? (
                 <>
-                    <textarea spellCheck={false} onChange={(e) => setBioInput(e.target.value)} style={{ height: '10vh', borderRadius: '1vh', border: 'none', backgroundColor: '#333334', color: 'white', outline: 'none', wordWrap: 'break-word', resize: 'none', padding: '1vh', userSelect: 'none' }} />
-                    <div style={{ display: 'flex', marginTop: '1vh', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                    <textarea spellCheck={false} onChange={(e) => setBioInput(e.target.value)} style={{ height: '5rem', borderRadius: '0.5rem', border: 'none', backgroundColor: '#333334', color: 'white', outline: 'none', wordWrap: 'break-word', resize: 'none', padding: '0.5rem', userSelect: 'none' }} />
+                    <div style={{ display: 'flex', marginTop: '0.5rem', flexDirection: 'row', justifyContent: 'flex-end' }}>
 
-                        <FacebookButton onClick={() => setIsBio(false)} style={{ width: '15vh', height: '4vh', marginRight: '2vh', fontSize: '2vh' }} ButtonType={BUTTON_TYPE.cancel} text="Hủy" />
-                        <FacebookButton onClick={() => setUserBio()} style={{ width: '15vh', height: '4vh', fontSize: '2vh' }} ButtonType={BUTTON_TYPE.basic} text="Lưu" />
+                        <FacebookButton onClick={() => setIsBio(false)} style={{ width: '7.5rem', height: '2rem', marginRight: '1rem', fontSize: '1rem' }} ButtonType={BUTTON_TYPE.cancel} text="Hủy" />
+                        <FacebookButton onClick={() => setUserBio()} style={{ width: '7.5rem', height: '2rem', fontSize: '1rem' }} ButtonType={BUTTON_TYPE.basic} text="Lưu" />
                     </div>
 
                 </>
             ) : (
 
-                <FacebookButton onClick={() => setIsBio(true)} ButtonType={BUTTON_TYPE.cancel} text="Thêm tiểu sử" isLoading={false} style={{ height: '4.5vh', fontSize: '2vh', width: '100%', marginTop: '2vh' }} />
+                <FacebookButton onClick={() => setIsBio(true)} ButtonType={BUTTON_TYPE.cancel} text="Thêm tiểu sử" isLoading={false} style={{ height: '2.25rem', fontSize: '1rem', width: '100%', marginTop: '1rem' }} />
             )}
-            <HomeItem img={HomeBio} text={profileInfo.live == "Chưa có" ? "Chưa có" : `Sống tại ${profileInfo.live}`} styleText={{ color: 'white' }} styleContainer={{ marginTop: '1vh' }} styleImg={{ width: '3vh', height: '3vh' }} />
-            <HomeItem img={GPS} text={profileInfo.from == "Chưa có" ? "Chưa có" : `Đến từ ${profileInfo.from}`} styleText={{ color: 'white' }} styleContainer={{ marginTop: '1vh' }} styleImg={{ width: '3vh', height: '3vh' }} />
-            <HomeItem img={Heart} text={profileInfo.relationship == "Chưa có" ? "Chưa có" : profileInfo.relationship} styleText={{ color: 'white' }} styleContainer={{ marginTop: '1vh' }} styleImg={{ width: '3vh', height: '3vh' }} />
-            <HomeItem img={Calendar} text={profileInfo.birth} styleText={{ color: 'white' }} styleContainer={{ marginTop: '1vh' }} styleImg={{ width: '3vh', height: '3vh' }} />
-            <HomeItem img={Gender} text={profileInfo.gender} styleText={{ color: 'white' }} styleContainer={{ marginTop: '1vh' }} styleImg={{ width: '3vh', height: '3vh' }} />
+            <HomeItem img={HomeBio} text={profileInfo.live == "Chưa có" ? "Chưa có" : `Sống tại ${profileInfo.live}`} styleText={{ color: 'white' }} styleContainer={{ marginTop: '0.5rem' }} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
+            <HomeItem img={GPS} text={profileInfo.from == "Chưa có" ? "Chưa có" : `Đến từ ${profileInfo.from}`} styleText={{ color: 'white' }} styleContainer={{ marginTop: '0.5rem' }} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
+            <HomeItem img={Heart} text={profileInfo.relationship == "Chưa có" ? "Chưa có" : profileInfo.relationship} styleText={{ color: 'white' }} styleContainer={{ marginTop: '0.5rem' }} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
+            <HomeItem img={Calendar} text={profileInfo.birth} styleText={{ color: 'white' }} styleContainer={{ marginTop: '0.5rem' }} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
+            <HomeItem img={Gender} text={profileInfo.gender} styleText={{ color: 'white' }} styleContainer={{ marginTop: '0.5rem' }} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
 
-            <FacebookButton onClick={() => setIsInfo(true)} ButtonType={BUTTON_TYPE.cancel} text="Chỉnh sửa chi tiết" isLoading={false} style={{ height: '4.5vh', fontSize: '2vh', width: '100%', marginTop: '2vh' }} />
+            <FacebookButton onClick={() => setIsInfo(true)} ButtonType={BUTTON_TYPE.cancel} text="Chỉnh sửa chi tiết" isLoading={false} style={{ height: '2.25rem', fontSize: '1rem', width: '100%', marginTop: '1rem' }} />
 
         </div>
     );

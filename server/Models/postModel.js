@@ -63,7 +63,18 @@ const postSchema = new mongoose.Schema({
         default:"",
         require:true
     },
-
+    textShare:{
+        type:String,
+        default:"",
+    },
+    createdOrigin:{
+        type:String,
+        default:"",
+    },
+    userIdShare:{
+        type:String,
+        default:"",
+    },
     video:{
         type:String,
         default:"",

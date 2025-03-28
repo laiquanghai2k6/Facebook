@@ -6,7 +6,7 @@ import ModalCreatePost from "./ModalCreatePost";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { requestPost } from "../service/service";
-import { PostType } from "../slices/postSlice";
+import { PostShareType, PostType } from "../slices/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
@@ -14,11 +14,12 @@ import { Virtuoso } from 'react-virtuoso';
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import LoadingPost from "./LoadingPost";
+import PostShare from "./PostShare";
 type MidHomeProps = {
 
 }
-type PostRequest = {
-    post:Array<PostType>
+export type PostRequest = {
+    post:Array<PostType|PostShareType>
     hasMore:boolean
     page:number
 }
@@ -48,10 +49,8 @@ const MidHome: React.FC<MidHomeProps> = () => {
 
     const {
         data,
-        isLoading,
         fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage
+        hasNextPage
     } =useInfiniteQuery({
         queryKey:['posts'],
         queryFn:fetchAllPost,
@@ -64,11 +63,12 @@ const MidHome: React.FC<MidHomeProps> = () => {
 
     const lastElementRef = useCallback((node:HTMLDivElement |null) => {
         if (!hasNextPage && observer.current) observer.current.disconnect();
-        console.log('node',node)
           observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasNextPage) {
               fetchNextPage();
             }
+          },{
+            rootMargin:'-300px'
           });
     
           if (node) observer.current.observe(node);
@@ -79,7 +79,6 @@ const MidHome: React.FC<MidHomeProps> = () => {
         <div className="mid-home" >
             {createPostModal && <ModalCreatePost setCreatePostModal={modalClose} />}
             <CreatePost setCreatePostModal={modalOpen} />
-
             {/* <Virtuoso
                 style={{
                     scrollbarWidth:'none',
@@ -95,23 +94,34 @@ const MidHome: React.FC<MidHomeProps> = () => {
 
             <div className="post-list-container">
                 {storePost.map((post, index) => {
+                    if(post.type == "own")
                     return (
                         <Post key={index} post={post} />
+                    )
+                    else return (
+                        <PostShare key={index} post={post as PostShareType} />
                     )
                 })}
             </div>
             <div className="post-list-container">
                 {data?.pages.map((pages)=>{
                     return(
-                        pages?.post.map((post,index)=>(
-                            <Post post={post} key={index} />
-                        ))
+                        pages?.post.map((post,index)=>
+                        {
+                            if(post.type == "own")
+                                return (
+                                    <Post key={index} post={post} />
+                                )
+                                else return (
+                                    <PostShare key={index} post={post as PostShareType} />
+                                )
+                        })
                     )
                 })}
               
             </div>
 
-            <div ref={lastElementRef} style={{ height: "20px",color:'#1c1c1d' }} >lastElement</div>
+            <div ref={lastElementRef} style={{ height: "1px",color:'#1c1c1d' }} >lastElement</div>
             {(hasNextPage) && <LoadingPost />}
             {/* <LoadingPost /> */}
             

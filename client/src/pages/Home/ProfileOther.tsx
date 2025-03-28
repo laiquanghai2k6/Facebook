@@ -12,7 +12,7 @@ const ProfileOther = () => {
     },[])
     return ( 
         <div className="profile">
-            <NavProfile />
+            <NavProfile type="other" />
             
             <BodyProfileOther />
         </div>

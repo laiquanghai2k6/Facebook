@@ -48,7 +48,7 @@ const createPostWithImage = async (req,res)=>{
 }
 const createPostWithVideo = async (req,res)=>{
     try{
-        const user = await userModel.findById('req.body.userId')
+        const user = await userModel.findById(req.body.userId)
         if(!user) return res.status(400).json("Không thấy người dùng")
         const filePath = req.file.path
         const {userId,text,type} = req.body
@@ -96,14 +96,127 @@ const getAllPost = async (req,res)=>{
 }
 const getPostOfOneUser = async (req,res)=>{
     try{
-        const user = await userModel.findById(req.body.userId).lean()
+        const {userId,page,limit} = req.query
+        const user = await userModel.findById(userId).lean()
         if(!user) return res.status(400).json('Không tìm thấy user')
-        const userPost = await postModel.find({userId:req.body.userId}).lean()
-        return res.status(200).json(userPost)
+        const length = await postModel.countDocuments({userId:userId})
+        const userPost = await postModel.find({userId:userId})
+        .sort({createdAt:-1})
+        .skip((page-1)*10)
+        .limit(limit)
+        .lean()
+
+        return res.status(200).json({
+            hasMore:page*limit < length,
+            page:parseInt(page),
+            post:userPost
+        })
     }catch(e){
         console.log(e)
         return res.status(500).json('loi:',e)
     }
 }
+const getVideo = async(req,res)=>{
+    try{
+        const {limit,page} = req.query
+        const skip = (page-1)*10
+        const countDocumentVideos = await postModel.countDocuments({video:{$ne:""}})
+        const response = await postModel.find({video:{$ne:""}})
+        .sort({createdAt:-1})
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        
+        return res.status(200).json({
+            hasMore:page*limit < countDocumentVideos,
+            page:parseInt(page),
+            post:response
+        })
 
-module.exports = {createPost,getPostOfOneUser,createPostWithImage,createPostWithVideo,getAllPost}
+    }catch(e){
+        console.log(e)
+        return res.status(500).json(e)
+    }
+}
+const createPostShare = async (req,res)=>{
+    try{
+
+        const {type,video,image,text,textShare,createdOrigin,userId,userIdShare} = req.body
+        const user = await userModel.findById(userId).lean()
+        const userShare = await userModel.findById(userIdShare).lean()
+   
+        if(!user || !userShare) return res.status(400).json('Không tìm thấy user')
+        const newPostShared = new postModel({
+            type,
+            video,
+            image,
+            text,
+            textShare,
+            createdOrigin,
+            userId,
+            userIdShare,
+
+        })
+        await newPostShared.save()
+        return res.status(200).json(newPostShared)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json("Lỗi")
+    }
+}
+
+
+const updateEmoji = async (req,res)=>{
+    try{
+        const {postId,emoji,isInc,userId} = req.body
+        let updatePost
+        if(isInc){
+            const isLiked = await postModel.findOne({
+                _id:postId,
+                [`${emoji}.userId`]:userId
+            })
+            if(isLiked) return res.status(500).json('Người dùng đã like')
+
+             updatePost = await postModel.findOneAndUpdate(
+                {
+                    _id:postId
+                },{
+                    $inc:{[`${emoji}.${emoji}`]: 1 },
+                    $addToSet:{[`${emoji}.userId`]:userId}
+                },
+                {
+                    new:true
+                }
+            )
+        }else{
+            const isLiked = await postModel.findOne({
+                _id:postId,
+                [`${emoji}.userId`]:userId
+            })
+            if(!isLiked) return res.status(500).json('Người dùng chưa like')
+
+             updatePost = await postModel.findOneAndUpdate(
+                {
+                    _id:postId
+                },{
+                    $inc:{[`${emoji}.${emoji}`]: -1 },
+                    $pull:{[`${emoji}.userId`]:userId}
+                },
+                {
+                    new:true
+                }
+            )
+            
+        }
+        console.log(updatePost)
+        return res.status(200).json(updatePost)
+
+      
+    
+    }catch(e){
+        console.log("Lỗi emoji")
+        return res.status(500).json(e)
+    }
+}
+
+module.exports = {updateEmoji,getVideo,createPost,createPostShare,getPostOfOneUser,createPostWithImage,createPostWithVideo,getAllPost}

@@ -10,7 +10,7 @@ import MidProfileOther from './MidProfileOther';
 const BodyProfileOther = () => {
     return (
         <div className="body-profile">
-         <TopProfileOther />
+        <TopProfileOther />
         <MidProfileOther />
         </div>
     );

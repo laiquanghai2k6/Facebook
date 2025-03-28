@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import FacebookIcon from "../assets/FacebookIcon.png";
-import Default from '../assets/angry.png'
+import Default from '../assets/default-image.png'
 import "react-lazy-load-image-component/src/effects/blur.css";
 interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     width: number | string;
@@ -18,7 +18,7 @@ export const useLazyLoad = () => {
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // console.log('entry:',entry)
+                
                 setIsVisible(entry.isIntersecting),
             { threshold: 0.1 }
             }
@@ -39,7 +39,7 @@ const UserImage = ({ img, width, height, className = 'icon-round-background', mi
         <div className={className} style={{ width: width, height: height, minHeight: minHeight, minWidth: minWidth }} {...other}>
             <img
                 ref={ref}
-                src={isVisible ? img : Default}
+                src={(isVisible && img ) ? img : Default}
                 style={{
                     width: '115%',
                     height: '115%',

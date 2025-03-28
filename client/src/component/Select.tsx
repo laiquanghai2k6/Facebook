@@ -15,7 +15,7 @@ const Months = [
 
 const Select: React.FC<SelectProps> = ({ value,type, onHandler, month = false, length, start, ...other }) => {
     return (
-        <select value={value} onChange={(e) => onHandler(type,e.target.value)} className="login-input" style={{width:'17vh',height:'5vh',marginBottom:'0',padding:'0'}}  {...other}>
+        <select value={value} onChange={(e) => onHandler(type,e.target.value)} className="login-input" style={{maxWidth:'8.5rem',height:'2.5rem',marginBottom:'0',padding:'0'}}  {...other}>
 
             {!month ? Array.from({ length: length }, (_, i) => start - i).map((val) => (
                 <option key={val} value={val}>

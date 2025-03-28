@@ -17,6 +17,7 @@ import InteractPostComment from "./InteractPostComment";
 import CommentInputReply from "./CommentInputReply";
 import { UserInfo } from "../slices/userSlice";
 import { useQuery } from "@tanstack/react-query";
+import InteractPost from "./InteractPost";
 interface ModalCommentProps {
     setModalComment: Function
     post:PostType
@@ -78,11 +79,15 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
                 
                 <CommentList setUserReply={setUserReply} setParentComment={setParentComment} openCommentReplyInput={openCommentReplyInput} currentComment={data} post={post} />
                 {commentReply ?(
-                  
+                  <>
                     <CommentInputReply  closeCommentReplyInput={closeCommentReplyInput} parentId={parentId} userReply={userReply} post={post} />
+         
+                  </>
                 ):(
-                 
+                 <>
                     <CommentInput setLoading={setLoad}   post={post} />
+                    
+                 </>
                 )}
 
             </div>

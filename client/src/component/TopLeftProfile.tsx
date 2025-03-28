@@ -8,9 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestUser } from "../service/service";
 import { setUserImage } from "../slices/userSlice";
 import Spinner from "./Spinner";
+type TopLeftProfileProps={
+    type?:string
+}
 
-
-const TopLeftProfile = ()=>{
+const TopLeftProfile = ({type="own"}:TopLeftProfileProps)=>{
     const [loading,isLoading] = useState(false)
 
     const user = useSelector(selectUserInfo)
@@ -39,7 +41,7 @@ const TopLeftProfile = ()=>{
     return (
         <div className='top-left-profile'>
             {loading && <Spinner />}
-            <div className='icon-round-background' style={{ width: '20vh', height: '20vh' }}>
+            <div className='icon-round-background' style={{ width: '10rem', height: '10rem' }}>
 
                 <img src={user.image == "" ? DefaultImage : user.image} style={{
                     width: '115%',
@@ -50,18 +52,21 @@ const TopLeftProfile = ()=>{
                     borderRadius: '50%',
 
                 }} />
-                <div onClick={openSetImage} style={{position:'absolute',right:'15%',bottom:'10%',backgroundColor:'white',height:'3.5vh',width:'3.5vh',borderRadius:'1vh'}}>
-                    <img src={Camera} style={{ width: '3.2vh', height: '3.2vh', }} />
+                {type == "own" &&(
+
+                <div onClick={openSetImage} style={{position:'absolute',right:'15%',bottom:'10%',backgroundColor:'white',height:'1.75rem',width:'1.75rem',borderRadius:'0.5rem'}}>
+                    <img src={Camera} style={{ width: '1.6rem', height: '1.6rem', }} />
                 </div>
+                )}
                 
                 <input onChange={(e)=>uploadImage(e)} type="file" id="input-file-profile" style={{ display: 'none' }} />
 
             </div>
             {/* <UserImage height={'20vh'} width={'20vh'} /> */}
             <div className='top-profile-right-image'>
-                <p style={{ fontSize: '3.5vh', color: 'white', fontWeight: 'bold' }}>Lai Quang Hai</p>
-                <p style={{ fontSize: '2vh', color: '#a2aeb8' }}>636 Người bạn</p>
-                <div style={{ display: 'flex', flexDirection: 'row', marginTop: '1vh' }}>
+                <p style={{ fontSize: '1.75rem', color: 'white', fontWeight: 'bold' }}>Lai Quang Hai</p>
+                <p style={{ fontSize: '1rem', color: '#a2aeb8' }}>636 Người bạn</p>
+                <div style={{ display: 'flex', flexDirection: 'row', marginTop: '0.5rem' }}>
                     <ImageChain img={DefaultImage} />
                     <ImageChain img={DefaultImage} />
                     <ImageChain img={DefaultImage} />

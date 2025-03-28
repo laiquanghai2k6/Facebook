@@ -7,10 +7,10 @@ const VideoCard = () => {
     console.log('from video')
     return (
         <div className="video-card">
-            <UserPost />
+            {/* <UserPost />
             <TextPost />
             <Media />
-            <InteractPost />
+            <InteractPost /> */}
             
 
 

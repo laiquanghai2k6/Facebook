@@ -1,4 +1,4 @@
-import { Profiler, useState } from 'react'
+import { Profiler, useEffect, useState } from 'react'
 
 import './App.css'
 import Login from './pages/Auth/Login'
@@ -15,18 +15,37 @@ import Game from './pages/Home/Game'
 import Profile from './pages/Home/Profile'
 import ProfileOther from './pages/Home/ProfileOther'
 import Video from './pages/Video/Video'
-
+import ScrollToTop from './component/ScrollToTop'
+import {io, Socket} from 'socket.io-client'
+import { socket } from './socket'
 
 function App() {
 
     const user = useSelector((state:RootState)=>state.user.getUser)
     const isUser = user._id != ""
-
+    useEffect(()=>{
+    const isUserSocket = user._id != ""
+      
+      if(isUserSocket){
+        socket.connect()
+        socket.on("connect", () => {
+          console.log(`✅ Connected to WebSocket server with ID: ${user._id}`);
+        });
+        socket.emit('getCurrentUserId',user._id)
+      }
+      return ()=>{
+        if(socket){
+          socket.emit("userLeave", user._id);
+          socket.disconnect()
+        }
+      }
+    },[user])
+    
     return (
     <div className='container'>
      {isUser && <NavBar /> }
 
-
+      <ScrollToTop />
     <Routes>
       <Route path='/' element={ <Login />}/>
       <Route path='/login' element={ <Login />}/>

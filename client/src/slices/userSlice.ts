@@ -46,6 +46,7 @@ export type UserLive ={
     gender:string
 }
 export type UserInfo = {
+    _id:string,
     lastName:string,
     firstName:string,
     image:string,
