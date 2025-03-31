@@ -32,7 +32,7 @@ const LeftHome:React.FC<LeftHomeProps> = () => {
                 navigate('/profile')
                 }}>
                 <UserImage img={user.image == "" ? DefaultImage : user.image} height={'2.5rem'} width={'2.5rem'} />
-                <p className="left-home-text">{`${user.firstName} ${user.lastName}`}</p>
+                <p className="left-home-text">{`${user.name}`}</p>
             </div>
             <HomeItem img={FaUsers} text="Bạn bè" styleContainer={{padding:'0.5rem 0'}} />
             <HomeItem img={FaClock} text="Kỷ niệm" styleContainer={{padding:'0.5rem 0'}}/>

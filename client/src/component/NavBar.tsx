@@ -11,7 +11,7 @@ import { IoIosNotifications } from "react-icons/io";
 import UserImage from "./UserImage";
 import { useDispatch, useSelector } from "react-redux";
 import { navigateHome } from '../slices/homeNavigateSlice'
-import React, { useCallback, useState } from "react";
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../store/store";
 import Messenger from "./Messenger";
@@ -20,28 +20,88 @@ import Notification from "./Notification";
 import UserSetting from "./UserSetting";
 import Default from '../assets/default-image.png'
 import { selectUserInfo } from "../selector/userSelector";
+import { useQuery } from "@tanstack/react-query";
+import { requestUser } from "../service/service";
+import DropdownSearch from "./DropdownSearch";
+
+export const debounce = (callback:Function,delay:number)=>{
+    let time: NodeJS.Timeout | undefined = undefined
+    return (value:string)=>{
+        clearTimeout(time)
+        time = setTimeout(()=>callback(value),delay)
+    }
+}
+
 const NavBar = () => {
     const [mesOpen,setMesOpen] = useState(false)
     const [notificationOpen,setNotificationOpen] = useState(false)
     const [userSettingOpen,setUserSettingOpen]=useState(false)
+    const [dropdownSearch,setDropdownSearch] = useState(false)
+    const [fetchSearch,setFetchSearch] = useState({
+        text:"",
+        data:[],
+    })
+    const [isPending, startTransition] = useTransition();
+    
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(selectUserInfo)
     const currentNavigate = useSelector((state: RootState) => state.homeNavigate.currentHome)
-    
     const NavigateHomeHandler = (e: string) => {
         dispatch(navigateHome(e))
         navigate(`/${e}`)
     }
+ 
+    const FetchUser = async (value:string)=>{
+        try{
+            if(value != ""){
+
+                const response = await requestUser.get(`/searchUser?name=${value}`)
+                setFetchSearch((prev)=>({...prev,data:response.data}))
+            }
+        }catch(e){
+            console.log(e)
+            alert('Lỗi tìm người dùng')
+        }
+    }
+    
+    const FetchUserSearch = useMemo(()=>{
+        return debounce(FetchUser,500)
+    },[])
     const closeMessage = useCallback(()=>setMesOpen(false),[])
     const closeNotification = useCallback(()=>setNotificationOpen(false),[])
     const closeUserSetting = useCallback(()=>setUserSettingOpen(false),[])
+    useEffect(()=>{
+        
+    
+        if(dropdownSearch){
+            document.addEventListener('click',function (event){
+                const id = (event.target as HTMLElement).className
+                if(id != "dropdown-search-container"){
+                    setDropdownSearch(false)
+                }
+                
+            })
+
+        }
+    },[dropdownSearch])
     return (
         <div className="navbar">
+            {dropdownSearch && <DropdownSearch isPending={isPending} user={fetchSearch.data} />}
             <div style={{display:'flex',flexDirection:'row',alignItems:'center',width:'21vw'}}>
 
             <img src={FacebookIcon} alt="FacebookIcon" className="facebook-icon" style={{cursor:'pointer'}} />
-            <Input type="text" className="home-input" placeholder="Search" />
+            <Input style={{width:'14rem'}} value={fetchSearch.text} onChange={(e)=>
+                {   
+                    if(e.target.value != "") setDropdownSearch(true)
+                    else setDropdownSearch(false)
+                    setFetchSearch((prev)=>({...prev,text:e.target.value}))
+                    startTransition(()=>{
+                        FetchUserSearch(e.target.value)
+
+                    })
+                    }} type="text" className="home-input" placeholder="Search" />
             </div>
             <div className="home-icon-middle-container" >
                 {currentNavigate == 'home' ? (

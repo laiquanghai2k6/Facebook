@@ -326,9 +326,9 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
                 <CloseButton onClick={() => setCreatePostModal()} />
                 <div className="left-home-items" style={{ width: '20vh' }} onClick={() => navigate('/profile')}>
                     <UserImage img={user.image == "" ? DefaultImage : user.image} height={'5vh'} width={'5vh'} />
-                    <p className="left-home-text">{`${user.firstName} ${user.lastName}`}</p>
+                    <p className="left-home-text">{`${user.name}`}</p>
                 </div>
-                <textarea ref={contentRef} spellCheck={false} className="create-post-input" style={{ height: '10vh' }} id="text-comment-input" rows={1} placeholder={`${user.firstName} ${user.lastName} ơi, bạn đang nghĩ gì`}></textarea>
+                <textarea ref={contentRef} spellCheck={false} className="create-post-input" style={{ height: '10vh' }} id="text-comment-input" rows={1} placeholder={`${user.name} ơi, bạn đang nghĩ gì`}></textarea>
                 <div className="create-post-image" onClick={() => {
                     document.getElementById('input-create-post')?.click()
 

@@ -7,11 +7,15 @@ import FacebookButton, { BUTTON_TYPE } from './button/FacebookButton';
 import TopLeftProfile from './TopLeftProfile';
 import TopProfileOther from './TopProfileOther';
 import MidProfileOther from './MidProfileOther';
-const BodyProfileOther = () => {
+import { User, UserInfo } from '../slices/userSlice';
+type BodyProfileOtherProp ={
+    user:User
+}
+const BodyProfileOther = ({user}:BodyProfileOtherProp) => {
     return (
         <div className="body-profile">
-        <TopProfileOther />
-        <MidProfileOther />
+        <TopProfileOther user={user}/>
+        <MidProfileOther user={user} />
         </div>
     );
 }

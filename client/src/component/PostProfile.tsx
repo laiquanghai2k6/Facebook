@@ -9,11 +9,11 @@ import { PostRequest } from "./MidHome";
 import PostShare from "./PostShare";
 
 type PostProfileProps = {
-    currentUser:UserInfo
+    currentUser:string
 }
 
 const PostProfile = ({currentUser}:PostProfileProps) => {
-    console.log(currentUser)
+
     const observer = useRef<IntersectionObserver | null>(null)
 
 
@@ -21,6 +21,7 @@ const PostProfile = ({currentUser}:PostProfileProps) => {
         
         try{
             const limit = 10
+            console.log('userId:',userId)
             const response = await requestPost.get(`/getPostOfOneUser?userId=${userId}&page=${pageParam}&limit=${limit}`)
             return response.data as PostRequest
         }catch(e){
@@ -30,8 +31,8 @@ const PostProfile = ({currentUser}:PostProfileProps) => {
     }
 
     const {data,fetchNextPage,hasNextPage} = useInfiniteQuery({
-        queryKey:['post:',currentUser._id],
-        queryFn:({pageParam})=>getPostOfUser(currentUser._id,pageParam),
+        queryKey:['post:',currentUser],
+        queryFn:({pageParam})=>getPostOfUser(currentUser,pageParam),
         initialPageParam:1,
         getNextPageParam:(lastPage)=>{
             return lastPage?.hasMore ? lastPage.page+1 :undefined
@@ -52,13 +53,16 @@ const PostProfile = ({currentUser}:PostProfileProps) => {
 
     },[hasNextPage])
     
-    console.log(data)
+
     return (
         
 
         <div className="post-profile-container">
-
-         {data?.pages.map((pages)=>{
+        
+         {data?.pages.map((pages,i)=>{
+                    if(i == 0 && pages?.post.length == 0) return(
+                        <p style={{fontWeight:'bold',color:'white',fontSize:'2rem',alignSelf:'center'}}>Chưa có bài viết nào</p>
+                    )
                     return(
                         pages?.post.map((post,index)=>
                         {

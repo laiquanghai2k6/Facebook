@@ -83,7 +83,7 @@ const ModalShare = ({post,setModalShare,type}:ModalShareProps) => {
                     
                     navigate('/profile')}}>
                     <UserImage img={user.image == "" ? DefaultImage : user.image} height={'5vh'} width={'5vh'} />
-                    <p className="left-home-text">{`${user.firstName} ${user.lastName}`}</p>
+                    <p className="left-home-text">{`${user.name}`}</p>
                 </div>
                 <textarea ref={contentRef} spellCheck={false} className="create-post-input" style={{ height: '10vh' }} id="text-comment-input" rows={1} placeholder={`Hãy nói gì đó về nội dung này...`}></textarea>
                 <FacebookButton onClick={() => CreateShare()} ButtonType={BUTTON_TYPE.basic} text="Chia sẻ bài viết" style={{ width: '95%', margin: '1vh 1vh 1vh 1vh', height: '5vh', alignSelf: 'center', fontSize: '2.5vh' }} />

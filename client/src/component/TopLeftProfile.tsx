@@ -6,16 +6,17 @@ import { ChangeEvent, useState } from "react";
 import { selectUserInfo } from "../selector/userSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { requestUser } from "../service/service";
-import { setUserImage } from "../slices/userSlice";
+import { setUserImage, UserInfo } from "../slices/userSlice";
 import Spinner from "./Spinner";
 type TopLeftProfileProps={
     type?:string
+    user:UserInfo
 }
 
-const TopLeftProfile = ({type="own"}:TopLeftProfileProps)=>{
+const TopLeftProfile = ({type="own",user}:TopLeftProfileProps)=>{
     const [loading,isLoading] = useState(false)
 
-    const user = useSelector(selectUserInfo)
+    
     const dispatch = useDispatch()
     const openSetImage = ()=>{
         document.getElementById('input-file-profile')?.click()

@@ -66,7 +66,7 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
                         
                     </div>
                 </div>
-                <p className="user-item-emoji-text" >{`${data?.firstName} ${data?.lastName}`}</p>
+                <p className="user-item-emoji-text" >{`${data?.name}`}</p>
             </div>
             <FacebookButton style={{ height: '2rem', fontSize: '1rem', width: '10rem' }} ButtonType={BUTTON_TYPE.cancel} text="Thêm bạn bè" />
         </div>

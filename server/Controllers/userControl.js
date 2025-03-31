@@ -7,14 +7,55 @@ const clientUrl = require('..')
 const { cloudinary } = require('../Cloud/clounary.js')
 const fs = require('fs')
 
-const getUser = async (req,res)=>{
-    try{
+const searchUser = async (req, res) => {
+    try {
+        const user = await userModel.aggregate([
+            {
+                $search: {
+                    index: "userName",
+                    autocomplete: {
+                        query: req.query.name,
+                        path: "name",
+                        fuzzy: { maxEdits: 1 }
+                    }
+                }
+            }, {
+                $limit: 6
+            }, {
+                $project: { password: 0 }
+            }
+        ])
+        return res.status(200).json(user)
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json([])
+    }
+}
+
+const getAllUserRandom = async (req, res) => {
+    try {
+        const countDocument = await userModel.countDocuments().lean()
+        const user = await userModel.aggregate(
+            [
+                { $sample: { size: countDocument } },
+                { $project: { name: 1, image: 1, _id: 1, backgroundImage: 1,lastOnline:1 } }
+            ]
+        )
+        return res.status(200).json(user)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json(e)
+    }
+}
+
+const getUser = async (req, res) => {
+    try {
         const user = await userModel.findById(req.params.userId)
-        .select("firstName lastName image backgroundImage")
-        .lean()
-        if(!user) return res.status(400).json("Lỗi tìm người dùng")
-            return res.status(200).json(user)
-    }catch(e){
+            .select("name image backgroundImage lastOnline")
+            .lean()
+        if (!user) return res.status(400).json("Lỗi tìm người dùng")
+        return res.status(200).json(user)
+    } catch (e) {
         console.log(e)
         return res.status(500).json("Lỗi tìm người dùng")
     }
@@ -23,7 +64,7 @@ const getUser = async (req,res)=>{
 const loginUser = async (req, res) => {
     const { email, password } = req.body
     const user = await userModel.findOne({ email }).lean()
-    
+
     if (!user) return res.status(400).json('Người dùng không tồn tại')
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) return res.status(400).json('Sai mật khẩu')
@@ -32,8 +73,8 @@ const loginUser = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-    const { email, password, lastName, firstName, gender, birth } = req.body
-    console.log(lastName)
+    const { email, password, name, gender, birth } = req.body
+
     let user = await userModel.findOne({ email })
     if (user) return res.status(400).json('Đã tồn tại người dùng')
     if (password.length < 6) return res.status(400).json('Mật khẩu 6 chữ cái trở lên')
@@ -41,8 +82,7 @@ const registerUser = async (req, res) => {
     user = new userModel({
         email,
         password,
-        lastName,
-        firstName,
+        name,
         gender,
         birth
     })
@@ -87,40 +127,40 @@ const uploadUserBackground = async (req, res) => {
             .toFormat('jpeg')
             .toBuffer()
         await cloudinary.uploader.upload_stream({ folder: 'user_images' }, async (error, result) => {
-            if(error) return res.status(400).json('Lỗi api cloudinary')
+            if (error) return res.status(400).json('Lỗi api cloudinary')
             fs.unlinkSync(req.file.path);
             currentUser.backgroundImage = result.secure_url
-            
+
             await currentUser.save()
             return res.status(200).json(result.secure_url)
         }).end(fileBuffer)
 
-    } catch(e){
+    } catch (e) {
         console.log(e)
         return res.status(400).json(e)
     }
 
 }
 
-const setUserBio = async (req,res)=>{
-    try{
+const setUserBio = async (req, res) => {
+    try {
         console.log('in')
         const currentUser = await userModel.findById(req.body.userId)
-        if(!currentUser) return res.status(400).json("Error")
+        if (!currentUser) return res.status(400).json("Error")
         currentUser.bio = req.body.bio
         await currentUser.save()
         return res.status(200).json()
-    }catch(e){
+    } catch (e) {
         console.log(e)
         return res.status(400).json()
     }
 }
-const setUserProfileInfo = async (req,res)=>{
-    try{
-        
+const setUserProfileInfo = async (req, res) => {
+    try {
+
         const currentUser = await userModel.findById(req.body.userId)
-        if(!currentUser) return res.status(400).json("Error")
-        const {live,from,relationship,birth,gender} = req.body
+        if (!currentUser) return res.status(400).json("Error")
+        const { live, from, relationship, birth, gender } = req.body
         currentUser.live = live
         currentUser.from = from
         currentUser.relationship = relationship
@@ -128,12 +168,28 @@ const setUserProfileInfo = async (req,res)=>{
         currentUser.gender = gender
         await currentUser.save()
         return res.status(200).json()
-    }catch(e){
+    } catch (e) {
         console.log(e)
         return res.status(400).json()
+    }
+}
+const updateLastOnline = async (req, res) => {
+    try {
+        const currentUser = await userModel.findById(req.body.userId)
+        if (!currentUser) return res.status(400).json("Error")
+        await userModel.findOneAndUpdate({
+            _id:req.body.userId
+        }, {
+            lastOnline: req.body.time
+        })
+        return res.status(200)
+    }catch (e){
+        console.log(e)
+        return res.status(400).json('Lỗi time')
     }
 }
 
 
 
-module.exports = {getUser,setUserBio,setUserProfileInfo, loginUser, registerUser, uploadUserImage,uploadUserBackground }
+
+module.exports = { getUser,updateLastOnline, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

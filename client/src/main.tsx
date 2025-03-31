@@ -9,7 +9,7 @@ import {store} from '../src/store/store'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <QueryClientProvider client={queryClient}>
 
     <Provider store={store}>
@@ -19,5 +19,5 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
     </Provider>
     </QueryClientProvider>
-  </StrictMode>
+  // </StrictMode>
 )

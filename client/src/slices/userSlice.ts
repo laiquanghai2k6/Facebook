@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 
 export interface User {
-    lastName: string,
-    firstName:string,
+    name:string,
     birth:string,
     gender:string,
     email: string,
@@ -11,11 +10,12 @@ export interface User {
     from: string,
     relationship: string,
     image: string
-    friend: string,
+    friend: Array<String>,
     bio:string,
     _id:string,
     _v:number| null,
     backgroundImage:string,
+    
 }
 interface UserState{
     getUser:User
@@ -25,14 +25,13 @@ export const initialUser:UserState = {
         _id:"",
         gender:"",
         birth:"",
-        lastName: "",
-        firstName:"",
+        name:"",
         email: "",
         live: "",
         from: "",
         relationship: "",
         image: "",
-        friend: "",
+        friend: [],
         backgroundImage:"",
         _v:null,
         bio:"",
@@ -47,10 +46,10 @@ export type UserLive ={
 }
 export type UserInfo = {
     _id:string,
-    lastName:string,
-    firstName:string,
+    name:string,
     image:string,
-    backgroundImage:string
+    backgroundImage:string,
+    lastOnline?:number,
 }
 
 export const userSlice = createSlice({

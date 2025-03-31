@@ -230,7 +230,7 @@ const CommentInput = ({ post, setLoading }: CommentInputProps) => {
     const onCreateComment = async () => {
 
         if(content.current?.value == "" && currentImage==""){
-            return alert('Bài viết không được để trống')
+            return alert('Bình luận không được để trống')
         }
         if(content.current?.value){
             text = content.current.value
@@ -274,7 +274,7 @@ const CommentInput = ({ post, setLoading }: CommentInputProps) => {
                 <div style={{ display: 'flex', flexDirection: 'row', margin: '2vh 0 0 1.5vh' }}>
 
                     <UserImage height={'5vh'} width={'5vh'} img={user.image == "" ? Default : user.image} />
-                    <textarea ref={content} spellCheck={false}  className="text-comment-input" id="text-comment-input" rows={1} placeholder={`Bình luận dưới tên ${user.lastName}`}></textarea>
+                    <textarea ref={content} spellCheck={false}  className="text-comment-input" id="text-comment-input" rows={1} placeholder={`Bình luận dưới tên ${user.name}`}></textarea>
                 </div>
 
                 <div style={{ minHeight: '5vh', marginRight:'2vh',backgroundColor: '#333334', display: 'flex', flexDirection: 'column', color: '#aeb1b6', fontSize: '1.8vh', marginLeft: '7.5vh', borderRadius: '0 0 2vh 2vh' }}>

@@ -6,10 +6,14 @@ import usertest from '../assets/user-test.jpg'
 
 import InfoProfileOther from "./InfoProfileOther";
 import LoadingPost from "./LoadingPost";
+import { User, } from "../slices/userSlice";
 const friendList = [
     'lhm', 'lqh', 'hth', 'ttuan', 'dvu'
 ]
-const MidProfileOther = () => {
+type MidProfileOtherProp = {
+    user:User
+}
+const MidProfileOther = ({user}:MidProfileOtherProp) => {
     const [currentNavigate, setCurrentNavigate] = useState(1)
     const setCurrentNavigateCallback1 = useCallback(() => {
         setCurrentNavigate(1)
@@ -17,17 +21,18 @@ const MidProfileOther = () => {
     const setCurrentNavigateCallback2 = useCallback(() => {
         setCurrentNavigate(2)
     }, [currentNavigate])
+    console.log('user',user)
     return (
         <div className="mid-profile-container">
-            <MidProfileNavigate currentNavigate={currentNavigate} setCurrentNavigate1={setCurrentNavigateCallback1} setCurrentNavigate2={setCurrentNavigateCallback2} />
+            <MidProfileNavigate  currentNavigate={currentNavigate} setCurrentNavigate1={setCurrentNavigateCallback1} setCurrentNavigate2={setCurrentNavigateCallback2} />
             {currentNavigate == 1 ? (
                 <div className="mid-profile-combination" id="post">
-                    <InfoProfileOther />
+                    <InfoProfileOther user={user} />
                     <div style={{display:'flex',flexDirection:'column',marginLeft:'2rem'}}>
 
-                    <LoadingPost />
+                    {/* <LoadingPost /> */}
                     </div>
-                    {/* <PostProfile  /> */}
+                    <PostProfile currentUser={user._id} />
                 </div>
             ) : (
                 <div className="mid-profile-combination-friend" id="friend">

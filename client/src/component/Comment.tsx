@@ -19,7 +19,7 @@ type CommentProps = {
 
 
 }
-const ConvertDate = (timeDif: number) => {
+export const ConvertDate = (timeDif: number) => {
 
     const seconds = Math.floor(timeDif / 1000)
     const minutes = Math.floor(timeDif / 60000)
@@ -57,7 +57,7 @@ const Comment = ({ setUserReply,dataUser, comment, setParentComment, openComment
                             <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column', marginLeft: '1vh' }} >
                                 <div className="comment-info-container">
 
-                                    <p style={{ display: 'block', width: 'fit-content', fontSize: '2vh', fontWeight: 'bold' }}>{`${dataUser?.firstName} ${dataUser?.lastName}`}</p>
+                                    <p style={{ display: 'block', width: 'fit-content', fontSize: '2vh', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
                                     {text != "" && <p className="text-comment">{text}</p>}
                                 </div>
                                 {video != "" && <video controls src={video} style={{ height: '40vh', width: '60vh', objectFit: 'contain' }} />}

@@ -66,7 +66,7 @@ const UserPost = ({userId,time}:UserPostProps ) => {
             <UserImage img={data?.image == "" ? Default : data?.image} width={'2.5rem'} height={'2.5rem'} />
             <div style={{flex:'1' ,flexDirection:'column',justifyContent:'space-between',marginLeft:'1vh'}}>
               
-                    <p style={{fontSize:'1rem',fontWeight:'bold'}}>{`${data?.firstName} ${data?.lastName}`}</p>
+                    <p style={{fontSize:'1rem',fontWeight:'bold'}}>{`${data?.name}`}</p>
                     <p style={{fontSize:'0.9rem',color:'#b0b3b8',fontWeight:'bold'}}>{formatDate}</p>
             </div>
         </div>

@@ -1,17 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImage from '../assets/defaul.jpg'
-import { setUserBackground, User } from '../slices/userSlice';
+import { setUserBackground, User, UserInfo } from '../slices/userSlice';
 import { selectUserInfo } from '../selector/userSelector';
 import { requestUser } from '../service/service';
 import { ChangeEvent, useState } from 'react';
 import Camera from '../assets/camera-black.png'
+import Spinner from './Spinner';
 type NavProfileProp = {
     type?: string
+    user:UserInfo
 }
 
-const NavProfile = ({ type = "own" }: NavProfileProp) => {
+const NavProfile = ({ type = "own",user }: NavProfileProp) => {
 
-    const user = useSelector(selectUserInfo)
     const dispatch = useDispatch()
     const [loading, isLoading] = useState(false)
     const uploadBackground = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,7 @@ const NavProfile = ({ type = "own" }: NavProfileProp) => {
     }
     return (
         <div className="nav-profile">
+            {loading && <Spinner />}
             <div className='image-profile' >
                 {type == "own" && (
                     <>

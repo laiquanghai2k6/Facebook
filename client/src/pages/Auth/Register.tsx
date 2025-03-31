@@ -82,8 +82,7 @@ const Register = () => {
             const converDateRegister = {
                 birth:`${registerInfo.day}/${registerInfo.month}/${registerInfo.year}`,
                 gender: registerInfo.gender,
-                lastName: registerInfo.lastName,
-                firstName: registerInfo.firstName,
+                name: registerInfo.firstName+registerInfo.lastName,
                 email: registerInfo.email,
                 password: registerInfo.password
             }
@@ -98,6 +97,7 @@ const Register = () => {
             if(axios.isAxiosError(e)){
                 setError(e.response?.data)
             }
+            isLoading(false)
         }
 
         

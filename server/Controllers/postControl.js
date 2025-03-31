@@ -105,7 +105,8 @@ const getPostOfOneUser = async (req,res)=>{
         .skip((page-1)*10)
         .limit(limit)
         .lean()
-
+        console.log(userPost)
+        
         return res.status(200).json({
             hasMore:page*limit < length,
             page:parseInt(page),
@@ -113,6 +114,7 @@ const getPostOfOneUser = async (req,res)=>{
         })
     }catch(e){
         console.log(e)
+        
         return res.status(500).json('loi:',e)
     }
 }

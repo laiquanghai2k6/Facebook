@@ -1,9 +1,11 @@
 import React from "react";
 
+
 interface MidProfileNavigateProps {
     currentNavigate: number,
     setCurrentNavigate1: Function
     setCurrentNavigate2: Function
+
 
 }
 

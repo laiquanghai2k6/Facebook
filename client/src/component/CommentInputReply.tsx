@@ -30,7 +30,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
     const user = useSelector(selectUserInfo)
     const dispatch = useDispatch()
     useEffect(()=>{
-        setContent(`@${userReply?.firstName} ${userReply?.lastName} `)
+        setContent(`@${userReply?.name} `)
         setCurrentFile(undefined)
         setIsMedia(false)
         setCurrentImage("")
@@ -225,7 +225,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
                 <div style={{ display: 'flex', flexDirection: 'row', margin: '2vh 0 0 1.5vh' }}>
 
                     <UserImage height={'5vh'} width={'5vh'} img={user.image == "" ? Default : user.image} />
-                    <textarea spellCheck={false} value={content} onChange={(e) => setContent(e.target.value)} className="text-comment-input" id="text-comment-reply-input" rows={1} placeholder={`Phản hồi bình luận dưới tên  ${user.lastName}`}></textarea>
+                    <textarea spellCheck={false} value={content} onChange={(e) => setContent(e.target.value)} className="text-comment-input" id="text-comment-reply-input" rows={1} placeholder={`Phản hồi bình luận dưới tên  ${user.name}`}></textarea>
                 </div>
 
                 <div style={{ minHeight: '5vh', backgroundColor: '#333334', display: 'flex', flexDirection: 'column', color: '#aeb1b6', fontSize: '1.8vh', marginLeft: '7.5vh', borderRadius: '0 0 2vh 2vh' }}>

@@ -8,10 +8,9 @@ const selectUserState = (state:RootState) => state.user.getUser;
 
 export const selectUserInfo =createSelector(
     [selectUserState],
-    ({_id,lastName,firstName,image,backgroundImage,})=>({
+    ({_id,name,image,backgroundImage,})=>({
         _id,
-        lastName,
-        firstName,image,backgroundImage
+        name,image,backgroundImage
     })
 )
 export const selectUserProfileInfo = createSelector(

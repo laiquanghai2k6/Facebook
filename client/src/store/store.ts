@@ -3,6 +3,9 @@ import { homeNavigateSlice } from "../slices/homeNavigateSlice";
 import { userSlice } from "../slices/userSlice";
 import { postSlice } from "../slices/postSlice";
 import { commentSlice } from "../slices/commentSlice";
+import { messengerSlice } from "../slices/messengerSlice";
+import { chatSlice } from "../slices/chatSlice";
+import { messengeSlice } from "../slices/messageSlice";
 
 
 export const store = configureStore({
@@ -11,6 +14,9 @@ export const store = configureStore({
         user:userSlice.reducer,
         post:postSlice.reducer,
         comment:commentSlice.reducer,
+        messengerCard:messengerSlice.reducer,
+        chats:chatSlice.reducer,
+        message:messengeSlice.reducer
 
     }
 })

@@ -22,7 +22,7 @@ const TopProfile = () => {
         <div className="top-profile-container">
            
             <div className='top-profile-direct' >
-                <TopLeftProfile />
+                <TopLeftProfile user={user} />
             </div>
      
           

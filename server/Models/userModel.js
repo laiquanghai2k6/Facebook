@@ -6,13 +6,7 @@ const mongoose = require('mongoose')
 
 
 const userSchema = new mongoose.Schema({
-    lastName:{
-        type:String,
-        require:true,
-        minlength:1,
-        maxlength:100
-    },
-    firstName:{
+    name:{
         type:String,
         require:true,
         minlength:1,
@@ -76,7 +70,15 @@ const userSchema = new mongoose.Schema({
     },
     post:[{
         type:mongoose.Schema.Types.ObjectId,ref:'Post'
-    }]
+    }],
+    lastOnline:{
+        type:Number,
+        default:0
+    },
+    chats:{
+        type:Array,
+        default:[]
+    }
 
 
 })
