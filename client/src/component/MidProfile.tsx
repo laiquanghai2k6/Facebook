@@ -6,12 +6,15 @@ import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import usertest from '../assets/user-test.jpg'
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../selector/userSelector";
+import { User } from "../slices/userSlice";
 const friendList = [
     'lhm', 'lqh', 'hth', 'ttuan', 'dvu'
 ]
-
-const MidProfile = () => {
-    const currentUser = useSelector(selectUserInfo)
+type MidProfileProp = {
+    user:User
+}
+const MidProfile = ({user}:MidProfileProp) => {
+   
     const [currentNavigate, setCurrentNavigate] = useState(1)
     const setCurrentNavigateCallback1 = useCallback(() => {
         setCurrentNavigate(1)
@@ -26,7 +29,7 @@ const MidProfile = () => {
             {currentNavigate == 1 ? (
                 <div className="mid-profile-combination" id="post">
                     <InfoProfile />
-                    <PostProfile currentUser={currentUser} />
+                    <PostProfile currentUserId={user._id} />
                 </div>
             ) : (
                 <div className="mid-profile-combination-friend" id="friend">

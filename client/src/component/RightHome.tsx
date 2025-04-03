@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { User } from "../slices/userSlice";
+import { User, UserInfo } from "../slices/userSlice";
 import UserImage from "./UserImage";
 import { requestChat, requestMessage, requestUser } from "../service/service";
 import Spinner from "./Spinner";
@@ -12,9 +12,9 @@ import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
 import moment from "moment";
 import { addChat } from "../slices/chatSlice";
 import { Chat } from "../pages/Home/Home";
-import { useRef } from "react";
-type MidHomeProps = {
-
+import { useEffect, useRef } from "react";
+type RightHomeProps = {
+    currentUser:UserInfo
 }
 export type UserQuickChat = {
     _id: string,
@@ -26,10 +26,14 @@ export type UserQuickChat = {
 export type UserQuickChatID = {
     _id: string,
     name: string,
+    user:string[],
     image: string,
     online?: boolean,
     lastOnline?: number,
-    chatId: string
+    chatId: string,
+    seen1:boolean,
+    seen2:boolean
+
 }
 export const ConvertDateOnline = (timeDif: number) => {
 
@@ -43,17 +47,16 @@ export const ConvertDateOnline = (timeDif: number) => {
         return `${minutes} phút trước`
     } else if (hour < 24) {
         return `${hour} giờ trước`
-    } else if (days < 4) {
+    } else {
         return `${days} ngày trước`
-    } else return "(Unknown)"
+    } 
 
 }
-const RightHome: React.FC<MidHomeProps> = () => {
-    const currentUser = useSelector(selectUserInfo)
+const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
     const dispatch = useDispatch()
     const currentChat = useSelector((state: RootState) => state.chats.chats)
-    const userOnline = useSelector((state:RootState)=>state.messengerCard.userOnline)
     const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
+    
     const FetchUser = async () => {
         try {
             const response = await requestUser('/getAllUserRandom')
@@ -63,14 +66,19 @@ const RightHome: React.FC<MidHomeProps> = () => {
             alert('Lỗi load người dùng')
         }
     }
-
     const { data, isLoading } = useQuery({
-        queryKey: ['chat'],
-        queryFn: () => FetchUser()
+        queryKey: ['chat',currentMessengerCard.userOnline],
+        queryFn: () => FetchUser(),
+        staleTime:5000,
+        enabled:Object.keys(currentMessengerCard.userOnline).length > 0,
+        refetchOnWindowFocus: false
+        
     })
+    
     const OpenNewCardMessenger = async (user: UserQuickChat) => {
         const isExistChat = currentChat.find((chat) => chat.user[0] == user._id || chat.user[1] == user._id)
         let chatId = ""
+        let userChat = []
         if (!isExistChat) {
             const now = new Date()
             try {
@@ -85,30 +93,43 @@ const RightHome: React.FC<MidHomeProps> = () => {
                     text: initMessage,
                     senderId: currentUser._id
                 }
+                userChat = response.data.user
                 chatId = (response.data as Chat)._id
                 const dateLatestMessage = {
                     chatId: (response.data as Chat)._id,
                     lastMessage: initMessage,
                     senderId: currentUser._id
                 }
+                // console.log('resposne in Hree',response.data.user)
                 socket.emit('sendMessage', {
                     fromUser:currentUser._id,
                     from: socket.id,
-                    toSocketId: userOnline[user._id],
+                    toSocketId: currentMessengerCard.userOnline[user._id],
                     message: `Xin chào ${user.name}`,
                     createdAt: now,
                     name: user.name,
                     imageUser: user.image,
                     image: "",
-                    chatId: chatId
+                    chatId: chatId,
+                    isNew:true,
+                    user:response.data.user,
+                    seen1:false,
+                    seen2:false,
                 })
-                await requestMessage.post('/createMessage', dataMessage)
-                await requestChat.put('/updateLatestMessage', dateLatestMessage)
+                const isUser1 = response?.data.user[0] == currentUser._id
 
+                requestMessage.post('/createMessage', dataMessage)
+                
+                    if(isUser1){
+                           const lastMessageMongodb = {...dateLatestMessage,seen1:true,seen2:false}
+                           await requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                       }else{
+                           const lastMessageMongodb = {...dateLatestMessage,seen1:false,seen2:true}
+                           await requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                       }
                 dispatch(addChat({
                     ...response.data,
                     lastMessage: initMessage,
-                    isSeen: false,
                     senderId: currentUser._id
                 } as Chat))
             } catch (e) {
@@ -119,17 +140,23 @@ const RightHome: React.FC<MidHomeProps> = () => {
             chatId = isExistChat._id
         }
         const width = window.innerWidth;
+        const chat = currentChat.find((chats)=>chats._id == chatId )
         const isCardExist = currentMessengerCard.messengerCard.find((cards) => cards._id == user._id)
+        const isUser1 = isCardExist?.user[0] == currentUser._id
+        if(isUser1) console.log('im 1')
+        else console.log('im2')
         const newCard: UserQuickChatID = {
             _id: user._id,
             name: user.name,
             image: user.image,
             lastOnline: user.lastOnline,
-            chatId: chatId
+            chatId: chatId,
+            seen1: isUser1 ? true : false,
+            seen2:isUser1 ? false:true,
+            user:chat?.user ? chat?.user : userChat,
         }
         const remToPx = 20 * 16
         if (!isCardExist) {
-
             if (currentMessengerCard.messengerCard.length == 0) {
                 dispatch(setMessengerCard(newCard))
             }
@@ -146,6 +173,7 @@ const RightHome: React.FC<MidHomeProps> = () => {
             {isLoading && <Spinner />}
             <p style={{ marginBottom: '1rem' }}>Người liên hệ</p>
             {data?.map((u, i) => {
+                
                 const isOnline = Object.keys(currentMessengerCard.userOnline).includes(u._id)
                 let convertDate = ""
                 if (!isOnline && u.lastOnline) {

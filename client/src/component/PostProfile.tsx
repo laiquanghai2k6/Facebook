@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Post from "./Post";
-import { UserInfo } from "../slices/userSlice";
+import { User, UserInfo } from "../slices/userSlice";
 import { requestPost } from "../service/service";
 import LoadingPost from "./LoadingPost";
 import { PostShareType, PostType } from "../slices/postSlice";
@@ -9,14 +9,12 @@ import { PostRequest } from "./MidHome";
 import PostShare from "./PostShare";
 
 type PostProfileProps = {
-    currentUser:string
+    currentUserId:string
 }
 
-const PostProfile = ({currentUser}:PostProfileProps) => {
+const PostProfile = ({currentUserId}:PostProfileProps) => {
 
     const observer = useRef<IntersectionObserver | null>(null)
-
-
     const getPostOfUser = async (userId:string,pageParam:number)=>{
         
         try{
@@ -31,8 +29,8 @@ const PostProfile = ({currentUser}:PostProfileProps) => {
     }
 
     const {data,fetchNextPage,hasNextPage} = useInfiniteQuery({
-        queryKey:['post:',currentUser],
-        queryFn:({pageParam})=>getPostOfUser(currentUser,pageParam),
+        queryKey:['post:',currentUserId],
+        queryFn:({pageParam})=>getPostOfUser(currentUserId,pageParam),
         initialPageParam:1,
         getNextPageParam:(lastPage)=>{
             return lastPage?.hasMore ? lastPage.page+1 :undefined
@@ -61,17 +59,17 @@ const PostProfile = ({currentUser}:PostProfileProps) => {
         
          {data?.pages.map((pages,i)=>{
                     if(i == 0 && pages?.post.length == 0) return(
-                        <p style={{fontWeight:'bold',color:'white',fontSize:'2rem',alignSelf:'center'}}>Chưa có bài viết nào</p>
+                        <p key={i} style={{fontWeight:'bold',color:'white',fontSize:'2rem',alignSelf:'center'}}>Chưa có bài viết nào</p>
                     )
                     return(
-                        pages?.post.map((post,index)=>
+                        pages?.post.map((post)=>
                         {
                             if(post.type == "own")
                                 return (
-                                    <Post key={index} post={post} />
+                                    <Post key={post._id} post={post} />
                                 )
                                 else return (
-                                    <PostShare key={index} post={post as PostShareType} />
+                                    <PostShare key={post._id} post={post as PostShareType} />
                                 )
                         })
                     )

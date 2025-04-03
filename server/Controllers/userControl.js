@@ -22,7 +22,11 @@ const searchUser = async (req, res) => {
             }, {
                 $limit: 6
             }, {
-                $project: { password: 0 }
+                $project: { 
+                    _id:1,
+                    image:1,
+                    name:1,
+                 }
             }
         ])
         return res.status(200).json(user)
@@ -60,6 +64,18 @@ const getUser = async (req, res) => {
         return res.status(500).json("Lỗi tìm người dùng")
     }
 }
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId)
+            .select("-password -lastOnline")
+            .lean()
+        if (!user) return res.status(400).json("Lỗi tìm người dùng")
+        return res.status(200).json(user)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json("Lỗi tìm người dùng")
+    }
+}
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body
@@ -68,14 +84,14 @@ const loginUser = async (req, res) => {
     if (!user) return res.status(400).json('Người dùng không tồn tại')
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) return res.status(400).json('Sai mật khẩu')
-
+        
     return res.status(200).json(user)
 }
 
 const registerUser = async (req, res) => {
     const { email, password, name, gender, birth } = req.body
 
-    let user = await userModel.findOne({ email })
+    let user = await userModel.exists({ email:email })
     if (user) return res.status(400).json('Đã tồn tại người dùng')
     if (password.length < 6) return res.status(400).json('Mật khẩu 6 chữ cái trở lên')
     if (!validator.isEmail(email)) return res.status(400).json('Email định dạng sai')
@@ -174,15 +190,18 @@ const setUserProfileInfo = async (req, res) => {
     }
 }
 const updateLastOnline = async (req, res) => {
+    
     try {
-        const currentUser = await userModel.findById(req.body.userId)
+        const currentUser = await userModel.exists({_id:req.body.userId})
+        
         if (!currentUser) return res.status(400).json("Error")
         await userModel.findOneAndUpdate({
             _id:req.body.userId
         }, {
             lastOnline: req.body.time
         })
-        return res.status(200)
+        return res.status(200).json('good')
+        
     }catch (e){
         console.log(e)
         return res.status(400).json('Lỗi time')
@@ -192,4 +211,4 @@ const updateLastOnline = async (req, res) => {
 
 
 
-module.exports = { getUser,updateLastOnline, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }
+module.exports = { getUser,updateLastOnline,getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

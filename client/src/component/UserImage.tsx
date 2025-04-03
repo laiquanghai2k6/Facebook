@@ -9,6 +9,7 @@ interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     minHeight?: number | string;
     className?: string;
     img?: string;
+    classNameImg?:string
 
 }
 export const useLazyLoad = () => {
@@ -33,11 +34,12 @@ export const useLazyLoad = () => {
 
     return [ref, isVisible] as const;
 };
-const UserImage = ({ img, width, height, className = 'icon-round-background', minHeight, minWidth, children, ...other }: UserImageProps) => {
+const UserImage = ({ img, width, height,classNameImg, className = 'icon-round-background', minHeight, minWidth, children, ...other }: UserImageProps) => {
     const [ref, isVisible] = useLazyLoad();
     return (
         <div className={className} style={{ width: width, height: height, minHeight: minHeight, minWidth: minWidth }} {...other}>
             <img
+                className={classNameImg}
                 ref={ref}
                 src={(isVisible && img ) ? img : Default}
                 style={{

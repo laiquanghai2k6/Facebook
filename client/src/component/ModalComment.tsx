@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CloseButton from "./button/CloseButton";
 import UserPost from "./UserPost";
 
@@ -11,13 +11,16 @@ import CommentInput from "./CommentInput";
 import { PostType } from "../slices/postSlice";
 import VideoPost from "./VideoPost";
 import Spinner from "./Spinner";
-import { requestComment } from "../service/service";
+import { requestComment, requestUser } from "../service/service";
 
 import InteractPostComment from "./InteractPostComment";
 import CommentInputReply from "./CommentInputReply";
 import { UserInfo } from "../slices/userSlice";
 import { useQuery } from "@tanstack/react-query";
 import InteractPost from "./InteractPost";
+import { useDispatch } from "react-redux";
+import { clearComment, CommentType } from "../slices/commentSlice";
+import SkeletonComment from "./LoadingComment";
 interface ModalCommentProps {
     setModalComment: Function
     post:PostType
@@ -29,13 +32,18 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
     const [parentId,setParentId] = useState("")
     const [commentReply,setCommentReply] = useState(false)
     const [userReply,setUserReply] = useState<UserInfo | null>(null)
-
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        return ()=>{
+            dispatch(clearComment())
+        }
+    },[])
     
     const fetchCommentPost = async ()=>{
         closeCommentReplyInput()
         try{
-            const response = await requestComment.get(`/getCommentOfPost/${post.userId}/${post._id}`)
-            return response.data
+            const response = await requestComment.get(`/getCommentOfPost/${post._id}`)
+            return response.data as Array<CommentType>
         }catch(e){
             console.log(e)
         }
@@ -44,6 +52,34 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
         queryKey:['comments',post._id],
         queryFn:()=>fetchCommentPost()
     })
+
+
+     const fetchUserComment = async () => {
+            try {
+                if (data) {
+                    const users = await Promise.all(
+                        data.map(async (comment) => {
+    
+                            const user = await requestUser(`/getUser/${comment.userId}`)
+                            // currentUser.push(user.data)
+                            return user.data as UserInfo
+                        })
+                    )
+                    return users
+                } else return []
+            } catch (e) {
+                console.log(e)
+            }
+    
+        }
+    
+    
+        const userQuery = useQuery({
+            queryKey: ['userComment', post._id],
+            queryFn: () => fetchUserComment(),
+            enabled: !!data?.length
+        })
+
     const openCommentReplyInput = useCallback(()=>{
         setCommentReply(true)
     },[commentReply])
@@ -61,7 +97,7 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
         <div className="modal-comment-container">
             {(isLoading||loading)  && <Spinner />}
             <div className="modal-comment-box">
-                <p style={{ position: 'absolute', top: '0', left: '40%', marginTop: '3vh', fontWeight: 'bold' }}>Bài viết của lqh</p>
+                <p style={{ position: 'absolute', top: '0', left: '40%', marginTop: '1.5rem', fontWeight: 'bold' }}>Bài viết của lqh</p>
                 <Hr />
                 <CloseButton onClick={() => setModalComment(false)} />
                 <UserPost userId={post.userId} time={post.createdAt} />
@@ -77,15 +113,23 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
                 <Hr />
                 
                 
-                <CommentList setUserReply={setUserReply} setParentComment={setParentComment} openCommentReplyInput={openCommentReplyInput} currentComment={data} post={post} />
+                {userQuery.isLoading ? (
+                    <SkeletonComment />
+                ):(
+
+                    <CommentList dataUser={userQuery.data ? userQuery.data:[]} setUserReply={setUserReply} setParentComment={setParentComment} openCommentReplyInput={openCommentReplyInput} currentComment={data} post={post} />
+                )}
                 {commentReply ?(
                   <>
-                    <CommentInputReply  closeCommentReplyInput={closeCommentReplyInput} parentId={parentId} userReply={userReply} post={post} />
+                    <CommentInputReply  closeCommentReplyInput={closeCommentReplyInput} parentIds={parentId} userReply={userReply} post={post} />
          
                   </>
                 ):(
                  <>
+            
+
                     <CommentInput setLoading={setLoad}   post={post} />
+
                     
                  </>
                 )}

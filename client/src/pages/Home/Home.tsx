@@ -17,8 +17,9 @@ export type Chat={
      user:string[],
      lastMessage:string,
      senderId:string,
-     isSeen:boolean,
-     createdAt:string
+     seen1:boolean,
+     seen2:boolean,
+     updatedAt:string
 }
 
 const Home = () => {
@@ -43,14 +44,14 @@ const Home = () => {
                 dispatch(setChat(data)) 
           }
      },[data])
-     
+
      
     return (
     <div className="home">
     
          <LeftHome  />
          <MidHome  />
-         <RightHome  />
+         <RightHome currentUser={user} />
          <MessengerDown />
          
     </div>

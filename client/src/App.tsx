@@ -24,18 +24,17 @@ import { UserQuickChat, UserQuickChatID } from './component/RightHome'
 import { requestUser } from './service/service'
 import { Message } from './component/MessengerDownCard'
 import { addMessage } from './slices/messageSlice'
-import { updateLastMessage, UpdateMessage } from './slices/chatSlice'
+import { updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
 
 function App() {
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
-  const userInfo = useSelector(selectUserInfo)
+
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
-    currentMessengerCardRef.current = currentMessengerCard.messengerCard
-    console.log('currentMessengerCardRef.current',currentMessengerCardRef.current  )
+    currentMessengerCardRef.current = currentMessengerCard.messengerCard 
   }, [currentMessengerCard])
   useEffect(() => {
     const isUserSocket = user._id != ""
@@ -44,7 +43,7 @@ function App() {
       socket.connect()
       socket.on('connect', () => {
         socket.emit('uploadCurrentUserId', user._id, socket.id)
-        socket.on('getCurrentUserOnline', (userOnline) => {
+        socket.on('getCurrentUserOnline', ({userOnline,isOffline}) => {
           dispatch(setCurrentOnline(userOnline as UserOnline))
         })
       })
@@ -52,16 +51,13 @@ function App() {
 
 
 
-      socket.on('receiveMessage', ({ from,fromUser, message, name, image, createdAt, imageUser, chatId }) => {
+      socket.on('receiveMessage', ({ from,fromUser,user,seen1At,seen2At ,message, name, image, createdAt, imageUser, chatId }) => {
         const width = window.innerWidth;
         const isCardExist = currentMessengerCardRef.current.find((card) => card.chatId == chatId)
-        
-
-      
         const lastMessage: UpdateMessage = {
           chatId: chatId,
           lastMessage: message,
-          createdAt:createdAt,
+          updatedAt:createdAt,
           senderId: user._id
         }
         const newMessage: Message = {
@@ -72,20 +68,28 @@ function App() {
           text: message
         }
         if(isCardExist){
-        dispatch(addMessage(newMessage))
+           dispatch(addMessage(newMessage))
         }
           dispatch(updateLastMessage(lastMessage))
       
         const remToPx = 20 * 16
+        
+        const newCard:UserQuickChatID={
+          _id: fromUser,
+          name: name,
+          image: imageUser,
+          online: true,
+          chatId: chatId,
+          seen1:seen1At,
+          seen2:seen2At,
+          user:user
+        }
+        console.log('receive new message',newCard)
+
+     
+        
         if (!isCardExist) {
-          const newCard: UserQuickChatID = {
-            _id: fromUser,
-            name: name,
-            image: imageUser,
-            online: true,
-            chatId: chatId,
-            
-          }
+        
           if (currentMessengerCardRef.current.length == 0) {
             dispatch(setMessengerCard(newCard))
           }
@@ -95,34 +99,27 @@ function App() {
             dispatch(fullMessengerCard(newCard))
           }
         }
-
       })
-
+      socket.on('noticeSeenMessage',({isSeen,seenWhatAt,chatId,fromUser})=>{
+          const updateSeenDispatch:UpdateSeen= {
+            isSeen:isSeen,
+            seenWhatAt:parseInt(seenWhatAt),
+            chatId:chatId,
+          }
+          dispatch(updateSeen(updateSeenDispatch)) 
+      })
     }
 
     return () => {
+     
       if (socket) {
         if (user._id != "") {
-          const updateLastOnline = async () => {
-            try {
-              const time = Date.now()
-              const data = {
-                userId: user._id,
-                time: time
-              }
-              await requestUser.put('updateLastOnline', data)
-            } catch (e) {
-              console.log(e)
-              alert('Lỗi hiển thị')
-            }
-          }
-          socket.off('getCurrentUserOnline')
+         
+          socket.off()
           socket.disconnect()
           dispatch(clearAll())
-          updateLastOnline()
-
         }
-
+       
       }
 
       currentMessengerCardRef.current = []
@@ -147,7 +144,7 @@ function App() {
         <Route path='/game' element={isUser ? <Game /> : <Login />} />
         <Route path='/profileOther' element={isUser ? <ProfileOther /> : <Login />} />
 
-        <Route path='/profile' element={isUser ? <Profile user={userInfo} /> : <Login />} />
+        <Route path='/profile' element={isUser ? <Profile user={user} /> : <Login />} />
       </Routes>
 
     </div>

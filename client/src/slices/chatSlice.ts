@@ -11,8 +11,13 @@ const initialState:ChatState={
 export type UpdateMessage = {
     chatId:string,
     lastMessage:string,
-    createdAt:string,
+    updatedAt:string,
     senderId:string
+}
+export type UpdateSeen={
+    seenWhatAt:number,
+    chatId:string,
+    isSeen:boolean,
 }
 export const chatSlice = createSlice({
     name:'chat',
@@ -25,14 +30,22 @@ export const chatSlice = createSlice({
             state.chats = [...state.chats,action.payload]
         },
         updateLastMessage:(state,action:PayloadAction<UpdateMessage>)=>{
-            const {lastMessage,createdAt,chatId} = action.payload
+            const {lastMessage,updatedAt,chatId} = action.payload
             
             const index = state.chats.findIndex((chat)=>chat._id == chatId )
             if (index !== -1) {
-                state.chats[index] = {...state.chats[index],lastMessage:lastMessage,createdAt:createdAt}
+                state.chats[index] = {...state.chats[index],lastMessage:lastMessage,updatedAt:updatedAt}
+            }
+        },
+        updateSeen:(state,action:PayloadAction<UpdateSeen>)=>{
+            const {seenWhatAt,chatId,isSeen} = action.payload
+            const index = state.chats.findIndex((chat)=>chat._id == chatId)
+            if(index !== -1){
+                state.chats[index] = {...state.chats[index],[`seen${seenWhatAt}`]: isSeen}  
             }
         }
+   
     }
 })
 
-export const {setChat,addChat,updateLastMessage} = chatSlice.actions
+export const {setChat,addChat,updateLastMessage,updateSeen} = chatSlice.actions

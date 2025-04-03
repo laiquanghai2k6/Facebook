@@ -13,7 +13,7 @@ export interface User {
     friend: Array<String>,
     bio:string,
     _id:string,
-    _v:number| null,
+    _v:string| null,
     backgroundImage:string,
     
 }

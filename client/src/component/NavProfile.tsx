@@ -8,11 +8,11 @@ import Camera from '../assets/camera-black.png'
 import Spinner from './Spinner';
 type NavProfileProp = {
     type?: string
-    user:UserInfo
+    user:User|UserInfo
 }
 
 const NavProfile = ({ type = "own",user }: NavProfileProp) => {
-
+   
     const dispatch = useDispatch()
     const [loading, isLoading] = useState(false)
     const uploadBackground = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +39,7 @@ const NavProfile = ({ type = "own",user }: NavProfileProp) => {
                             document.getElementById('upload-background')?.click()
                         }}>
                             <img src={Camera} style={{ width: '1.5rem', height: '1.5rem', color: 'black' }} />
-                            <p style={{ fontSize: '1rem', fontWeight: 'bold' }}>Chỉnh sửa ảnh bìa</p>
+                            <p style={{ fontSize: '1rem',cursor:'pointer', fontWeight: 'bold' }}>Chỉnh sửa ảnh bìa</p>
                         </div>
                         <input id="upload-background" type="file" onChange={(e) => { uploadBackground(e) }} style={{ display: 'none' }} />
                     </>

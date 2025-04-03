@@ -1,3 +1,4 @@
+import { UpdateSeen } from './chatSlice';
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { UserQuickChat, UserQuickChatID } from "../component/RightHome";
 
@@ -23,6 +24,7 @@ const initialState:MessengerState = {
     name:'messengerCard',
     reducers:{
         setMessengerCard:(state,action:PayloadAction<UserQuickChatID>)=>{
+
             state.messengerCard = [...state.messengerCard,action.payload]
         },
         closeMessengerCard:(state,action:PayloadAction<string>)=>{
@@ -41,7 +43,9 @@ const initialState:MessengerState = {
         },
         cleatLast:(state)=>{
             state.messengerCard = state.messengerCard.slice(0,-1)
-        }
+        },
+
+
     }
  })
 

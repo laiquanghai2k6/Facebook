@@ -8,7 +8,7 @@ const getMessageOfChat = async (req, res) => {
     try {
 
         const { chatId } = req.query
-        const currentChat = await chatModel.findById(chatId).lean()
+        const currentChat = await chatModel.exists({_id:chatId})
         if (!currentChat) return res.status(400).json('Lỗi tìm chat')
         const messages = await messageModel.find({ chatId: chatId })
             .sort({ createdAt: -1 })
@@ -22,7 +22,7 @@ const getMessageOfChat = async (req, res) => {
 const createMessage = async (req, res) => {
     try {
         const { chatId, text, senderId } = req.body
-        const currentChat = await chatModel.findById(chatId).lean()
+        const currentChat = await chatModel.exists({_id:chatId})
         if (!currentChat) return res.status(400).json('Lỗi tìm chat')
         const newMessage = new messageModel({
             chatId: chatId,
@@ -41,7 +41,8 @@ const createMessageImage = async (req, res) => {
     try {
         const filePath = req.file.path
         const { chatId, text, senderId } = req.body
-        const currentChat = await chatModel.findById(chatId).lean()
+        
+        const currentChat = await chatModel.exists({_id:chatId})
         if (!currentChat) return res.status(400).json('Lỗi tìm chat')
         const fileBuffer = await sharp(filePath)
             .toFormat('jpeg')
@@ -63,7 +64,7 @@ const createMessageImage = async (req, res) => {
     } catch (e) {
         console.log(e)
         res.status(500).json('Lỗi tạo tin nhắn')
-    }
+}
 }
 
 module.exports = { getMessageOfChat,createMessageImage,createMessage }

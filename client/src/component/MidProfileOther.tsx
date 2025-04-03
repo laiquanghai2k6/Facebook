@@ -32,7 +32,7 @@ const MidProfileOther = ({user}:MidProfileOtherProp) => {
 
                     {/* <LoadingPost /> */}
                     </div>
-                    <PostProfile currentUser={user._id} />
+                    <PostProfile currentUserId={user._id} />
                 </div>
             ) : (
                 <div className="mid-profile-combination-friend" id="friend">

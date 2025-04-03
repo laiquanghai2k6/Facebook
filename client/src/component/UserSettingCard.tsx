@@ -21,26 +21,22 @@ const UserSettingCard = () => {
                 userId: user._id,
                 time: time
             }
-            await requestUser.put('updateLastOnline', data)
+        await requestUser.put('/updateLastOnline', data)
         } catch (e) {
             console.log(e)
             alert('Lỗi hiển thị')
         }
     }
     const signOut = async () => {
-
-        socket.off('getCurrentUserOnline')
-        socket.disconnect()
-        dispatch(clearAll())
-        updateLastOnline()
+        await updateLastOnline()
         dispatch(setUser(initialUser.getUser))
         navigate('/login')
     }
     return (
         <>
             <div className="user-setting-card" onClick={() => navigate('/profile')}>
-                <UserImage img={user.image != "" ? user.image : Default} height={'5vh'} width={'5vh'} />
-                <p style={{ color: 'white', marginLeft: '2vh', fontSize: '2.5vh', fontWeight: 'bold' }}>{user.name}</p>
+                <UserImage classNameImg='setting-icon' img={user.image != "" ? user.image : Default} height={'2.5rem'} width={'2.5rem'} />
+                <p style={{ color: 'white', marginLeft: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>{user.name}</p>
 
             </div>
             <div className='user-setting-card' onClick={signOut}>

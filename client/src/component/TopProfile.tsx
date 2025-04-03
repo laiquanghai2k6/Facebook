@@ -9,12 +9,12 @@ import Spinner from "./Spinner";
 
 
 type TopProfileProps = {
-
+    user:User
 }
 
-const TopProfile = () => {
+const TopProfile = ({user}:TopProfileProps) => {
 
-    const user = useSelector(selectUserInfo)
+
     
 
     

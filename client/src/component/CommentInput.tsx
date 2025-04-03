@@ -138,7 +138,6 @@ const CommentInput = ({ post, setLoading }: CommentInputProps) => {
         return response.data
     }
     const CreateCommentNormal = async (text:string) => {
-        console.log('content:',text)
         const data = {
             text: text,
             postId: post._id,
@@ -271,15 +270,15 @@ const CommentInput = ({ post, setLoading }: CommentInputProps) => {
     return (
         <>
             <div className="comment-input">
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '2vh 0 0 1.5vh' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '1rem 0 0 0.75rem' }}>
 
-                    <UserImage height={'5vh'} width={'5vh'} img={user.image == "" ? Default : user.image} />
+                    <UserImage height={'2.15rem'} width={'2.15rem'} img={user.image == "" ? Default : user.image} />
                     <textarea ref={content} spellCheck={false}  className="text-comment-input" id="text-comment-input" rows={1} placeholder={`Bình luận dưới tên ${user.name}`}></textarea>
                 </div>
 
-                <div style={{ minHeight: '5vh', marginRight:'2vh',backgroundColor: '#333334', display: 'flex', flexDirection: 'column', color: '#aeb1b6', fontSize: '1.8vh', marginLeft: '7.5vh', borderRadius: '0 0 2vh 2vh' }}>
+                <div style={{ minHeight: '2.5rem', marginRight:'1rem',backgroundColor: '#333334', display: 'flex', flexDirection: 'column', color: '#aeb1b6', fontSize: '0.9rem', marginLeft: '3.75em', borderRadius: '0 0 1rem 1rem' }}>
                     {currentImage != "" && (
-                        <div style={{ height: '8vh', width: '8vh', position: 'relative', marginLeft: '2vh', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                        <div style={{ height: '4rem', width: '4rem', position: 'relative', marginLeft: '1rem', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                             {isMedia && <img style={{ position: 'absolute' }} src={Play} height={'20%'} />}
 
                             <img src={currentImage} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
@@ -287,13 +286,13 @@ const CommentInput = ({ post, setLoading }: CommentInputProps) => {
                     )}
 
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <HomeItem onClick={() => document.getElementById('upload-comment-image')?.click()} img={Camera} styleImg={{ width: '3vh', height: '3vh' }} styleContainer={{ marginLeft: '2vh' }} />
+                        <HomeItem onClick={() => document.getElementById('upload-comment-image')?.click()} img={Camera} styleImg={{ width: '1.5rem', height: '1.5rem' }} styleContainer={{ marginLeft: '1rem' }} />
                         <input ref={media} onChange={(e) => { onChangeInputImage(e) }} type="file" style={{ display: 'none' }} id="upload-comment-image" />
                         
 
                            
                        
-                            <HomeItem img={SendBlue} onClick={onCreateComment} styleImg={{ width: '3vh', height: '3vh' }} />
+                            <HomeItem img={SendBlue} onClick={onCreateComment} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
 
                     </div>
 

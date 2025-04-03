@@ -6,11 +6,11 @@ import { ChangeEvent, useState } from "react";
 import { selectUserInfo } from "../selector/userSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { requestUser } from "../service/service";
-import { setUserImage, UserInfo } from "../slices/userSlice";
+import { setUserImage, User, UserInfo } from "../slices/userSlice";
 import Spinner from "./Spinner";
 type TopLeftProfileProps={
     type?:string
-    user:UserInfo
+    user:UserInfo|User
 }
 
 const TopLeftProfile = ({type="own",user}:TopLeftProfileProps)=>{
@@ -65,7 +65,7 @@ const TopLeftProfile = ({type="own",user}:TopLeftProfileProps)=>{
             </div>
             {/* <UserImage height={'20vh'} width={'20vh'} /> */}
             <div className='top-profile-right-image'>
-                <p style={{ fontSize: '1.75rem', color: 'white', fontWeight: 'bold' }}>Lai Quang Hai</p>
+                <p style={{ fontSize: '1.75rem', color: 'white', fontWeight: 'bold' }}>{user.name}</p>
                 <p style={{ fontSize: '1rem', color: '#a2aeb8' }}>636 Người bạn</p>
                 <div style={{ display: 'flex', flexDirection: 'row', marginTop: '0.5rem' }}>
                     <ImageChain img={DefaultImage} />

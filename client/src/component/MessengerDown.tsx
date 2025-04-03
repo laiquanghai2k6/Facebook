@@ -35,6 +35,8 @@ export const throttle = (callback:Function,delay:number)=>{
 const MessengerDown:React.FC<MessengerDownProps> = () => {
  
     const messengerCard = useSelector((state:RootState)=>state.messengerCard.messengerCard)
+    const userOnline = useSelector((state: RootState) => state.messengerCard.userOnline)
+            
     
     const messengerCardRef = useRef<number|null>(null)
     useEffect(()=>{
@@ -60,18 +62,17 @@ const MessengerDown:React.FC<MessengerDownProps> = () => {
             window.removeEventListener('resize',GetWidth)
         }
     },[])
+    // console.log('messengerdown:',messengerCard)
     return (
         <div className="messenger-down-container">
             {messengerCard.map((card,i)=>{
-                console.log('cardSs:',card)
-                return(
-                    <MessengerDownCard card={card} keys={i} key={i} />
-                )
+                  return(
+                     
+                      <MessengerDownCard userOnline={userOnline} card={card}  key={`cardsdf${i}`} />
+                  )
+              
             })}
             
-           
-
-
         </div>
     );
 }

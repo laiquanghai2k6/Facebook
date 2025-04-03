@@ -12,17 +12,17 @@ import Play from '../assets/play.png'
 
 import { requestComment } from "../service/service";
 import { PostType } from "../slices/postSlice";
-import { CommentType, setComment } from "../slices/commentSlice";
+import { CommentType, ReplyComment, setComment, setReply, updateChildren } from "../slices/commentSlice";
 import { UserInfo } from "../slices/userSlice";
 
 type CommentInputProps = {
     post: PostType,
     userReply:UserInfo|null,
-    parentId:string,
+    parentIds:string,
     closeCommentReplyInput:Function
 }
 
-const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: CommentInputProps) => {
+const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: CommentInputProps) => {
     const [currentImage, setCurrentImage] = useState("")
     const [currentFile, setCurrentFile] = useState<File | undefined>(undefined)
     const [isMedia, setIsMedia] = useState(false)
@@ -34,8 +34,11 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
         setCurrentFile(undefined)
         setIsMedia(false)
         setCurrentImage("")
-    },[parentId])
-    
+    },[parentIds])
+    if(!parentIds){
+        alert('Lỗi phản hồi người dùng')
+        return <></>
+    }
     useEffect(() => {
         const textarea = document.getElementById("text-comment-reply-input");
 
@@ -93,7 +96,6 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
             getFirstFrame(filePath)
 
         } else if (filePath.type.startsWith('image/')) {
-            console.log('if:',filePath)
             const imageUrl = URL.createObjectURL(filePath)
             setIsMedia(false)
             setCurrentFile(filePath)
@@ -104,112 +106,104 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
         }
     }
     const onCreateComment = async () => {
+        try{
 
-        if (currentImage != "" && !isMedia) {
-            try {
-                const data = new FormData()
-                data.append("image",currentFile as File)
-                data.append("text",content)
-                data.append("postId",post._id)
-                data.append("userId",user._id)
-                data.append("type",'reply')
-                data.append
-                
-                // isLoading(true)
-                const response = await requestComment.post('/createCommentWithImage', data)
-                const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
-                const newComment:CommentType ={
-                    _id,
-                    createdAt,
-                    image,
-                    text,
-                    postId,
-                    userId,
-                    type,
-                    parentId,
-                    video
-                } 
-                dispatch(setComment(newComment))
-                // isLoading(false)
-
-               
-                console.log(response.data)
-            } catch (e) {
-                console.log(e)
-                return alert('Lỗi tạo bình luận với ảnh')
-            }
-        } else if (currentImage != "" && isMedia) {
-            try {
-                const formData = new FormData()
-                formData.append("video",currentFile as File)
-                formData.append("postId",post._id)
-                formData.append("userId",user._id)
-                formData.append("type","direct")
-
-                // isLoading(true)
-
-
-
-                const response = await requestComment.post('/createCommentWithVideo', formData)
-                const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
-                const newComment:CommentType ={
-                    _id,
-                    createdAt,
-                    image,
-                    text,
-                    postId,
-                    userId,
-                    type,
-                    parentId,
-                    video
-                } 
-                dispatch(setComment(newComment))
-          
-                console.log(response.data)
-                // isLoading(false)
-
-
-
-            } catch (e) {
-                console.log(e)
-                return alert('Lỗi tạo bình luận với ảnh')
-            }
-        }else{
-            try {
-                const data = {
-                    text: content,
-                    postId: post._id,
-                    userId: user._id,
-                    type: 'direct'
-                }
-                // isLoading(true)
-
-
-
-                const response = await requestComment.post('/createComment', data)
-                const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
-                const newComment:CommentType ={
-                    _id,
-                    createdAt,
-                    image,
-                    text,
-                    postId,
-                    userId,
-                    type,
-                    parentId,
-                    video
-                } 
-                dispatch(setComment(newComment))
+            if (currentImage != "" && !isMedia) {
+            
+                    const data = new FormData()
+                    data.append("image",currentFile as File)
+                    data.append("text",content)
+                    data.append("postId",post._id)
+                    data.append("userId",user._id)
+                    data.append("type",'reply')
+                    data.append("parentId",parentIds)
+                    
+                    // isLoading(true)
+                    const response = await requestComment.post('/createCommentWithImage', data)
+                    const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
+                    const newComment:ReplyComment ={
+                        createdAt,
+                        image,
+                        text,
+                        postId,
+                        userId,
+                        parentId,
+                        video,
+                        _id,
+                        type
+                    } 
+                    dispatch(setReply(newComment))
+                    // isLoading(false)
     
-                // isLoading(false)
-
-
+                   
+                    console.log(response.data)
+              
+            } else if (currentImage != "" && isMedia) {
+                
+                    const formData = new FormData()
+                    formData.append("video",currentFile as File)
+                    formData.append("postId",post._id)
+                    formData.append("userId",user._id)
+                    formData.append("type","reply")
+                    formData.append("parentId",parentIds)
+    
+                    // isLoading(true)
+    
+    
+    
+                    const response = await requestComment.post('/createCommentWithVideo', formData)
+                    const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
+                    const newComment:ReplyComment ={
+                        createdAt,
+                        image,
+                        text,
+                        postId,
+                        userId,
+                        parentId,
+                        video,
+                        _id,
+                        type
+                    } 
+                    dispatch(setReply(newComment))
+           
+                    // isLoading(false)
+    
+    
+    
+                
+            }else{
                
-                console.log(response.data)
-            } catch (e) {
-                console.log(e)
-                return alert('Lỗi tạo bình luận với ảnh')
+                    const data = {
+                        text: content,
+                        postId: post._id,
+                        userId: user._id,
+                        type: 'reply',
+                        parentId:parentIds
+                    }
+                    // isLoading(true)
+    
+    
+    
+                    const response = await requestComment.post('/createComment', data)
+                    const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
+                    const newComment:ReplyComment ={
+                        createdAt,
+                        image,
+                        text,
+                        postId,
+                        userId,
+                        parentId,
+                        video,
+                        _id,
+                        type
+                    } 
+                    dispatch(setReply(newComment))
             }
+            await requestComment.put('/updateChildren',{commentId:parentIds})
+            dispatch(updateChildren(parentIds))
+        }catch(e){
+            console.log(e)
+            alert('Lỗi phản hồi')
         }
         setContent("")
         setCurrentImage("")
@@ -222,29 +216,29 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentId,post }: C
   
 
             <div className="comment-input">
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '2vh 0 0 1.5vh' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '1rem 0 0 0.75rem' }}>
 
-                    <UserImage height={'5vh'} width={'5vh'} img={user.image == "" ? Default : user.image} />
+                    <UserImage height={'2.5rem'} width={'2.5rem'} img={user.image == "" ? Default : user.image} />
                     <textarea spellCheck={false} value={content} onChange={(e) => setContent(e.target.value)} className="text-comment-input" id="text-comment-reply-input" rows={1} placeholder={`Phản hồi bình luận dưới tên  ${user.name}`}></textarea>
                 </div>
 
-                <div style={{ minHeight: '5vh', backgroundColor: '#333334', display: 'flex', flexDirection: 'column', color: '#aeb1b6', fontSize: '1.8vh', marginLeft: '7.5vh', borderRadius: '0 0 2vh 2vh' }}>
+                <div style={{ minHeight: '2.5rem', backgroundColor: '#333334', display: 'flex', flexDirection: 'column', marginRight:'1rem',color: '#aeb1b6', fontSize: '0.9rem', marginLeft: '3.75rem', borderRadius: '0 0 1rem 1rem' }}>
                     {currentImage != "" && (
-                        <div style={{ height: '8vh', width: '8vh', position: 'relative', marginLeft: '2vh', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                        <div style={{ height: '4rem', width: '4rem', position: 'relative', marginLeft: '1rem', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                             {isMedia && <img style={{ position: 'absolute' }} src={Play} height={'20%'} />}
 
                             <img src={currentImage} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                         </div>
                     )}
 
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <HomeItem onClick={() => document.getElementById('upload-comment-image')?.click()} img={Camera} styleImg={{ width: '3vh', height: '3vh' }} styleContainer={{ marginLeft: '2vh' }} />
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',marginRight:'1rem' }}>
+                        <HomeItem onClick={() => document.getElementById('upload-comment-image')?.click()} img={Camera} styleImg={{ width: '1.5rem', height: '1.5rem' }} styleContainer={{ marginLeft: '1rem' }} />
                         <input onChange={(e) => { onChangeInputImage(e) }} type="file" style={{ display: 'none' }} id="upload-comment-image" />
                         {content == "" && currentImage == "" ? (
 
-                            <HomeItem img={Send} onClick={() => alert('Bài viết không được để trống')} styleImg={{ width: '3vh', height: '3vh' }} />
+                            <HomeItem img={Send} onClick={() => alert('Bài viết không được để trống')} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
                         ) : (
-                            <HomeItem img={SendBlue} onClick={onCreateComment} styleImg={{ width: '3vh', height: '3vh' }} />
+                            <HomeItem img={SendBlue} onClick={onCreateComment} styleImg={{ width: '1.5rem', height: '1.5rem' }} />
 
                         )}
                     </div>

@@ -181,7 +181,7 @@ const NavBar = () => {
             <div className="home-icon-right-container">
                 {mesOpen && <Messenger closeMessenger={closeMessage} />}
                 {notificationOpen && <Notification closeNotification={closeNotification} />}
-                {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting} />}
+                {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting}  />}
                 <div className="icon-round-background">
                     <div className="home-icon-right">
                         <CgMenuGridO style={{ fontSize: '2rem' }} className="home-icon-right-mes4" />
@@ -199,8 +199,15 @@ const NavBar = () => {
                     </div>
                 </div>
                 <UserImage img={user.image == "" ? Default : user.image} width={'2.5rem'} height={'2.5rem'}
-                 onClick={()=>setUserSettingOpen((prev)=>!prev)} 
-                // onClick={()=>navigate('/profileOther')}
+                 onClick={()=>{
+                    if(!userSettingOpen){
+                        setUserSettingOpen(true)
+                    }
+                    
+                 }} 
+                 id="user-setting"
+                 
+          
                  />
 
 

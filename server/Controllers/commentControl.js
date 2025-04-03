@@ -7,9 +7,7 @@ const fs = require('fs')
 
 const getCommentOfPost = async(req,res)=>{
     try{
-        const user = await  userModel.findById(req.params.userId).lean()
-        const post = await postModel.findById(req.params.postId).lean()
-        if(!user) return res.status(400).json("Không thấy người dùng")
+        const post = await postModel.exists({_id:req.params.postId})
         if(!post) return res.status(400).json("Không thấy bài viết")
         const comments = await commentModel.find({postId:req.params.postId}).sort({createdAt:-1}).lean()
         return res.status(200).json(comments)
@@ -22,7 +20,7 @@ const getCommentOfPost = async(req,res)=>{
 const getLengthCommentOfPost = async(req,res)=>{
     try{
 
-        const post = await postModel.findById(req.params.postId).lean()
+        const post = await postModel.exists({_id:req.params.postId})
         if(!post) return res.status(400).json("Không thấy bài viết")
             const commentsLength = await commentModel.countDocuments({ postId: req.params.postId });
             return res.status(200).json(commentsLength)
@@ -32,28 +30,13 @@ const getLengthCommentOfPost = async(req,res)=>{
     }
 
 }
-const getCommentReply = async (req,res)=>{
-    try{
-        const user = await  userModel.findById(req.params.userId).lean()
-        const post = await postModel.findById(req.params.postId).lean()
-        const commentParent = await commentModel.findById(req.params.commentId).lean()
-        if(!user) return res.status(400).json("Không thấy người dùng")
-        if(!post) return res.status(400).json("Không thấy bài viết")
-        if(!commentParent) return res.status(400).json("Không thấy bình luận")
 
-         const commentReply = await commentReplyModel.findById({parentCommentId:req.params.commentId});
-            return res.status(200).json(commentReply)
-    }catch(e){
-        console.log(e)
-        return res.status(500).json('Lỗi độ dài lấy bình luận')
-    }
-}
 
 const createComment = async(req,res)=>{
     try{
         const {text,postId,userId,type,parentId} = req.body
-        const user = await  userModel.findById(userId).lean()
-        const post = await postModel.findById(postId).lean()
+        const user = await  userModel.exists({_id:userId})
+        const post = await postModel.exists({_id:postId})
         if(!user) return res.status(400).json("Không thấy người dùng")
         if(!post) return res.status(400).json("Không thấy bài viết")
         
@@ -77,8 +60,8 @@ const createCommentWithImage = async(req,res)=>{
         const imageFile = req.file.path
         if(!imageFile) return res.status(400).json('Không thấy ảnh') 
         const {text,postId,userId,type,parentId} = req.body
-        const user = await  userModel.findById(userId).lean()
-        const post = await postModel.findById(postId).lean()
+        const user = await  userModel.exists({_id:userId})
+        const post = await postModel.exists({_id:postId})
         if(!user) return res.status(400).json("Không thấy người dùng")
         if(!post) return res.status(400).json("Không thấy bài viết")
         const fileBuffer = await sharp(imageFile)
@@ -111,8 +94,8 @@ const createCommentWithVideo =async (req,res)=>{
     try{
         const {text,postId,userId,type,parentId} = req.body
         const videoFile = req.file.path
-        const user = await  userModel.findById(userId).lean()
-        const post = await postModel.findById(postId).lean()
+        const user = await  userModel.exists({_id:userId})
+        const post = await postModel.exists({_id:postId})
         if(!user) return res.status(400).json("Không thấy người dùng")
         if(!post) return res.status(400).json("Không thấy bài viết")
         const response = await cloudinary.uploader.upload(videoFile,{
@@ -136,4 +119,20 @@ const createCommentWithVideo =async (req,res)=>{
         return res.status(500).json('Lỗi tạo bình luận với video')
     }
 }
-module.exports={getLengthCommentOfPost,getCommentReply,createComment,createCommentWithImage,getCommentOfPost,createCommentWithVideo}
+const updateChildren = async (req,res)=>{
+    try{
+        const {commentId} =req.body
+        const updateComment = await commentModel.findOneAndUpdate({
+            _id:commentId
+        },{
+            $inc:{children:1}
+        })
+        return res.status(200).json(updateComment)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json('Lỗi update phản hồi')
+    }
+}
+
+
+module.exports={getLengthCommentOfPost,updateChildren,createComment,createCommentWithImage,getCommentOfPost,createCommentWithVideo}

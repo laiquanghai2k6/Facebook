@@ -1,8 +1,10 @@
-import { UserInfo } from "../slices/userSlice";
+import { User, UserInfo } from "../slices/userSlice";
 import UserImage from "./UserImage";
 import Default from '../assets/default-image.png'
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { navigateHome } from "../slices/homeNavigateSlice";
 type DropdownSearchProps = {
     user: Array<UserInfo>
     isPending: boolean
@@ -10,6 +12,7 @@ type DropdownSearchProps = {
 
 const DropdownSearch = ({ user, isPending }: DropdownSearchProps) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     return (
 
         <div className="dropdown-search-container">
@@ -22,8 +25,17 @@ const DropdownSearch = ({ user, isPending }: DropdownSearchProps) => {
 
             ) :(
                 user.map((u, i) => {
+                    
                     return (
-                        <div onClick={()=>navigate(`/profileOther`,{state:u})} key={i} className="left-home-items" style={{ width: '95%' }}>
+                        <div onClick={()=>{
+                            
+                        dispatch(navigateHome(""))
+                            
+                            navigate(`/profileOther?userId=${u._id}`)
+                        }
+                            
+                        }
+                        key={i} className="left-home-items" style={{ width: '95%' }}>
                             <UserImage img={u.image ? u.image : Default} height={'2.5rem'} width={'2.5rem'} />
                             <p style={{ color: 'white' }} className="left-home-text">{`${u.name}`}</p>
                         </div>

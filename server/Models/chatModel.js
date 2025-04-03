@@ -12,7 +12,11 @@ const chatSchema = new mongoose.Schema({
         type:String,
         default:""
     },
-    isSeen:{
+    seen1:{
+        type:Boolean,
+        default:false
+    },
+    seen2:{
         type:Boolean,
         default:false
     },

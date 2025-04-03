@@ -92,7 +92,7 @@ const Register = () => {
             dispatch(setUser(data as User))
             setError(null)
             isLoading(false)
-            navigate('/home')
+
         }catch(e){
             if(axios.isAxiosError(e)){
                 setError(e.response?.data)

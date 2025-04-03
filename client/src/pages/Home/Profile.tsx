@@ -6,17 +6,19 @@ import { User, UserInfo } from "../../slices/userSlice";
 import { navigateHome } from "../../slices/homeNavigateSlice";
 import { useEffect } from "react";
 type ProfileProps = {
-    user:UserInfo
+    user:User
 }
 
 const Profile = ({user}:ProfileProps) => {
-    console.log(3)
     const dispatch = useDispatch()
- 
+    useEffect(()=>{
+
+        dispatch(navigateHome(""))
+    },[])
     return ( 
         <div className="profile">
             <NavProfile user={user} />
-            <BodyProfile  />
+            <BodyProfile user={user}  />
         </div>
      );
 }

@@ -14,7 +14,7 @@ const MessengerDownNav = ({card,userOnline}:MessengerDownNavProps) => {
         dispatch(closeMessengerCard(card._id))
     }
     const isOnline = Object.keys(userOnline).includes(card._id)
-    console.log('card._id',card._id)
+  
     const now = Date.now()
     let lastOnline = "Unknown"
     

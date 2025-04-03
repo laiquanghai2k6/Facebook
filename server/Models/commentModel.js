@@ -28,7 +28,10 @@ const commentSchema = new mongoose.Schema({
     parentId:{
         type:String,
         default:"",
-
+    },
+    children:{
+        type:Number,
+        default:0
     }
 
 },{

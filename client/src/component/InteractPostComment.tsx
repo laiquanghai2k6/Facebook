@@ -213,9 +213,9 @@ const InteractPostComment = ({lengthComment,post}:InteractPostCommentProps) => {
                 <div className="infomation-interact-post" style={{userSelect:'none'}}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         
-                    {emoji[0].num !=0 &&<HomeItem  className="-interact" img={emoji[0].image}   styleImg={{ height: '3.5vh', width: '3.5vh' }} styleContainer={{ marginBottom: '0', }} styleText={{ display: 'none' }} /> }
-                    {emoji[1].num!=0 && <HomeItem className="-interact"  img={emoji[1].image} styleImg={{ height: '3.5vh', width: '3.5vh' }} styleContainer={{ marginBottom: '0',marginLeft:'-1.2vh' }} styleText={{ display: 'none' }}/>}   
-                    {emoji[2].num!=0 &&<HomeItem className="-interact"  img={ emoji[2].image} styleImg={{ height: '3.5vh', width: '3.5vh' }} styleContainer={{ marginBottom: '0',marginLeft:'-1.2vh' }} styleText={{ display: 'none' }}/>}
+                    {emoji[0].num !=0 &&<HomeItem  className="-interact" img={emoji[0].image}   styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0', }} styleText={{ display: 'none' }} /> }
+                    {emoji[1].num!=0 && <HomeItem className="-interact"  img={emoji[1].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0',marginLeft:'-0.6rem' }} styleText={{ display: 'none' }}/>}   
+                    {emoji[2].num!=0 &&<HomeItem className="-interact"  img={ emoji[2].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0',marginLeft:'-0.6rem' }} styleText={{ display: 'none' }}/>}
                         
                          
                         <p className="text-infomation-interact-post" >{total != 0 ? total : ""}</p>

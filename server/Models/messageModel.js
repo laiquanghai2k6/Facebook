@@ -3,7 +3,7 @@ const { default: mongoose, Types } = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
     chatId:{
-        type:mongoose.Schema.Types.ObjectId,Ref:'Chat'
+        type:mongoose.Schema.Types.ObjectId,ref:'Chat'
     },
     senderId:{
         type:String,

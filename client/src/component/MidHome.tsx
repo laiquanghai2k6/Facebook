@@ -52,7 +52,7 @@ const MidHome: React.FC<MidHomeProps> = () => {
         fetchNextPage,
         hasNextPage
     } =useInfiniteQuery({
-        queryKey:['posts'],
+        queryKey:['posts',storePost],
         queryFn:fetchAllPost,
         initialPageParam:1,
         getNextPageParam:(lastPage)=>{
@@ -92,7 +92,7 @@ const MidHome: React.FC<MidHomeProps> = () => {
                 )}
             /> */}
 
-            <div className="post-list-container">
+            {/* <div className="post-list-container">
                 {storePost.map((post, index) => {
                     if(post.type == "own")
                     return (
@@ -102,7 +102,7 @@ const MidHome: React.FC<MidHomeProps> = () => {
                         <PostShare key={index} post={post as PostShareType} />
                     )
                 })}
-            </div>
+            </div> */}
             <div className="post-list-container">
                 {data?.pages.map((pages)=>{
                     return(

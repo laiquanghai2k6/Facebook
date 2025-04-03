@@ -54,22 +54,24 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
     }
     const {data,isLoading} = useQuery({
         queryKey:['messenger-user'],
-        queryFn:()=>FetchMessengerUser()
+        queryFn:()=>FetchMessengerUser(),
+        refetchOnWindowFocus: false
     })
     const currentMessengerCard = useSelector((state:RootState)=>state.messengerCard)
     const OpenCard = (chat:Chat,index:number)=>{
-        console.log(4)
         const width = window.innerWidth;
-        const isCardExist = currentMessengerCard.messengerCard.find((cards)=>cards._id == currentUser._id)
+        const isCardExist = currentMessengerCard.messengerCard.find((cards)=>cards.chatId == chat._id)
         let newCard:UserQuickChatID|null = null
         if(data){
-
              newCard = {
                 _id:recipientUser[index],
                 name:data[index].name,
                 image:data[index].image,
                 lastOnline:data[index].lastOnline,
-                chatId:chat._id
+                chatId:chat._id,
+                seen1:chat.seen1,
+                seen2:chat.seen2,
+                user:chat.user
             }
         }
         const remToPx = 20*16
@@ -99,7 +101,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
 
                         return(
                             <MessengerCard CLick={()=>{
-                                console.log('click')
+                                
                                 OpenCard(chat,i)
                             }} key={i} user={data[i]} chat={chat} />
                         )

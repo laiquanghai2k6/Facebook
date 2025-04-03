@@ -7,19 +7,18 @@ import { socket } from '../socket';
 import { UserOnline } from '../slices/messengerSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserInfo } from '../selector/userSelector';
-import { requestMessage } from '../service/service';
+import { requestChat, requestMessage } from '../service/service';
 import { useMutation } from '@tanstack/react-query';
 import { Message } from './MessengerDownCard';
 import test from '../assets/test2.png'
 import { addMessage } from '../slices/messageSlice';
 import { updateLastMessage, UpdateMessage } from '../slices/chatSlice';
 interface MessengerDownInputProps {
-    keys: number,
     card: UserQuickChatID,
     userOnline: UserOnline
 }
 
-const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, keys, card }) => {
+const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, card }) => {
     const user = useSelector(selectUserInfo)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const sendRef = useRef<HTMLImageElement>(null);
@@ -57,13 +56,13 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
         };
     }, [card.chatId])
     useEffect(()=>{
-        const keyEventHandler = (event:Event)=>{
+        const keyEventHandler = async (event:Event)=>{
             const keyboardEvent = event as unknown as KeyboardEvent;
             
             if(keyboardEvent.key == "Enter" && !keyboardEvent.shiftKey && textAreaRef.current?.value !=""){
                 keyboardEvent.preventDefault()
-                console.log('good')
-                // sendRef.current?.click()
+                // console.log('good')
+                 sendMessage()
             }
         }
         if(textAreaRef.current){
@@ -84,7 +83,6 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
                 chatId: card.chatId,
                 senderId: user._id,
             }
-            console.log('data req',data)
 
             const response = await requestMessage.post('/createMessage', data)
             return response.data as Message
@@ -113,17 +111,54 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
     }
     const mutationNormal = useMutation({
         mutationFn: async (text:string) => CreateMessageNormal(text),
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (data) {
-                const { text, chatId, senderId, createdAt } = data
-                const newMessage: Message = {
-                    chatId,
-                    senderId,
-                    createdAt,
-                    text,
+                const { text, chatId, senderId, createdAt, image } = data
+                const now = new Date()
+                const newMessage:Message={
+                    chatId:chatId,
+                    createdAt:createdAt,
+                    senderId:senderId,
+                    image:image,
+                    text:text
                 }
-                console.log(newMessage)
-
+                const lastMessage:UpdateMessage={
+                    chatId:chatId,
+                    lastMessage:text ? text : "",
+                    updatedAt:now.toString(),
+                    senderId:senderId
+                }
+                if (userOnline[card._id]){
+                    socket.emit('sendMessage', {
+                        fromUser:user._id,
+                        from: userOnline[user._id],
+                        toSocketId: userOnline[card._id],
+                        message: text,
+                        createdAt: now,
+                        name: user.name,
+                        imageUser: user.image,
+                        image:image,
+                        chatId:chatId,
+                        user:card.user,
+                        seen2At:true,
+                        seen1At:true,
+                    })
+        
+                }
+                const isUser1 = card?.user[0] == user._id
+                if(isUser1){
+                    const lastMessageMongodb = {...lastMessage,seen1:true,seen2:false}
+                     requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                }else{
+                    const lastMessageMongodb = {...lastMessage,seen1:false,seen2:true}
+                     requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                }
+                
+                dispatch(updateLastMessage(lastMessage))
+                dispatch(addMessage(newMessage))
+                setCurrentText("")
+                setCurrentFile(undefined)
+                setCurrentImage("")
             }
             // dispatch(setComment(newComment))
             // setLoading(false)
@@ -137,17 +172,55 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
     })
     const mutationImage = useMutation({
         mutationFn: async ({file,text}:{file:File,text:string}) => CreateMessageImage(file,text),
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (data) {
                 const { text, chatId, senderId, createdAt, image } = data
-                const newMessage: Message = {
-                    chatId,
-                    senderId,
-                    createdAt,
-                    text,
-                    image
+                const now = new Date()
+                const newMessage:Message={
+                    chatId:chatId,
+                    createdAt:createdAt,
+                    senderId:senderId,
+                    image:image,
+                    text:text
                 }
-                console.log(newMessage)
+                const lastMessage:UpdateMessage={
+                    chatId:chatId,
+                    lastMessage:text ? text : "",
+                    updatedAt:now.toString(),
+                    senderId:senderId
+                }
+                if (userOnline[card._id]){
+                    socket.emit('sendMessage', {
+                        fromUser:user._id,
+                        from: userOnline[user._id],
+                        toSocketId: userOnline[card._id],
+                        message: text,
+                        createdAt: now,
+                        name: user.name,
+                        imageUser: user.image,
+                        image:image,
+                        chatId:chatId,
+                        user:card.user,
+                        seen2At:true,
+                        seen1At:true,
+                    })
+        
+                }
+                const isUser1 = card?.user[0] == user._id
+                if(isUser1){
+                    const lastMessageMongodb = {...lastMessage,seen1:true,seen2:false}
+                     requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                }else{
+                    const lastMessageMongodb = {...lastMessage,seen1:false,seen2:true}
+                     requestChat.put('/updateLatestMessage', lastMessageMongodb)
+                }
+                
+                dispatch(updateLastMessage(lastMessage))
+                dispatch(addMessage(newMessage))
+                setCurrentText("")
+                setCurrentFile(undefined)
+                setCurrentImage("")
+          
 
             }
 
@@ -162,7 +235,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
     })
     const onChangeInputImage = (e:ChangeEvent<HTMLInputElement>)=>{
         const filePath = e.target.files?.[0] as File
-        console.log(filePath)
+        
         if(!filePath.type.startsWith('image/')){
             alert('Vui lòng gửi ảnh')
         }
@@ -170,48 +243,17 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
             const imageUrl = URL.createObjectURL(filePath)
             setCurrentFile(filePath)
             setCurrentImage(imageUrl)
-            console.log(imageUrl)
+           
 
         }
     }
-    const sendMessage = () => {
+    const sendMessage =async () => {
         if(currentImage != "" && currentFile ){
             mutationImage.mutate({file:currentFile,text:currentText})
         }else{
             mutationNormal.mutate(currentText)
         }
-        const now = new Date()
-        if (userOnline[card._id]){
-            socket.emit('sendMessage', {
-                fromUser:user._id,
-                from: userOnline[user._id],
-                toSocketId: userOnline[card._id],
-                message: currentText,
-                createdAt: now,
-                name: user.name,
-                imageUser: user.image,
-                image:currentImage,
-                chatId:card.chatId
-            })
-            const lastMessage:UpdateMessage={
-                chatId:card._id,
-                lastMessage:currentText,
-                createdAt:now.toString(),
-                senderId:user._id
-            }
-            const newMessage:Message={
-                chatId:card.chatId,
-                createdAt:now.toString(),
-                senderId:user._id,
-                image:currentImage,
-                text:currentText
-            }
-            dispatch(updateLastMessage(lastMessage))
-            dispatch(addMessage(newMessage))
-        }
-        setCurrentText("")
-        setCurrentFile(undefined)
-        setCurrentImage("")
+       
 
     }
     
@@ -219,7 +261,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
         <div className="messenger-down-card-input">
             {currentImage != "" &&(
 
-                <img src={test} style={{width:'3rem',height:'3rem',marginBottom:'0.2rem',borderRadius:'0.2rem',marginLeft:'3.5rem',marginRight:'auto',objectFit:'cover'}} />
+                <img src={currentImage} style={{width:'3rem',height:'3rem',marginBottom:'0.2rem',borderRadius:'0.2rem',marginLeft:'3.5rem',marginRight:'auto',objectFit:'cover'}} />
             )}
 
             <div style={{display:'flex',flexDirection:'row'}}>
@@ -234,7 +276,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, key
             {currentImage == "" && currentText == "" ? (
                 <img src={Send} className='messenger-down-icon-right' />
             ) : (
-                <img src={SendBlue} ref={sendRef } onClick={() => {
+                <img src={SendBlue} ref={sendRef} onClick={() => {
                     sendMessage()
                 }} className='messenger-down-icon-right' />
             )}

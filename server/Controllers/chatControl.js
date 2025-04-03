@@ -6,8 +6,8 @@ const createChat = async (req,res)=>{
     try{
 
         const {user1,user2} = req.body
-        const currentUser1 = await userModel.findById(user1)
-        const currentUser2 = await userModel.findById(user2)
+        const currentUser1 = await userModel.exists({_id:user1})
+        const currentUser2 = await userModel.exists({_id:user2})
         if(!currentUser1 | !currentUser2) return res.status(400).json('Lỗi tìm user')
         const newChat = new chatModel({
             user:[user1,user2]
@@ -22,14 +22,16 @@ const createChat = async (req,res)=>{
 const updateLatestMessage = async(req,res)=>{
     try{
 
-        const {chatId,lastMessage,senderId} = req.body
+        const {chatId,lastMessage,senderId,seen1,seen2} = req.body
         const update = await chatModel.findOneAndUpdate({
             _id:chatId,
 
         },{
             isSeen:false,
             lastMessage:lastMessage,
-            senderId:senderId
+            senderId:senderId,
+            seen1:seen1,
+            seen2:seen2
         },{
             new:true
         }) 
@@ -40,10 +42,32 @@ const updateLatestMessage = async(req,res)=>{
         res.status(500).json('Lỗi lấy chat')
     }
 }
+const updateSeen = async(req,res)=>{
+    try{
+        const{seenWhatAt,chatId,isSeen} = req.body
+       
+
+        const updateChat = await chatModel.findOneAndUpdate(
+            {
+                _id:chatId
+            },{
+                [`seen${seenWhatAt}`]:isSeen
+              },
+              {
+                new:true
+              }
+        )
+        return res.status(200).json(updateChat)
+    }catch(e){
+        console.log(e)
+        res.status(500).json('Lỗi seen chat')
+
+    }
+}
 const getChatOfUser = async (req,res)=>{
     try{
         const {userId} = req.query
-        const currentUser = await userModel.findById(userId)
+        const currentUser = await userModel.exists({_id:userId})
         if(!currentUser) return res.status(400).json('Lỗi tìm user')
         const userChat = await chatModel.find({
             user:{$in:[userId]}
@@ -57,4 +81,4 @@ const getChatOfUser = async (req,res)=>{
     }
 }
 
-module.exports = {createChat,getChatOfUser,updateLatestMessage}
+module.exports = {createChat,getChatOfUser,updateLatestMessage,updateSeen}

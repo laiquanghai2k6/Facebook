@@ -35,13 +35,14 @@ const Login = (): JSX.Element => {
         try {
             setLoading(true)
 
-            const { data } = await requestUser.post('/login', loginData)
+            const {data} = await requestUser.post('/login', loginData)
+            console.log('dataLogin:',data)
             setLoginData((prev) => ({ ...prev, error: '' }))
           
             dispatch(setUser(data as User))
             setLoading(false)
-
             navigate('/home')
+
         } catch (e: unknown) {
             if (axios.isAxiosError(e)) {
                 setLoginData((prev) => ({ ...prev, error: e.response?.data }))

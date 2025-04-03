@@ -1,98 +1,144 @@
 
 import MessengerTextLeft from "./MessengerTextLeft";
 import MessengerTextRight from "./MessengerTextRight";
-import MessengerSeen from "./MessengerSeen";
 import MessengerDownInput from "./MessengerDownInput";
 import MessengerDownNav from "./MessengerDownNav";
-import React, { useEffect, useRef, useState } from "react";
-import { UserQuickChat, UserQuickChatID } from "./RightHome";
-import { socket } from "../socket";
-import { UserOnline } from "../slices/messengerSlice";
-import { shallowEqual, useSelector } from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { UserQuickChatID } from "./RightHome";
+
+
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "./Spinner";
-import { requestMessage } from "../service/service";
+
+import { requestChat, requestMessage } from "../service/service";
 import { selectUserInfo } from "../selector/userSelector";
-interface MessengerDownCard{
-    keys:number,
-    card:UserQuickChatID
+import { socket } from "../socket";
+import { UserOnline } from "../slices/messengerSlice";
+import { selectSeenChatParam } from "../selector/chatSelector";
+import { UpdateSeen ,updateSeen} from "../slices/chatSlice";
+interface MessengerDownCardProps {
+    card: UserQuickChatID,
+    userOnline:UserOnline
 }
 export type Message = {
-    text?:string,
-    senderId:string,
-    image?:string,
-    createdAt:string,
-    chatId:string
+    text?: string,
+    senderId: string,
+    image?: string,
+    createdAt: string,
+    chatId: string
 }
-const MessengerDownCard:React.FC<MessengerDownCard> = ({keys,card}) => {
-    console.log(card)
-    const scrollRef = useRef<HTMLDivElement|null>(null)
-    const userOnline = useSelector((state:RootState)=>state.messengerCard.userOnline)
-    
+const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }) => {
+
+    const scrollRef = useRef<HTMLDivElement | null>(null)
     const currentUser = useSelector(selectUserInfo)
-    const updateMessage = useSelector((state:RootState)=>state.message.message,shallowEqual)
-    useEffect(()=>{
+    const updateMessage = useSelector((state: RootState) => state.message.message)
+    const dispatch = useDispatch()
+    const selectSeenParam = selectSeenChatParam(card.chatId)
+    const currentSeenChat = useSelector(selectSeenParam)
+
+    useEffect(() => {
         const scroll = scrollRef.current
-        if(scroll){
+        if (scroll) {
             scroll.scrollTop = scroll.scrollHeight
         }
-      
-    },[])
 
-    const FetchMessage = async ()=>{
-        try{
+    }, [])
+
+
+    const FetchMessage = async () => {
+        try {
             const response = await requestMessage.get(`/getMessageOfChat?chatId=${card.chatId}`)
             return response.data as Message[]
-        }catch(e){
+        } catch (e) {
             console.log(e)
             alert('Lỗi không thấy đoạn chat')
         }
     }
-    const {data,isLoading} = useQuery({
-        queryKey:['message'],
-        queryFn:()=>FetchMessage()
+    const { data, isLoading } = useQuery({
+        queryKey: [`message${card._id}`],
+        queryFn: () => FetchMessage(),
+        refetchOnWindowFocus: false
     })
+    useEffect(() => {
+        const updateSeens = async () => {
+            try {
+                const numberCurrentUser = card.user[0] == currentUser._id ? 1 : 2
+                const dataUpdate:UpdateSeen = {
+                    seenWhatAt: numberCurrentUser,
+                    chatId: card.chatId,
+                    isSeen:true
+                }
+                dispatch(updateSeen(dataUpdate))
+
+                const response = await requestChat.put('/updateSeen', dataUpdate)
+                socket.emit('seenMessage',{...dataUpdate,fromUser:currentUser._id,toUser:card._id})
+              
+                console.log('seen success', response.data)
+            } catch (e) {
+                console.log(e)
+                alert('Lỗi seen')
+            }
+        }
+        updateSeens()
+    }, [data, updateMessage])
+    console.log('curentSeenChat',currentSeenChat)
     return (
         <div className="messenger-down-card">
-            {isLoading && <Spinner />}
+
             <MessengerDownNav userOnline={userOnline} card={card} />
             <div ref={scrollRef} className="messenger-down-card-text-container">
-            {updateMessage?.map((message,i)=>{
-                    if(message.chatId == card.chatId){
-  
-                        if(message.senderId == currentUser._id && message.text){
-                            
-                            return(
-                                <MessengerTextRight key={`right${i}`} text={message.text} />
-                            )
-                        }else{
-           
-                            return(
-                                <MessengerTextLeft key={`left${i}`} text={message.text ? message.text:""} /> 
-                            )
-                        }
-                    }
-                    
-                 })}
-                 {data?.map((message,i)=>{
-                    return(
+                {isLoading ? <></> : (
+                    <>
+                        {updateMessage?.map((message, i) => {
+                            if (message.chatId == card.chatId) {
 
-                        message.senderId == currentUser._id && message.text ? (
-    
-                            <MessengerTextRight key={i} text={message.text} />
-                        ) :(
-    
-                            <MessengerTextLeft key={i} text={message.text ? message.text:""} /> 
-                        )                       
-                    )
-                        
-                    }
-                 )}
-             
-                <MessengerSeen />
+
+                                if (message.senderId == currentUser._id) {
+                                    return (
+
+                                        <div key={`dsf${i}`}>
+                                            <MessengerTextRight time={message.createdAt} image={message.image ? message.image : ""} key={`right${i}`} text={message.text ? message.text : ""} />
+                                            
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <MessengerTextLeft image={message.image ? message.image : ""} time={message.createdAt} key={`left${i}`} text={message.text ? message.text : ""} />
+                                    )
+                                }
+                            }
+
+                        })}
+                        {data?.map((message, i) => {
+
+                            if (message.chatId == card.chatId) {
+                                if (message.senderId == currentUser._id) {
+                                    return (
+
+                                        <div key={`dsff${i}`}>
+                                            <MessengerTextRight image={message.image ? message.image : ""} time={message.createdAt} key={`rights${i}`} text={message.text ? message.text : ""} />
+
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <MessengerTextLeft image={message.image ? message.image : ""} time={message.createdAt} key={`lefts${i}`} text={message.text ? message.text : ""} />
+                                    )
+                                }
+                            }
+
+
+
+
+                        }
+                        )}
+                    </>
+                )}
+
+
             </div>
-            <MessengerDownInput userOnline={userOnline} card={card} keys={keys} />
+            <MessengerDownInput userOnline={userOnline} card={card} key={card._id} />
 
         </div>
     );

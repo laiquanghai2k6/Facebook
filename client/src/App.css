@@ -552,7 +552,7 @@ padding-left: 5vw;
 .text-post-comment {
   white-space: pre-line;
   -webkit-box-orient: vertical;
-  font-size: 1.9vh;
+  font-size: 0.95rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre-line;
@@ -579,7 +579,27 @@ padding-left: 5vw;
 
 
 }
-
+.image-message.right{
+  margin-top: 0.5rem;
+  cursor: pointer;
+  width: 70%;
+  align-self: flex-end;
+  height: 10rem;
+  background-color: black;
+  border-radius: 1rem;
+}
+.image-message.left{
+  margin-top: 0.5rem;
+  cursor: pointer;
+  width: 70%;
+  
+  height: 10rem;
+  background-color: black;
+  border-radius: 1rem;
+}
+.image-message:hover{
+    background: rgba(255, 255, 255, 0.1);
+}
 .interact-post {
 
   display: flex;
@@ -676,10 +696,10 @@ padding-left: 5vw;
 .modal-comment-box {
   display: flex;
   flex-direction: column;
-  width: 83vh;
+  width: 41.5rem;
   height: 90%;
   border-radius: 0.5rem;
-  padding-top: 7vh;
+  padding-top: 3.5rem;
   background-color: #252728;
   overflow: auto;
   position: relative;
@@ -693,15 +713,15 @@ padding-left: 5vw;
   display: flex;
   margin-top: 20vh;
   flex-direction: column;
-  width: 83vh;
-  
+  min-width: 83vh;
+  width: auto;
   height: auto;
   min-height: 50%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
   padding-top: 7vh;
   background-color: #252728;
-  overflow: auto;
+  overflow-y: auto;
   position: relative;
   -ms-overflow-style: none !important;
   position: fixed;
@@ -751,7 +771,7 @@ padding-left: 5vw;
   height: 60%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
-  padding-top: 7vh;
+  padding-top: 3.5rem;
   background-color: #252728;
   overflow: hidden;
   position: relative;
@@ -761,8 +781,8 @@ padding-left: 5vw;
 .close-button {
   right: 0;
   top: 0;
-  height: 7vh;
-  width: 7vh;
+  height: 3.5rem;
+  width: 3.5rem;
   position: absolute;
   padding: 1rem 1rem 0 0;
   cursor: pointer;
@@ -770,23 +790,24 @@ padding-left: 5vw;
 
 .emoji-appear {
   position: absolute;
-  width: 35vh;
+  width: 17.5rem;
   top: 0;
   left: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  height: 5vh;
+  height: 2.5rem;
   background-color: #1c1c1d;
-  border-radius: 10vh;
+  border-radius: 5rem;
   opacity: 0;
   display:none
 }
 
 .comment-list {
-  margin: 1rem 0 0.5rem 1.5vh;
+  margin: 1rem 0 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;
+  flex: 1;
   /* overflow-y: auto; */
 }
 
@@ -794,8 +815,7 @@ padding-left: 5vw;
   display: flex;
   flex-direction: column;
   height: auto;
-  width: 78vh;
-
+  width: 39rem;
   padding: 0.5rem;
 
 }
@@ -805,10 +825,9 @@ padding-left: 5vw;
   display: flex;
   flex-direction: row;
   height: auto;
-  width: 70vh;
-
+  width: 35rem;
   padding: 0.5rem;
-  margin-left: 8vh;
+
   position: relative;
 }
 
@@ -817,8 +836,8 @@ padding-left: 5vw;
 
 .user-image-comment {
   display: flex;
-  width: 5vh;
-  height: 5vh;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   background-color: #3b3d3e;
   text-align: center;
@@ -838,8 +857,8 @@ padding-left: 5vw;
 .text-comment {
   
   border-radius: 1rem;
-  font-size: 1.9vh;
-  padding: 0.5vh;
+  font-size: 0.95rem;
+  padding: 0.25rem;
   overflow: hidden;
 
   margin-left: 0.5rem;
@@ -858,13 +877,16 @@ padding-left: 5vw;
 .comment-input {
   display: flex;
   flex-direction: column;
+
   height: auto;
-  flex: 1;
+  /* flex: 1; */
+  z-index: 1000;
   margin-right: 0.5rem;
   background-color: #252728;
   border-top: 0.5px solid #3a3c3d;
   position: sticky;
   bottom: 0;
+  justify-content: flex-end;
   width: 100%;
   padding-bottom: 0.5rem;
   
@@ -874,7 +896,7 @@ padding-left: 5vw;
 .text-comment-input {
   background-color: #333334;
   border-radius: 1rem 1rem 0 0;
-  font-size: 1.9vh;
+  font-size: 0.95rem;
   padding: 0.5rem;
   margin-right: 1rem;
   outline: none;
@@ -1083,6 +1105,7 @@ padding-left: 5vw;
   display: flex;
   flex-direction: column;
   position: relative;
+  border: 1px solid rgb(55, 49, 49);
 }
 
 .nav-bar-card {
@@ -1121,6 +1144,7 @@ padding-left: 5vw;
 
 .messenger-down-card-text {
   display: flex;
+  flex-direction: column;
   height: auto;
   width: 100%;
   align-items: center;
@@ -1132,7 +1156,8 @@ padding-left: 5vw;
   color: white;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .text-messenger-right {
@@ -1203,15 +1228,16 @@ padding-left: 5vw;
 
 .user-setting-container {
   position: absolute;
-  width: 50vh;
-  height: 30vh;
+  width: 25rem;
+  height: 13rem;
   background-color: #252728;
   top: 3rem;
-  margin-right: 30vh;
+  margin-right: 15rem;
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
+  border: 0.1rem solid rgb(126, 121, 121) ;
 }
 
 .messenger-down-icon-right {
@@ -1314,6 +1340,8 @@ padding-left: 5vw;
   justify-content: space-between;
 }
 .top-profile-camera{
+  z-index: 1000;
+  cursor: pointer;
   color:black;
   background-color: white;
   width: 11.5rem;
@@ -1326,7 +1354,7 @@ padding-left: 5vw;
   align-items: center;
   display: flex;
   border-radius: 0.5rem;
-  cursor: pointer;
+
 }
 .top-left-profile{
   display:flex;
