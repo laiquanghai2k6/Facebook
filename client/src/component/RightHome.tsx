@@ -13,6 +13,7 @@ import moment from "moment";
 import { addChat } from "../slices/chatSlice";
 import { Chat } from "../pages/Home/Home";
 import { useEffect, useRef } from "react";
+import LoadingRightHome from "./LoadingRightHome";
 type RightHomeProps = {
     currentUser:UserInfo
 }
@@ -170,7 +171,8 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
 
     return (
         <div className="right-home">
-            {isLoading && <Spinner />}
+            {isLoading && <LoadingRightHome />}
+            
             <p style={{ marginBottom: '1rem' }}>Người liên hệ</p>
             {data?.map((u, i) => {
                 

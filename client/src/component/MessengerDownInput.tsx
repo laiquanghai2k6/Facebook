@@ -55,26 +55,18 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
             }
         };
     }, [card.chatId])
-    useEffect(()=>{
-        const keyEventHandler = async (event:Event)=>{
-            const keyboardEvent = event as unknown as KeyboardEvent;
-            
-            if(keyboardEvent.key == "Enter" && !keyboardEvent.shiftKey && textAreaRef.current?.value !=""){
-                keyboardEvent.preventDefault()
-                // console.log('good')
-                 sendMessage()
-            }
-        }
-        if(textAreaRef.current){
-            textAreaRef.current.addEventListener('keydown',keyEventHandler)
-        }
-        return ()=>{
-            if(textAreaRef.current){
-                textAreaRef.current.removeEventListener('keydown',keyEventHandler)
-            }
-        }
+    // useEffect(()=>{
+        
+    //     if(textAreaRef.current){
+    //         textAreaRef.current.addEventListener('keydown',keyEventHandler)
+    //     }
+    //     return ()=>{
+    //         if(textAreaRef.current){
+    //             textAreaRef.current.removeEventListener('keydown',keyEventHandler)
+    //         }
+    //     }
    
-    },[])
+    // },[])
     const CreateMessageNormal = async (text:string) => {
         try {
             
@@ -128,11 +120,14 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                     updatedAt:now.toString(),
                     senderId:senderId
                 }
+                const isUser1 = card?.user[0] == user._id
+
                 if (userOnline[card._id]){
                     socket.emit('sendMessage', {
                         fromUser:user._id,
                         from: userOnline[user._id],
                         toSocketId: userOnline[card._id],
+                        toUserId:card._id,
                         message: text,
                         createdAt: now,
                         name: user.name,
@@ -140,12 +135,11 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                         image:image,
                         chatId:chatId,
                         user:card.user,
-                        seen2At:true,
-                        seen1At:true,
+                        seen2At:isUser1 ? false : true,
+                        seen1At:isUser1 ? true : false,
                     })
         
                 }
-                const isUser1 = card?.user[0] == user._id
                 if(isUser1){
                     const lastMessageMongodb = {...lastMessage,seen1:true,seen2:false}
                      requestChat.put('/updateLatestMessage', lastMessageMongodb)
@@ -189,6 +183,8 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                     updatedAt:now.toString(),
                     senderId:senderId
                 }
+                const isUser1 = card?.user[0] == user._id
+
                 if (userOnline[card._id]){
                     socket.emit('sendMessage', {
                         fromUser:user._id,
@@ -201,12 +197,10 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                         image:image,
                         chatId:chatId,
                         user:card.user,
-                        seen2At:true,
-                        seen1At:true,
+                        seen2At:isUser1 ? false:true,
+                        seen1At:isUser1 ? true : false,
                     })
-        
                 }
-                const isUser1 = card?.user[0] == user._id
                 if(isUser1){
                     const lastMessageMongodb = {...lastMessage,seen1:true,seen2:false}
                      requestChat.put('/updateLatestMessage', lastMessageMongodb)
@@ -256,7 +250,20 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
        
 
     }
-    
+    const keyEventHandler = async (event:KeyboardEvent<HTMLTextAreaElement>)=>{
+        // const keyboardEvent = event as unknown as KeyboardEvent;
+        
+        if(event.key == "Enter" && !event.shiftKey ){
+            event.preventDefault()
+            // console.log('good')
+            const value = event.currentTarget.value.trim();
+            if(value){
+                sendMessage()
+
+                console.log('currentText',currentText)
+            }
+        }
+    }
     return (
         <div className="messenger-down-card-input">
             {currentImage != "" &&(
@@ -267,7 +274,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
             <div style={{display:'flex',flexDirection:'row'}}>
 
             <img src={Camera} className='messenger-down-icon-left' onClick={()=>document.getElementById('upload-message-image')?.click()} />
-                <textarea ref={textAreaRef} spellCheck={false} value={currentText} onChange={(e) =>{
+                <textarea onKeyDown={(e)=>keyEventHandler(e)} ref={textAreaRef} spellCheck={false} value={currentText} onChange={(e) =>{
                     if(e.target.value != '\n'){
                         setCurrentText(e.target.value)
                     }

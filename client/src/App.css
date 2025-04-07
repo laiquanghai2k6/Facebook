@@ -1,10 +1,15 @@
 body {
  
   /* overflow-x: auto; */
-  overflow-y: auto;
+  /* overflow-y: auto; */
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  background-color: #1c1c1d;
+  
   user-select: none;
+  height: 100%;
+  background-color: #f0f2f5;
+}
+html{
+  background-color: #f0f2f5;
 }
 
 .hr-facebook-home {
@@ -15,13 +20,13 @@ body {
 
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .login {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: 100%;
 
   /* align-items: center; */
   justify-content: space-around;
@@ -38,7 +43,7 @@ body {
   /* align-items: center; */
   justify-content: space-around;
   background-color: #f0f2f5;
-  padding-top: 5vh;
+  padding-top: 2.5rem;
 }
 
 .register-form {
@@ -79,6 +84,7 @@ body {
 
 .text-login-container {
   max-width: 22.5rem;
+  min-height: 20rem;
 }
 
 .facebook-text-login {
@@ -101,6 +107,7 @@ body {
   margin-top: 1.5rem;
   height: 25rem;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .login-input {
@@ -201,7 +208,7 @@ body {
 
 .home {
   background-color: #1c1c1d;
-  height: 100vh;
+  height: 100%;
   margin-top: 8vh;
   overflow-y: hidden;
 }
@@ -347,7 +354,7 @@ padding-left: 5vw;
   text-align: center;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   cursor: pointer;
 }
@@ -434,6 +441,17 @@ padding-left: 5vw;
   cursor: pointer;
   align-items: center;
 }
+.loading-user-image{
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  user-select: none;
+  border-radius: 50%;
+  background-color: #3b3d3e;
+  animation: loadingPost 1.5s infinite;
+
+
+
+}
 .left-home-items{
   display: flex;
   flex-direction: row;
@@ -513,6 +531,9 @@ padding-left: 5vw;
   width: 44rem;
   height: 60rem;
 }
+.right-home-loading-container{
+
+}
 .emoji-loading-post-container{
   display:flex;
   align-items:center;
@@ -574,9 +595,11 @@ padding-left: 5vw;
 
 .image-post {
   user-select: none;
-  max-width: 50rem;
+  width: 100%;
   height: 100%;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
 .image-message.right{
@@ -711,15 +734,15 @@ padding-left: 5vw;
 }
 .modal-info-box{
   display: flex;
-  margin-top: 20vh;
+  margin-top: 10rem;
   flex-direction: column;
-  min-width: 83vh;
+  min-width: 41.5rem;
   width: auto;
   height: auto;
   min-height: 50%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
-  padding-top: 7vh;
+  padding-top: 3.5rem;
   background-color: #252728;
   overflow-y: auto;
   position: relative;
@@ -730,15 +753,15 @@ padding-left: 5vw;
   transform: translateX(-50%);
 }
 .modal-create-post-box{
-  margin-top: 4vh;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  width: 83vh;
+  width: 41.5rem;
   height: auto;
   min-height: 70%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
-  padding-top: 7vh;
+  padding-top: 3.5rem;
   background-color: #252728;
   overflow: hidden;
   position: relative;
@@ -747,15 +770,15 @@ padding-left: 5vw;
  
 }
 .modal-share-post-box{
-  margin-top: 4vh;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  width: 83vh;
+  width: 41.5rem;
   height: auto;
   min-height: 40%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
-  padding-top: 7vh;
+  padding-top: 3.5rem;
   background-color: #252728;
   overflow: hidden;
   position: relative;
@@ -764,10 +787,10 @@ padding-left: 5vw;
  
 }
 .modal-emoji-post-box{
-  margin-top: 4vh;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  width: 65vh;
+  width: 32.5rem;
   height: 60%;
   padding-bottom: 1rem;
   border-radius: 0.5rem;
@@ -1036,6 +1059,7 @@ padding-left: 5vw;
   display: flex;
   font-size: 2.5rem;
   cursor: pointer;
+  position: relative;
 }
 
 .messenger-card:hover {
@@ -1083,6 +1107,31 @@ padding-left: 5vw;
   align-items: center;
   justify-content: center;
   display: flex;
+  position: relative;
+}
+.notification-round{
+  height: 1rem;
+  width: 1rem;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  right:0;
+  bottom: -0.1rem;
+  animation:appear-noti 0.75s linear
+}
+@keyframes appear-noti{
+  0%{
+    scale: 0;
+  }
+  75%{
+    scale: 1.2;
+  }
+  100%{
+    scale:1
+  }
 }
 
 .messenger-down-container {
@@ -1257,6 +1306,7 @@ padding-left: 5vw;
   position: relative;
   width: 75rem;
   border-radius: 0 0 1.5vh 1.5vh;
+  margin-top: 7rem;
 
 }
 
@@ -1279,6 +1329,7 @@ padding-left: 5vw;
   align-items: center;
   justify-content: center;
   position: relative;
+  /* margin-top: ; */
 
 }
 
@@ -1298,12 +1349,14 @@ padding-left: 5vw;
   display: flex;
   flex-direction: row;
   position: absolute;
-  top: 0vh;
+ 
   width: 100%;
-  padding-left: 5vh;
+  padding-left: 2.5rem;
   justify-content: space-between;
   padding-bottom: 1rem;
   border-bottom: 1px solid #65686c;
+  margin-top: 3.5rem;
+  
 }
 
 
@@ -1361,7 +1414,7 @@ padding-left: 5vw;
   flex-direction:row;
 }
 .mid-profile-container{
-  margin-top: 11.5rem;
+  margin-top: 15rem;
   width: 100%;
 }
 .mid-profile-navigate{
@@ -1497,6 +1550,14 @@ padding-left: 5vw;
   border-radius: 2rem;
   animation: loadingPost 1.5s infinite;
 }
+.loading-text{
+  max-width: 15rem;
+  width: 15rem;
+  margin-left: 1rem;
+  height: 1rem;
+  border-radius: 2rem;
+  animation: loadingPost 1.5s infinite;
+}
 .loading-time-post{
   margin-top: 0.5rem;
   width: 7rem;
@@ -1625,7 +1686,7 @@ padding-left: 5vw;
   align-items: center;
 }
 .user-item-emoji-text{
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: bold;
   margin-left: 1rem;
   cursor: pointer;
@@ -1697,6 +1758,14 @@ padding-left: 5vw;
 }
 
 @media (max-width: 870px) {
+  .text-login-container{
+    display: flex;
+    flex-direction: column;
+  }
+  .text-login-container h2{
+    text-align: center;
+
+  }
   .home-input{
     display: none;
   }
@@ -1756,7 +1825,7 @@ padding-left: 5vw;
   .login {
     flex-direction: column;
     align-items: center;
-
+    padding-top: 0;
   }
 
   .facebook-text-login {
@@ -1766,8 +1835,8 @@ padding-left: 5vw;
 
   .auth-container {
     background-color: white;
-    height: 60vh;
-    width: 60vh;
+    height: 30rem;
+    width: 30rem;
     border-radius: 1rem;
   }
 

@@ -3,7 +3,7 @@ import { JSX, useEffect, useRef, useState } from "react";
 import Input from "../../component/Input";
 import InputPassword from "../../component/InputPassword";
 import FacebookButton, { BUTTON_TYPE } from "../../component/button/FacebookButton";
-import { requestUser } from "../../service/service";
+import { requestNotification, requestUser } from "../../service/service";
 import axios from "axios";
 import Error from "../../component/Error";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import { setUser, User } from "../../slices/userSlice";
 import Spinner from "../../component/Spinner";
 import { socket } from "../../socket";
 import { setCurrentOnline, UserOnline } from "../../slices/messengerSlice";
+import { notiType, setNoti } from "../../slices/notiSlice";
 ;
 type loginData = {
     email: string,
@@ -24,6 +25,7 @@ const Login = (): JSX.Element => {
         password: '',
         error: ''
     })
+   
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
@@ -34,11 +36,13 @@ const Login = (): JSX.Element => {
     const submitHandler = async () => {
         try {
             setLoading(true)
+            console.log('dataLogin:','ss')
 
             const {data} = await requestUser.post('/login', loginData)
             console.log('dataLogin:',data)
             setLoginData((prev) => ({ ...prev, error: '' }))
-          
+            const response = await requestNotification.get(`getNotification/${data._id}`)
+            dispatch(setNoti(response.data as notiType[]))
             dispatch(setUser(data as User))
             setLoading(false)
             navigate('/home')
@@ -50,6 +54,7 @@ const Login = (): JSX.Element => {
             setLoading(false)
         }
     }
+
     return (
         <div className="login">
             {loading && <Spinner />}

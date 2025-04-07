@@ -211,7 +211,7 @@ const updateEmoji = async (req, res) => {
             )
 
         }
-        console.log(updatePost)
+        
         return res.status(200).json(updatePost)
 
 

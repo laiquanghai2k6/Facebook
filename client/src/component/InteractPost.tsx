@@ -43,7 +43,7 @@ export const debounce = (callback: Function, delay: number) => {
         }, delay)
     }
 }
-const reactions: Array<Emoji> = [{
+export const reactions: Array<Emoji> = [{
     type: "unlike",
     currentEmojiString: Like,
     text: 'Thích',
@@ -120,12 +120,16 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
     ]
     
     currentEmoji.sort((a,b)=>b.num-a.num)
+
+
     const [emoji,setEmoji] = useState(currentEmoji)
     const initEmojiObject = reactions.find((react) => {
         const type = react.type as keyof PostType;
-        return (post[type] as Wows | Likes | Hahas | Loves | Sads | Angrys)?.userId?.length;
+        // console.log('postType:',post[type])
+        const PostType = post[type] as Wows | Likes | Hahas | Loves | Sads | Angrys
+        return PostType?.userId?.length &&PostType.userId.includes(user._id);
     }) || reactions[0];
-
+    // console.log('initEmoji:',initEmojiObject)
     const [currentEmojiObject, setCurrentEmojiObject] = useState<Emoji>(initEmojiObject)
     let total: number = emoji.reduce((acc, item) => {
         return acc + item.num
@@ -144,21 +148,33 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
             switch (e) {
                 case "Đã thích":
                     emojiInMongoDB = 'like'
+                    post.like.like--
+                    post.like.userId = post.like.userId.filter((l)=>l != user._id)
                     break
                 case "Yêu thích":
                     emojiInMongoDB = 'love'
+                    post.love.love--
+                    post.love.userId = post.love.userId.filter((l)=>l != user._id)
                     break
                 case "Haha":
                     emojiInMongoDB = 'haha'
+                    post.haha.haha--
+                    post.haha.userId = post.haha.userId.filter((l)=>l != user._id)
                     break
                 case "Wow":
                     emojiInMongoDB = 'wow'
+                    post.wow.wow--
+                    post.wow.userId = post.wow.userId.filter((l)=>l != user._id)
                     break
                 case "Buồn":
                     emojiInMongoDB = 'sad'
+                    post.sad.sad--
+                    post.sad.userId = post.sad.userId.filter((l)=>l != user._id)
                     break
                 case "Phẫn nộ":
                     emojiInMongoDB = 'angry'
+                    post.angry.angry--
+                    post.angry.userId = post.angry.userId.filter((l)=>l != user._id)
                     break
                 default:
                     break
@@ -176,7 +192,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
             })
 
             const response = await requestPost.put('/updateEmoji', data)
-            console.log(response.data)
+            
         } else {
             const data = {
                 postId: post._id,
@@ -212,7 +228,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
         if (currentEmojiObject.currentEmojiString == Like) {
             setCurrentEmojiObject((prev) => {
                 clickLikeHandlerDebounce('liked', prev.text)
-
+                post.like.like++
+                post.like.userId.push(user._id)
                 return (reactions[1])
             })
 
@@ -221,6 +238,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
 
         } else {
             setCurrentEmojiObject((prev) => {
+                
                 clickLikeHandlerDebounce('like', prev.text)
                 return (reactions[0])
             })
@@ -248,21 +266,33 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
         switch (currentEmojiObject.text) {
             case "Đã thích":
                 emojiInMongoDB = 'like'
+                post.like.like--
+                post.like.userId = post.like.userId.filter((l)=>l != user._id)
                 break
             case "Yêu thích":
                 emojiInMongoDB = 'love'
+                post.love.love--
+                post.love.userId = post.love.userId.filter((l)=>l != user._id)
                 break
             case "Haha":
                 emojiInMongoDB = 'haha'
+                post.haha.haha--
+                post.haha.userId = post.haha.userId.filter((l)=>l != user._id)
                 break
             case "Wow":
                 emojiInMongoDB = 'wow'
+                post.wow.wow--
+                post.wow.userId = post.wow.userId.filter((l)=>l != user._id)
                 break
             case "Buồn":
                 emojiInMongoDB = 'sad'
+                post.sad.sad--
+                post.sad.userId = post.sad.userId.filter((l)=>l != user._id)
                 break
             case "Phẫn nộ":
                 emojiInMongoDB = 'angry'
+                post.angry.angry--
+                post.angry.userId = post.angry.userId.filter((l)=>l != user._id)
                 break
             default:
                 break
@@ -295,6 +325,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                     emoji: 'like',
                     isInc: true
                 }
+                post.like.like++
+                post.like.userId.push(user._id)
                 const response1 = await requestPost.put('/updateEmoji', data1)
                 console.log(response1.data)
                 setEmoji((prev)=>{
@@ -304,6 +336,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                 setCurrentEmojiObject(reactions[1])
                 break;
             case 'love':
+                post.love.love++
+                post.love.userId.push(user._id)
                 let data2 = {
                     postId: post._id,
                     userId: user._id,
@@ -321,6 +355,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
 
                 break;
             case 'haha':
+                post.haha.haha++
+                post.haha.userId.push(user._id)
                 let data3 = {
                     postId: post._id,
                     userId: user._id,
@@ -338,6 +374,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
 
                 break;
             case 'wow':
+                post.wow.wow++
+                post.wow.userId.push(user._id)
                 let data4 = {
                     postId: post._id,
                     userId: user._id,
@@ -355,6 +393,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
 
                 break;
             case 'sad':
+                post.sad.sad++
+                post.sad.userId.push(user._id)
                 let data5 = {
                     postId: post._id,
                     userId: user._id,
@@ -372,6 +412,8 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
 
                 break;
             case 'angry':
+                post.angry.angry++
+                post.angry.userId.push(user._id)
                 let data6 = {
                     postId: post._id,
                     userId: user._id,
@@ -404,7 +446,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
     return (
         <>
             {modalComment && type == 'own'&&isModal && (
-                <ModalComment post={post} setModalComment={setModalComment} />
+                <ModalComment type={type} post={post} setModalComment={setModalComment} />
 
             )}
             {modalComment && type == 'share'&&isModal && (
@@ -425,8 +467,6 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                         {emoji[0].num > 0 && <HomeItem className="-interact" img={emoji[0].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0', }} styleText={{ display: 'none' }} />}
                         {emoji[1].num > 0 && <HomeItem className="-interact" img={emoji[1].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0', marginLeft: '-0.6rem' }} styleText={{ display: 'none' }} />}
                         {emoji[2].num > 0 && <HomeItem className="-interact" img={emoji[2].image} styleImg={{ height: '1.75rem', width: '1.75rem' }} styleContainer={{ marginBottom: '0', marginLeft: '-0.6rem' }} styleText={{ display: 'none' }} />}
-
-
                         <p onClick={()=>setModalEmoji(true)} className="text-infomation-interact-post" >{totalEmoji != 0 ? totalEmoji : ""}</p>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '0.25rem', marginBottom: '0.25rem' }}>

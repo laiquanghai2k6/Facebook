@@ -25,7 +25,7 @@ const notificationSchema = new mongoose.Schema({
     linking:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Notification",
-        default:""
+        default:null
     }
 
 },{

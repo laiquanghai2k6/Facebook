@@ -40,8 +40,7 @@ const ProfileOther = () => {
     enabled:!!id
    }) 
 
-    if(!data)
-    return <Spinner />
+
 
 
 

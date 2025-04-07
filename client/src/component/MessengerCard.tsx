@@ -18,9 +18,9 @@ const MessengerCard = ({ chat, user, CLick }: MessengerCardProps) => {
     const chatTime = new Date(chat.updatedAt).getTime()
     // console.log(chat.createdAt.getTime())
     const convertDate = ConvertDateOnline(now - chatTime)
-
+    const unRead = chat.senderId == user._id && (!chat.seen1 || !chat.seen2)
     return (
-        <div className="messenger-card" onClick={() => CLick()}>
+        <div className="messenger-card" onClick={() => CLick(unRead)}>
             <UserImage img={user.image} height={'3.25rem'} width={'3.25rem'} />
             <div className="messenger-card-text">
                 <p style={{ color: 'white', fontSize: '1rem', fontWeight: 'bold' }}>{user.name}</p>

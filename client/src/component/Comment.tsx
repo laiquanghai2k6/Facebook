@@ -9,6 +9,9 @@ import moment from "moment";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Spinner from "./Spinner";
 import SkeletonComment from "./LoadingComment";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { navigateHome } from "../slices/homeNavigateSlice";
 
 type CommentProps = {
     comment: CommentType | ReplyComment,
@@ -20,7 +23,7 @@ type CommentProps = {
 
 
 }
-export const ConvertDate = (timeDif: number) => {
+export const ConvertDate = (timeDif: number,timePost:number) => {
 
     const seconds = Math.floor(timeDif / 1000)
     const minutes = Math.floor(timeDif / 60000)
@@ -34,7 +37,7 @@ export const ConvertDate = (timeDif: number) => {
         return `${hour} giờ trước`
     } else if (days < 4) {
         return `${days} ngày trước`
-    } else return moment(timeDif).format("DD-MM-YY HH:mm:ss")
+    } else return moment(timePost).format("DD-MM-YY HH:mm:ss")
 
 }
 
@@ -43,8 +46,14 @@ const Comment = ({ setUserReply, dataUser, comment, setParentComment, openCommen
     const timePost = new Date(comment.createdAt).getTime()
     const timeNow = Date.now()
     const timeDif = timeNow - timePost
-    const formatDate = ConvertDate(timeDif)
+    const formatDate = ConvertDate(timeDif,timePost)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     // console.log('comment in Comment:',comment)
+    const NavigateOtherProfile = ()=>{
+                navigate(`/profileOther?userId=${userId}`)
+                dispatch(navigateHome(""))
+            }
     if (type == 'direct') {
         // console.log('in here')
         return (
@@ -54,13 +63,13 @@ const Comment = ({ setUserReply, dataUser, comment, setParentComment, openCommen
 
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <UserImage img={dataUser?.image == "" ? Default : dataUser?.image} 
+                        <UserImage onClick={NavigateOtherProfile} img={dataUser?.image == "" ? Default : dataUser?.image} 
                         style={{zIndex:'500'}} 
                         height={'2.5rem'} width={'2.5rem'} minWidth={'2.5rem'} minHeight={'2.5rem'} />
                         <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column', marginLeft: '0.5rem' }} >
                             <div className="comment-info-container">
 
-                                <p style={{ display: 'block', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
+                                <p onClick={NavigateOtherProfile}  style={{ display: 'block', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
                                 {text != "" && <p className="text-comment">{text}</p>}
                             </div>
                             {video != "" && <video controls src={video} style={{ height: '20rem', width: '30rem', objectFit: 'contain' }} />}
@@ -97,11 +106,11 @@ const Comment = ({ setUserReply, dataUser, comment, setParentComment, openCommen
 
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <UserImage img={dataUser?.image == "" ? Default : dataUser?.image} height={'2.5rem'} width={'2.5rem'} minWidth={'2.5rem'} minHeight={'2.5rem'} />
+                        <UserImage onClick={NavigateOtherProfile}  img={dataUser?.image == "" ? Default : dataUser?.image} height={'2.5rem'} width={'2.5rem'} minWidth={'2.5rem'} minHeight={'2.5rem'} />
                         <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column', marginLeft: '0.5rem' }} >
                             <div className="comment-info-container">
 
-                                <p style={{ display: 'block', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
+                                <p onClick={NavigateOtherProfile}  style={{ display: 'block', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
                                 {text != "" && <p className="text-comment">{text}</p>}
                             </div>
                             {video != "" && <video controls src={video} style={{ height: '20rem', width: '30rem', objectFit: 'contain' }} />}

@@ -19,10 +19,11 @@ type CommentInputProps = {
     post: PostType,
     userReply:UserInfo|null,
     parentIds:string,
-    closeCommentReplyInput:Function
+    closeCommentReplyInput:Function,
+    setLoading:Function
 }
 
-const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: CommentInputProps) => {
+const CommentInputReply = ({closeCommentReplyInput, setLoading,userReply,parentIds,post }: CommentInputProps) => {
     const [currentImage, setCurrentImage] = useState("")
     const [currentFile, setCurrentFile] = useState<File | undefined>(undefined)
     const [isMedia, setIsMedia] = useState(false)
@@ -118,7 +119,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
                     data.append("type",'reply')
                     data.append("parentId",parentIds)
                     
-                    // isLoading(true)
+                    setLoading(true)
                     const response = await requestComment.post('/createCommentWithImage', data)
                     const {image,text,postId,userId,type,parentId,createdAt,video,_id} = response.data
                     const newComment:ReplyComment ={
@@ -133,7 +134,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
                         type
                     } 
                     dispatch(setReply(newComment))
-                    // isLoading(false)
+                    setLoading(false)
     
                    
                     console.log(response.data)
@@ -147,7 +148,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
                     formData.append("type","reply")
                     formData.append("parentId",parentIds)
     
-                    // isLoading(true)
+                    setLoading(true)
     
     
     
@@ -166,7 +167,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
                     } 
                     dispatch(setReply(newComment))
            
-                    // isLoading(false)
+                    setLoading(false)
     
     
     
@@ -180,7 +181,7 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
                         type: 'reply',
                         parentId:parentIds
                     }
-                    // isLoading(true)
+                    setLoading(true)
     
     
     
@@ -201,6 +202,8 @@ const CommentInputReply = ({closeCommentReplyInput, userReply,parentIds,post }: 
             }
             await requestComment.put('/updateChildren',{commentId:parentIds})
             dispatch(updateChildren(parentIds))
+            setLoading(false)
+
         }catch(e){
             console.log(e)
             alert('Lỗi phản hồi')

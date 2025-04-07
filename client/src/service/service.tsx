@@ -1,10 +1,11 @@
 
 import axios from 'axios'
-export const userUrl = 'http://localhost:5000/users'
-export const postUrl = 'http://localhost:5000/posts'
-export const commentUrl = 'http://localhost:5000/comments'
-export const chatUrl = 'http://localhost:5000/chats'
-export const messageUrl = 'http://localhost:5000/messages'
+export const userUrl = 'http://192.168.110.9:3000/users'
+export const postUrl = 'http://192.168.110.9:3000/posts'
+export const commentUrl = 'http://192.168.110.9:3000/comments'
+export const chatUrl = 'http://192.168.110.9:3000/chats'
+export const messageUrl = 'http://192.168.110.9:3000/messages'
+export const notificationUrl = 'http://192.168.110.9:3000/notifications'
 
 export const requestUser = axios.create({
     baseURL:userUrl,
@@ -26,6 +27,11 @@ export const requestChat = axios.create({
 })
 export const requestMessage = axios.create({
     baseURL:messageUrl,
+    withCredentials:true
+
+})
+export const requestNotification = axios.create({
+    baseURL:notificationUrl,
     withCredentials:true
 
 })

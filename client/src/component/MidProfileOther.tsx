@@ -21,7 +21,7 @@ const MidProfileOther = ({user}:MidProfileOtherProp) => {
     const setCurrentNavigateCallback2 = useCallback(() => {
         setCurrentNavigate(2)
     }, [currentNavigate])
-    console.log('user',user)
+ 
     return (
         <div className="mid-profile-container">
             <MidProfileNavigate  currentNavigate={currentNavigate} setCurrentNavigate1={setCurrentNavigateCallback1} setCurrentNavigate2={setCurrentNavigateCallback2} />

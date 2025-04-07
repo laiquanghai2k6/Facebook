@@ -209,6 +209,52 @@ const updateLastOnline = async (req, res) => {
 }
 
 
+const addFriend = async (req,res)=>{
+    try{
+        const {fromId,toId} = req.body
+        const fromUser = await userModel.findById(fromId)
+        const toUser = await userModel.findById(toId)
+        if (fromId === toId) {
+            return res.status(400).json({ error: "Bạn không thể kết bạn với chính mình" });
+        }
+        if(!fromUser || !toUser) 
+        return res.status(404).json({error:'Lỗi không thấy người kết bạn'})
+        if (fromUser.friend.includes(toId) || toUser.friend.includes(fromId)) {
+            return res.status(400).json({ error: "Hai người đã là bạn bè" });
+        }
+        fromUser.friend.push(toId)
+        toUser.friend.push(fromId)
+        await fromUser.save()
+        await toUser.save()
+        return res.status(200).json({ message: "Kết bạn thành công" });
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({error:'Lỗi kết bạn'})
+    }
+}
 
+const setNumberNoti = async (req,res)=>{
+    try{
+        const {userId,numberNoti,type} = req.body
+        const currentUser = await userModel.findById(userId)
+        if(!currentUser)
+            return res.status(404).json({error:'Lỗi không thấy người dùng'})
+        console.log('type:',type)
+        console.log('num:',numberNoti)
+        console.log('userId:',userId)
+        if(type == 'set')
+        currentUser.numberNoti = numberNoti
+        if(type =='inc')
+        currentUser.numberNoti = currentUser.numberNoti+1
+        if(type == 'dec')
+        currentUser.numberNoti = currentUser.numberNoti-1
 
-module.exports = { getUser,updateLastOnline,getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }
+        await currentUser.save()
+        return res.status(200).json({ message: "cập nhật thông báo thành công" });
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({error:'Lỗi cập nhật thông báo'})
+    }
+}
+
+module.exports = {setNumberNoti, getUser,addFriend,updateLastOnline,getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

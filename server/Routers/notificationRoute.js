@@ -1,6 +1,9 @@
 const express = require('express')
-const { createFriendNotification, ActionFriendRequest } = require('../Controllers/notificationControl')
+const { createFriendNotification, actionFriendRequest, deleteFriendRequest, getNotification } = require('../Controllers/notificationControl')
 const route = express.Router()
 
 route.post('/createFriendNotification',createFriendNotification)
-route.put('/createFriendNotification',ActionFriendRequest)
+route.put('/actionFriendRequest',actionFriendRequest)
+route.delete('/deleteFriendRequest/:toUserId/:fromUserId',deleteFriendRequest)
+route.get('/getNotification/:ownerId',getNotification)
+module.exports = route

@@ -78,6 +78,10 @@ const userSchema = new mongoose.Schema({
     chats:{
         type:Array,
         default:[]
+    },
+    numberNoti:{
+        type:Number,
+        default:0
     }
 
 

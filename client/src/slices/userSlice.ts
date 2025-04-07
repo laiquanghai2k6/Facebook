@@ -15,6 +15,7 @@ export interface User {
     _id:string,
     _v:string| null,
     backgroundImage:string,
+    numberNoti:number
     
 }
 interface UserState{
@@ -35,6 +36,7 @@ export const initialUser:UserState = {
         backgroundImage:"",
         _v:null,
         bio:"",
+        numberNoti:0
     }
 }
 export type UserLive ={

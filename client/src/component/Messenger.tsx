@@ -10,6 +10,7 @@ import { UserInfo } from "../slices/userSlice";
 import { Chat } from "../pages/Home/Home";
 import { UserQuickChat, UserQuickChatID } from "./RightHome";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
+import { descreaseUnRead } from "../slices/chatSlice";
 
 
 interface MessengerProps {
@@ -58,7 +59,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
         refetchOnWindowFocus: false
     })
     const currentMessengerCard = useSelector((state:RootState)=>state.messengerCard)
-    const OpenCard = (chat:Chat,index:number)=>{
+    const OpenCard = (chat:Chat,index:number,unRead:boolean)=>{
         const width = window.innerWidth;
         const isCardExist = currentMessengerCard.messengerCard.find((cards)=>cards.chatId == chat._id)
         let newCard:UserQuickChatID|null = null
@@ -87,8 +88,10 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
                dispatch(fullMessengerCard(newCard))
             }
         }
+      
         closeMessenger()
     }
+    console.log('currentChat:',currentChat)
     return (
 
 
@@ -100,9 +103,9 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
                     if(data?.[i] && data){
 
                         return(
-                            <MessengerCard CLick={()=>{
+                            <MessengerCard CLick={(unRead:boolean)=>{
                                 
-                                OpenCard(chat,i)
+                                OpenCard(chat,i,unRead)
                             }} key={i} user={data[i]} chat={chat} />
                         )
                     }else return<div key={i}></div>

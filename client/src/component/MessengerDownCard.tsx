@@ -16,7 +16,7 @@ import { selectUserInfo } from "../selector/userSelector";
 import { socket } from "../socket";
 import { UserOnline } from "../slices/messengerSlice";
 import { selectSeenChatParam } from "../selector/chatSelector";
-import { UpdateSeen ,updateSeen} from "../slices/chatSlice";
+import { descreaseUnRead, UpdateSeen ,updateSeen} from "../slices/chatSlice";
 interface MessengerDownCardProps {
     card: UserQuickChatID,
     userOnline:UserOnline
@@ -74,15 +74,15 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
                 const response = await requestChat.put('/updateSeen', dataUpdate)
                 socket.emit('seenMessage',{...dataUpdate,fromUser:currentUser._id,toUser:card._id})
               
-                console.log('seen success', response.data)
             } catch (e) {
                 console.log(e)
                 alert('Lỗi seen')
             }
         }
+        dispatch(descreaseUnRead(card._id))
         updateSeens()
     }, [data, updateMessage])
-    console.log('curentSeenChat',currentSeenChat)
+
     return (
         <div className="messenger-down-card">
 
@@ -104,7 +104,7 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
                                     )
                                 } else {
                                     return (
-                                        <MessengerTextLeft image={message.image ? message.image : ""} time={message.createdAt} key={`left${i}`} text={message.text ? message.text : ""} />
+                                        <MessengerTextLeft imageUser={card.image} image={message.image ? message.image : ""} time={message.createdAt} key={`left${i}`} text={message.text ? message.text : ""} />
                                     )
                                 }
                             }
@@ -123,7 +123,7 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
                                     )
                                 } else {
                                     return (
-                                        <MessengerTextLeft image={message.image ? message.image : ""} time={message.createdAt} key={`lefts${i}`} text={message.text ? message.text : ""} />
+                                        <MessengerTextLeft imageUser={card.image} image={message.image ? message.image : ""} time={message.createdAt} key={`lefts${i}`} text={message.text ? message.text : ""} />
                                     )
                                 }
                             }

@@ -1,14 +1,23 @@
 import React, { useEffect, useRef } from "react";
-import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
+
 import NotificationCard from "./NotificationCard";
-import UserImage from "./UserImage";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { clearNoti, setNumberNoti } from "../slices/notiSlice";
+import { requestUser } from "../service/service";
+
+
 
 interface NotificationCardProps{
-    closeNotification:Function
+    closeNotification:Function,
+    currentUserId:string
 }
 
-const Notification:React.FC<NotificationCardProps> = ({closeNotification}) => {
+const Notification:React.FC<NotificationCardProps> = ({closeNotification,currentUserId}) => {
     const notiRef = useRef<null |HTMLDivElement>(null)
+    const currentNoti = useSelector((state:RootState)=>state.notification.notification)
+    const dispatch = useDispatch()
     useEffect(()=>{
 
         const handlerClick = (event:MouseEvent)=>{
@@ -20,18 +29,36 @@ const Notification:React.FC<NotificationCardProps> = ({closeNotification}) => {
                 }
             }
         }
+        const update = {
+            userId:currentUserId,
+            type:'set',
+            numberNoti:0
+        }
+        requestUser.put('/setNumberNoti',update)
+        dispatch(setNumberNoti(0))
 
         document.addEventListener('mousedown',handlerClick)
         return ()=>{
+            // dispatch(clearNoti())
             document.removeEventListener('mousedown',handlerClick)
         }
     })
+
+    
+   
     return (
         <div className="notification-container" ref={notiRef}>
             <p style={{ color: 'white', fontWeight: 'bold', fontSize: '3vh' }}>Thông báo</p>
             <div className="notification-card-container">
-                <NotificationCard />
-                <NotificationCard />
+              
+                {currentNoti?.map((noti,i)=>{
+
+                    return(
+                        <NotificationCard key={i} noti={noti} />
+
+                    )
+                })}
+                
 
            
             </div>

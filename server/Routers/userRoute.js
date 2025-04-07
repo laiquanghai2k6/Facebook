@@ -1,7 +1,7 @@
 const express  = require('express')
 const {upload} = require('../Cloud/clounary.js')
 const route = express.Router()
-const {loginUser, registerUser,uploadUserImage, uploadUserBackground, setUserBio, setUserProfileInfo, getUser, searchUser, getAllUserRandom, updateLastOnline, getUserProfile} = require('../Controllers/userControl') 
+const {loginUser, registerUser,uploadUserImage, uploadUserBackground, setUserBio, setUserProfileInfo, getUser, searchUser, getAllUserRandom, updateLastOnline, getUserProfile, addFriend, setNumberNoti} = require('../Controllers/userControl') 
 
 route.post('/login',loginUser)
 route.get('/getUser/:userId',getUser)
@@ -14,5 +14,7 @@ route.get('/searchUser',searchUser)
 route.get('/getAllUserRandom',getAllUserRandom)
 route.put('/updateLastOnline',updateLastOnline)
 route.get('/getUserProfile/:userId',getUserProfile)
+route.put('/addFriend',addFriend)
+route.put('/setNumberNoti',setNumberNoti)
 module.exports = route
 

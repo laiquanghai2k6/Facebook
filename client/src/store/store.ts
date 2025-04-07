@@ -6,6 +6,7 @@ import { commentSlice } from "../slices/commentSlice";
 import { messengerSlice } from "../slices/messengerSlice";
 import { chatSlice } from "../slices/chatSlice";
 import { messengeSlice } from "../slices/messageSlice";
+import { notiSlice } from "../slices/notiSlice";
 
 
 export const store = configureStore({
@@ -16,7 +17,8 @@ export const store = configureStore({
         comment:commentSlice.reducer,
         messengerCard:messengerSlice.reducer,
         chats:chatSlice.reducer,
-        message:messengeSlice.reducer
+        message:messengeSlice.reducer,
+        notification:notiSlice.reducer
 
     }
 })

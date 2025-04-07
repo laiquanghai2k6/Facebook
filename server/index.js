@@ -7,6 +7,7 @@ const postRoute = require('./Routers/postRoute')
 const commentRoute = require('./Routers/commentRoute')
 const chatRoute = require('./Routers/chatRoute')
 const messageRoute = require('./Routers/messageRoute')
+const notificationRoute = require('./Routers/notificationRoute')
 
 const axios = require('axios')
 const cors = require('cors')
@@ -33,6 +34,7 @@ app.use('/posts',postRoute)
 app.use('/comments',commentRoute)
 app.use('/chats',chatRoute)
 app.use('/messages',messageRoute)
+app.use('/notifications',notificationRoute)
 mongoose.connect(atlasUrl).then(async ()=>{
     console.log('successfully mongoose')
 }).catch((e)=>{
@@ -53,7 +55,10 @@ const io = new Server({ cors: {
 io.on('connection',(socket)=>{
     let currentUserId = ''
     socket.on('uploadCurrentUserId',(userId,socketId)=>{
-        userOnline[userId] = socketId
+        if(!userOnline[userId]){
+            userOnline[userId] =[]
+        }
+        userOnline[userId].push(socketId)
         currentUserId = userId
         console.log('online:')
         console.log(userOnline)
@@ -62,21 +67,27 @@ io.on('connection',(socket)=>{
     socket.on('requestUserOnline',()=>{
         socket.emit('getUserOnline',userOnline)
     })
-    socket.on('sendMessage',({from,seen1At,seen2At,user,fromUser,isNew,toSocketId,chatId,image,imageUser,message,createdAt,name})=>{
-        
-        io.to(toSocketId).emit('receiveMessage',{
-            fromUser:fromUser,
-            from:from,
-            message:message,
-            createdAt:createdAt,
-            name:name,
-            imageUser:imageUser,
-            image:image,
-            chatId:chatId,
-            user:user,
-            seen1:seen1At,
-            seen2:seen2At
+    socket.on('sendMessage',({from,seen1At,toUserId,seen2At,user,fromUser,isNew,toSocketId,chatId,image,imageUser,message,createdAt,name})=>{
+     
+        const receiverSocketIds = userOnline[toUserId] || [];
+
+        receiverSocketIds.forEach(socketId=>{
+            
+            io.to(socketId).emit('receiveMessage',{
+                fromUser:fromUser,
+                from:from,
+                message:message,
+                createdAt:createdAt,
+                name:name,
+                imageUser:imageUser,
+                image:image,
+                chatId:chatId,
+                user:user,
+                seen1:seen1At,
+                seen2:seen2At
+            })
         })
+       
         
     })
     socket.on('seenMessage',({isSeen,seenWhatAt,toUser,chatId,fromUser})=>{
@@ -89,7 +100,21 @@ io.on('connection',(socket)=>{
             })
         }
     })
-
+    socket.on('sendNotiFrom',({createdAt,fromUserId,linking,owner,toUserId,type,updatedAt,_id})=>{
+        if(userOnline[toUserId]){
+            const data = {createdAt,fromUserId,linking,owner,toUserId,type:'pending',updatedAt,_id}
+            io.to(userOnline[toUserId]).emit('sendNotiToUser',data)
+        }
+    })
+    socket.on('cancelNoti',(userId)=>{
+        io.to(userOnline[userId]).emit('deleteNoti',userId)
+    })
+    socket.on('acceptFriend',({from,to})=>{
+        io.to(userOnline[from]).emit('successFriend',to)
+    })
+    socket.on('cancelFriend',({from,to})=>{
+        io.to(userOnline[from]).emit('rejectFriend',to)
+    })
     socket.on('disconnect', async ()=>{
         const time = Date.now()
         const data = {

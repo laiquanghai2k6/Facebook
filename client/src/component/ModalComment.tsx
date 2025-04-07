@@ -24,9 +24,10 @@ import SkeletonComment from "./LoadingComment";
 interface ModalCommentProps {
     setModalComment: Function
     post:PostType
+    type:string
 }
 
-const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => {
+const ModalComment: React.FC<ModalCommentProps> = ({ post,type,setModalComment }) => {
     const {image,text,video} = post
     const [loading,setLoading] = useState(false)
     const [parentId,setParentId] = useState("")
@@ -38,7 +39,6 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
             dispatch(clearComment())
         }
     },[])
-    
     const fetchCommentPost = async ()=>{
         closeCommentReplyInput()
         try{
@@ -60,7 +60,7 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
                     const users = await Promise.all(
                         data.map(async (comment) => {
     
-                            const user = await requestUser(`/getUser/${comment.userId}`)
+                            const user = await requestUser.get(`/getUser/${comment.userId}`)
                             // currentUser.push(user.data)
                             return user.data as UserInfo
                         })
@@ -107,9 +107,8 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
                 </div>
                 {video!="" && <VideoPost src={video} />}
                 {image !="" && <ImagePost img={image}/>}
-      
                 
-                <InteractPostComment lengthComment={data?.length} post={post} />
+                <InteractPostComment type={type} lengthComment={data?.length} post={post} />
                 <Hr />
                 
                 
@@ -121,13 +120,11 @@ const ModalComment: React.FC<ModalCommentProps> = ({ post,setModalComment }) => 
                 )}
                 {commentReply ?(
                   <>
-                    <CommentInputReply  closeCommentReplyInput={closeCommentReplyInput} parentIds={parentId} userReply={userReply} post={post} />
+                    <CommentInputReply setLoading={setLoad} closeCommentReplyInput={closeCommentReplyInput} parentIds={parentId} userReply={userReply} post={post} />
          
                   </>
                 ):(
                  <>
-            
-
                     <CommentInput setLoading={setLoad}   post={post} />
 
                     

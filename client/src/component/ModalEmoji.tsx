@@ -10,7 +10,7 @@ type ModalEmojiProps = {
 const emojis = ['like', 'love', 'haha', 'wow', 'sad', 'angry']
 
 const ModalEmoji = ({ setModalEmoji, post }: ModalEmojiProps) => {
-
+    
     return (
         <div>
             <div className="modal-emoji-container">
@@ -24,7 +24,7 @@ const ModalEmoji = ({ setModalEmoji, post }: ModalEmojiProps) => {
 
                         return (
                             (post[emoji as keyof PostType] as Wows | Likes | Hahas | Sads | Loves | Angrys).userId.map((u, i) => (
-                                <UserItemEmoji userId={u} key={i} emoji={emoji} />
+                                  <UserItemEmoji userId={u} key={i} emoji={emoji} />
 
                             ))
                         )

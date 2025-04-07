@@ -24,13 +24,14 @@ import { UserQuickChat, UserQuickChatID } from './component/RightHome'
 import { requestUser } from './service/service'
 import { Message } from './component/MessengerDownCard'
 import { addMessage } from './slices/messageSlice'
-import { updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
+import { increaseUnRead, setChat, setUnRead, updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
+import { acceptFriend, addNoti, clearNoti, deleteNoti, notiType, rejectFriend, setNumberNoti } from './slices/notiSlice'
 
 function App() {
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
-
+  const currentNumNoti = useSelector((state:RootState)=>state.notification.unReadNoti)
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
@@ -40,7 +41,11 @@ function App() {
     const isUserSocket = user._id != ""
 
     if (isUserSocket) {
+
       socket.connect()
+      document.documentElement.style.backgroundColor = "#1c1c1d";
+      document.body.style.backgroundColor = "#1c1c1d";
+      dispatch(setNumberNoti(user.numberNoti))
       socket.on('connect', () => {
         socket.emit('uploadCurrentUserId', user._id, socket.id)
         socket.on('getCurrentUserOnline', ({userOnline,isOffline}) => {
@@ -51,14 +56,19 @@ function App() {
 
 
 
-      socket.on('receiveMessage', ({ from,fromUser,user,seen1At,seen2At ,message, name, image, createdAt, imageUser, chatId }) => {
+      socket.on('receiveMessage', ({ from,fromUser,user,seen1,seen2 ,message, name, image, createdAt, imageUser, chatId }) => {
+       
         const width = window.innerWidth;
         const isCardExist = currentMessengerCardRef.current.find((card) => card.chatId == chatId)
+       
+
         const lastMessage: UpdateMessage = {
           chatId: chatId,
           lastMessage: message,
           updatedAt:createdAt,
-          senderId: user._id
+          senderId: user._id,
+          seen1:seen1,
+          seen2:seen2          
         }
         const newMessage: Message = {
           chatId: chatId,
@@ -70,6 +80,7 @@ function App() {
         if(isCardExist){
            dispatch(addMessage(newMessage))
         }
+
           dispatch(updateLastMessage(lastMessage))
       
         const remToPx = 20 * 16
@@ -80,23 +91,24 @@ function App() {
           image: imageUser,
           online: true,
           chatId: chatId,
-          seen1:seen1At,
-          seen2:seen2At,
+          seen1:seen1,
+          seen2:seen2,
           user:user
         }
-        console.log('receive new message',newCard)
 
      
-        
+        console.log()
         if (!isCardExist) {
         
           if (currentMessengerCardRef.current.length == 0) {
             dispatch(setMessengerCard(newCard))
           }
-          else if (currentMessengerCardRef.current.length + 1 * remToPx <= 70 * (width / 100)) {
+          else if ((currentMessengerCardRef.current.length + 1) * remToPx <= 70 * (width / 100)) {
             dispatch(setMessengerCard(newCard))
           } else {
-            dispatch(fullMessengerCard(newCard))
+            
+            dispatch(increaseUnRead(fromUser))
+            // dispatch(fullMessengerCard(newCard))
           }
         }
       })
@@ -108,28 +120,47 @@ function App() {
           }
           dispatch(updateSeen(updateSeenDispatch)) 
       })
+      socket.on('sendNotiToUser',(noti:notiType)=>{
+        dispatch(addNoti(noti))
+      })
+      socket.on('deleteNoti',(userId)=>{
+        console.log('delete:',userId)
+        dispatch(deleteNoti(userId))
+      })
+      socket.on('successFriend',(toUserId)=>{
+          dispatch(acceptFriend(toUserId))
+      })
+      socket.on('rejectFriend',(toUserId)=>{
+        dispatch(rejectFriend(toUserId))
+    })
     }
 
     return () => {
-     
+   
       if (socket) {
         if (user._id != "") {
-         
+          const dataNoti = {
+            userId:user._id,
+            numberNoti:currentNumNoti,
+            type:'set'
+          }
           socket.off()
           socket.disconnect()
-          dispatch(clearAll())
         }
        
       }
-
       currentMessengerCardRef.current = []
       dispatch(clearAll())
+      dispatch(clearNoti())
+    
+      document.documentElement.style.backgroundColor = "#f0f2f5";
+      document.body.style.backgroundColor = "#f0f2f5";
     }
   }, [user])
 
   return (
     <div className='container'>
-      {isUser && <NavBar />}
+      {isUser && <NavBar user={user} />}
 
       <ScrollToTop />
       <Routes>

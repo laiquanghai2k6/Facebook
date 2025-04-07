@@ -17,14 +17,18 @@ const NavProfile = ({ type = "own",user }: NavProfileProp) => {
     const [loading, isLoading] = useState(false)
     const uploadBackground = async (e: ChangeEvent<HTMLInputElement>) => {
         try {
-
-            const data = new FormData()
-            data.append('image', e.target.files?.[0] as File)
-            data.append('userId', user._id)
-            isLoading(true)
-            const response = await requestUser.post('/uploadBackgroundImage', data)
-            dispatch(setUserBackground(response.data))
-            isLoading(false)
+            if((e.target.files?.[0] as File).type.startsWith('image/')){
+                const data = new FormData()
+                data.append('image', e.target.files?.[0] as File)
+                data.append('userId', user._id)
+                isLoading(true)
+                const response = await requestUser.post('/uploadBackgroundImage', data)
+                dispatch(setUserBackground(response.data))
+                isLoading(false)
+            }else{
+                alert('Vui lòng chọn ảnh')
+            }
+          
         } catch (e) {
             alert('Tải ảnh không thành công')
         }
@@ -46,7 +50,7 @@ const NavProfile = ({ type = "own",user }: NavProfileProp) => {
                 )}
 
                 <div className="image-post">
-                    {user.backgroundImage != "" && <img src={user.backgroundImage} style={{ width: '50rem', height: '100%', objectFit: 'contain' }} />}
+                    {user.backgroundImage != "" && <img src={user.backgroundImage} style={{ width: '50rem', height: '100%', objectFit: 'cover'}} />}
 
                 </div>
             </div>
