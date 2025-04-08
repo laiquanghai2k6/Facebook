@@ -7,18 +7,19 @@ interface HomeItemProps extends ButtonHTMLAttributes<HTMLDivElement>{
     styleContainer?:React.CSSProperties
     styleText?:React.CSSProperties,
     onClick?:MouseEventHandler<HTMLDivElement> | undefined
-    className?:string
+    className?:string,
+    classNameText?:string
 
     
 
 }
 
 
-const HomeItem:React.FC<HomeItemProps> = ({children,className='',img,styleImg={height:'2.5rem',width:'2.5rem'},text,styleContainer,styleText,onClick}) => {
+const HomeItem:React.FC<HomeItemProps> = ({children,id,classNameText='left-home-text',className='',img,styleImg={height:'2.5rem',width:'2.5rem'},text,styleContainer,styleText,onClick}) => {
     return (
-        <div className={`left-home-items${className}`} style={styleContainer} onClick={onClick}>
+        <div className={`left-home-items${className}`} id={id} style={styleContainer} onClick={onClick}>
             <img src={img} style={styleImg} />
-            <p className="left-home-text" style={styleText}>{text}</p>
+            <p className={classNameText} style={styleText}>{text}</p>
             {children}
         </div>
     );

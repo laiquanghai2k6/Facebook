@@ -26,14 +26,16 @@ const CreatePost = ({setCreatePostModal}:CreatePostProps) => {
             </div>
             <Hr style={{marginTop:'0.5rem'}}/>
             <div style={{display:'flex',flexDirection:'row',justifyContent:'space-around',marginTop:'0.25rem'}}>
-                <HomeItem  onClick={(e)=>{alert('Chức năng sẽ được cập nhật')
+                <HomeItem classNameText={'create-post-text'}  onClick={(e)=>{alert('Chức năng sẽ được cập nhật')
                     e.stopPropagation()
-                }} text="Video trực tiếp" img={Video} styleText={{marginLeft:'0.3rem',fontSize:'1rem'}} styleImg={{height:'1.5rem',width:'2rem'}} />
-                <HomeItem onClick={()=>{
+                }} text="Video trực tiếp" img={Video} styleText={{marginLeft:'0.3rem'}} styleImg={{height:'1.5rem',width:'2rem'}} />
+                <HomeItem classNameText={'create-post-text'} onClick={()=>{
                     setCreatePostModal(true)
                
-                }} text="Ảnh/video" img={Photo} styleText={{marginLeft:'0.3rem',fontSize:'0.9rem'}} styleImg={{height:'2rem',width:'2.5rem'}} />
-                <HomeItem onClick={()=>setCreatePostModal(true)} text="Cảm xúc/hoạt động" img={Smile} styleText={{marginLeft:'0.3rem',fontSize:'0.9rem'}} styleImg={{height:'1.5rem',width:'1.5rem'}} />
+                }} text="Ảnh/video" img={Photo} styleText={{marginLeft:'0.3rem'}} styleImg={{height:'2rem',width:'2.5rem'}} />
+                <HomeItem 
+                id="emoji-create-post"
+                classNameText={'create-post-text'} onClick={()=>setCreatePostModal(true)} text="Cảm xúc/hoạt động" img={Smile} styleText={{marginLeft:'0.3rem'}} styleImg={{height:'1.5rem',width:'1.5rem'}} />
 
             </div>
         </div>

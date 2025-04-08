@@ -48,7 +48,7 @@ const NavProfile = ({ type = "own",user }: NavProfileProp) => {
                 )}
 
                 <div className="image-post">
-                    {user.backgroundImage != "" && <img src={user.backgroundImage} style={{ width: '50rem', height: '100%', objectFit: 'cover'}} />}
+                    {user.backgroundImage != "" && <img src={user.backgroundImage} className='image-background' />}
 
                 </div>
             </div>

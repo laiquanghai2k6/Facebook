@@ -99,7 +99,7 @@ const NavBar = ({user}:NavBarProps) => {
            
             <div className="left-nav">
 
-                <img src={FacebookIcon} alt="FacebookIcon" className="facebook-icon" style={{ cursor: 'pointer' }} />
+                <img src={FacebookIcon} onClick={()=>navigate('/home')} alt="FacebookIcon" className="facebook-icon" style={{ cursor: 'pointer' }} />
                 <Input style={{ width: 'auto' }} value={fetchSearch.text} onChange={(e) => {
                     if (e.target.value != "") setDropdownSearch(true)
                     else setDropdownSearch(false)

@@ -97,7 +97,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
 
         <div className="messenger" ref={messengerRef}>
             <p style={{ color: 'white', fontWeight: 'bold', fontSize: '1.5rem' }}>Đoạn chat</p>
-            <Input className={'home-input'} type="text" style={{ width: '22.5rem', margin: '1rem 1.25rem 1rem 1.25rem', fontSize: '1rem' }} placeholder="Tìm kiếm trên messenger" />
+            <Input className={'home-input-mes'}  type="text"placeholder="Tìm kiếm trên messenger" />
             <div className="messenger-card-container">
                 {isLoading ?(
                     <LoadingChat />

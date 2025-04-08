@@ -1169,6 +1169,18 @@ html {
   animation: appear-noti 0.75s linear
 }
 
+.home-input-mes {
+  width: 22.5rem;
+  margin: 1rem 1.25rem 1rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+  height: 2.5rem;
+  background-color: #333334;
+  border: none;
+  padding: 1rem 3rem 1rem 1rem;
+  color: white;
+}
+
 @keyframes appear-noti {
   0% {
     scale: 0;
@@ -1313,8 +1325,8 @@ html {
 
 .notification-container {
   position: absolute;
-  width: 50vh;
-  height: 90vh;
+  width: 25rem;
+  height: 45rem;
   background-color: #252728;
   top: 3rem;
   margin-right: 30vh;
@@ -1464,10 +1476,6 @@ html {
 
 }
 
-.top-left-profile {
-  display: flex;
-  flex-direction: row;
-}
 
 .mid-profile-container {
   margin-top: 15rem;
@@ -1542,6 +1550,7 @@ html {
   border-radius: 0.5rem;
   /* background-color: #0866ff; */
   flex-direction: column;
+  padding-bottom: 5rem;
   /* gap: 1rem; */
 }
 
@@ -1660,7 +1669,6 @@ html {
   border-radius: 2rem;
 
 }
-
 
 @keyframes spin {
   to {
@@ -1804,11 +1812,23 @@ html {
   animation: loading 1s infinite linear;
 
 }
+
 .left-nav {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 21vw;
+}
+
+.create-post-text {
+  margin-left: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  max-width: 70%;
+  overflow-wrap: break-word;
+  white-space: normal;
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
 @keyframes loading {
@@ -1849,34 +1869,64 @@ html {
   }
 }
 
+.image-comment{
+   margin-top: -0.5rem;
+    border-radius: 1rem;
+    width: 25rem;
+    height: 25rem;
+    object-fit: 'contain';
+}
 @media (max-height:625px) {
 
   .home-input {
     display: none;
   }
 }
+.wrap-image{
+  height:auto;
+  width:auto;
+  margin-top: 1rem;
+  max-width: 80vw;
 
+  
+}
+.image-comment{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.image-background{
+  width: 50rem;
+  height: 100%;
+   object-fit: cover
+}
 @media (max-width: 870px) {
 
   html,
   body {
     overflow-x: hidden;
   }
+
   .left-nav {
-    flex:1
-  } 
+    flex: 1
+  }
 
   .home-icon-right-container {
     width: 19.5vw;
     width: 100%;
     /* Chiếm hết phần cha */
     max-width: 13rem;
-
-
-
   }
 
-  
+  .create-post-text {
+    font-size: 0.7rem;
+  }
+
+  #emoji-create-post {
+    display: none;
+  }
 
   .home-icon-middle-container {
     display: none;
@@ -1895,7 +1945,22 @@ html {
     text-align: center;
 
   }
+  .profile{
+    width: 100%;
+  }
+  .nav-profile{
+    width: 100%;
+  }
+  .image-profile{
+    width: 100%;
+    object-fit: cover;
+  }
+  .body-profile{
+    width: 100%;
+  }
+ 
 
+  
   .home-input {
     width: auto;
     max-width: 100%;
@@ -1904,16 +1969,73 @@ html {
     min-width: 0;
   }
 
+  .home {
+    width: 100%;
+  }
+
+  .mid-home {
+    width: 100%;
+  }
+
+  .post-list-container {
+    width: 100%;
+  }
+
+  .create-post-container {
+    width: 95%;
+  }
+
   .mid-profile-combination {
     flex-direction: column;
+  }
+
+  .post-container {
+    width: 95%;
+    height: auto;
+  }
+  .image-background{
+    width: 100%;
+   
+  }
+  .modal-share-post-box {
+    width: 90%;
+  }
+
+  .modal-emoji-post-box {
+    width: 95%;
   }
 
   .mid-profile-navigate {
     justify-content: center;
   }
-
+  .modal-create-post-box{
+    width: 95%;
+  }
+  .messenger-down-container{
+    width: 95%;
+    right: 0;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .messenger-down-card{
+    margin-left:0
+  }
+  .home-input-mes {
+    width: 95%;
+    height: 5vh;
+  }
+  .messenger{
+    width: 95vw;
+  }
+  .notification-container{
+    width: 95vw;
+    padding:0;
+    margin-right:45vw;
+    height: 90vh;
+  }
   .mid-profile-container {
     margin-top: 1rem;
+    width: 95%;
   }
 
   .body-profile {
@@ -1921,11 +2043,29 @@ html {
     align-items: center;
   }
 
+  .user-setting-container{
+    width: 95vw;
+    margin-right:45vw;
+  }
+  .modal-comment-container{
+    width: 95%;
+    height: 95%;
+    
+  }
+  .modal-comment-box{
+    width: 100%;
+    height: 80%;
+    
+  }
   .top-left-profile {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    display: flex;
+    height: 20rem;
   }
+
+  
 
   .top-profile-camera {
     /* margin-left: 30vh; */
@@ -1951,19 +2091,22 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: auto;
   }
-
+  .post-loading-container{
+    width: 95%;
+  }
   .top-profile-container {
     justify-content: center;
     position: relative;
     padding-left: 0;
-    width: 40rem;
-    /* align-items: center; */
+    width: 100%;
+    align-items: center;
+    height: auto;
   }
 
-  .image-profile {
-    width: 60rem;
-
+  .image-post{
+    width: 100%;
   }
 
   .login {
@@ -1991,7 +2134,13 @@ html {
     width: 0;
     height: 0;
   }
-
+  .image-comment{
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
   .mid-home {
     margin-right: 0;
   }
