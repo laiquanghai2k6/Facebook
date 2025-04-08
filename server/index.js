@@ -8,11 +8,10 @@ const chatRoute = require('./Routers/chatRoute')
 const messageRoute = require('./Routers/messageRoute')
 const notificationRoute = require('./Routers/notificationRoute')
 
-const axios = require('axios')
 const cors = require('cors')
 require('dotenv').config({ path: './.env' });
 const mongoose = require('mongoose')
-const path = require('path')
+
 const app = express()
 const atlasUrl = process.env.MONGO_ATLAS_URI
 const port = process.env.PORT || 5000
@@ -24,10 +23,7 @@ app.use(cors({
     methods: ['GET', 'POST','PUT','DELETE'],
     allowedHeaders: ['Content-Type'],               
 }));
-const requestOffline = axios.create({
-    baseURL:`${process.env.CLIENT_URL}/users`,
-    withCredentials:true
-})
+
 app.use('/users',userRoute)
 app.use('/posts',postRoute)
 app.use('/comments',commentRoute)

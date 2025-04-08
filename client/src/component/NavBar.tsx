@@ -220,7 +220,7 @@ const NavBar = ({user}:NavBarProps) => {
                 </div>
                 <UserImage img={user.image == "" ? Default : user.image} width={'2.5rem'} height={'2.5rem'}
                     onClick={(e) => {
-                        e.stopPropagation()
+                        e.stopPropagation();
                             setUserSettingOpen((prev)=>!prev)
                     }}
                     id="user-setting"

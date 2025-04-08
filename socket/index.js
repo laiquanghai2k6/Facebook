@@ -1,5 +1,8 @@
 
 const {Server} = require('socket.io')
+const path = require('path')
+const axios = require('axios')
+
 require('dotenv').config({ path: './.env' });
 const io = new Server({ cors: {
     origin: `${process.env.CLIENT_URL}`, // Link frontend
@@ -7,7 +10,10 @@ const io = new Server({ cors: {
   }
 })
 let userOnline = {}
-
+const requestOffline = axios.create({
+    baseURL:`${process.env.SERVER_URL}/users`,
+    withCredentials:true
+})
 
 io.on('connection',(socket)=>{
     let currentUserId = ''
