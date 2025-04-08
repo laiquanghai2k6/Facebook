@@ -2,8 +2,7 @@ import HomeItem from "./HomeItem";
 import Like from '../assets/facebook-reactions.png'
 import Comment from '../assets/chat.png'
 import Share from '../assets/share.png'
-import { useEffect, useMemo, useState } from "react";
-import ModalComment from "./ModalComment";
+import {  useMemo, useState } from "react";
 import LikePostEmoji from '../assets/like-post.png'
 import LikePost from "./LikePost";
 import Love from '../assets/love.png'
@@ -12,7 +11,6 @@ import Wow from '../assets/wow.png'
 import Sad from '../assets/sad.png'
 import Angry from '../assets/angry.png'
 import { PostType, Angrys, Hahas, Likes, Loves, Sads, Wows  } from "../slices/postSlice";
-import { CommentType } from "../slices/commentSlice";
 import { debounce, reactions } from "./InteractPost";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../selector/userSelector";
@@ -32,7 +30,8 @@ type InteractPostCommentProps = {
 
 
 const InteractPostComment = ({type,lengthComment,post}:InteractPostCommentProps) => {
-    const [modalEmoji,setModalEmoji] = useState(false)
+    // const [modalEmoji,setModalEmoji] = useState(false)
+
     const [modalShare, setModalShare] = useState(false)
     
     const user = useSelector(selectUserInfo)
@@ -134,7 +133,7 @@ const InteractPostComment = ({type,lengthComment,post}:InteractPostCommentProps)
                 return [...update].sort((a, b) => b.num - a.num)
             })
 
-            const response = await requestPost.put('/updateEmoji', data)
+            await requestPost.put('/updateEmoji', data)
             
         } else {
             const data = {

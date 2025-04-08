@@ -35,7 +35,7 @@ const Home = () => {
           }
      }
      
-     const {data,isLoading} = useQuery({
+     const {data} = useQuery({
           queryKey:['chats'],
           queryFn:()=>FetchChat()
      })

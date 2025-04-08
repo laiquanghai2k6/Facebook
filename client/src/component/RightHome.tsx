@@ -1,18 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { User, UserInfo } from "../slices/userSlice";
+import {  UserInfo } from "../slices/userSlice";
 import UserImage from "./UserImage";
 import { requestChat, requestMessage, requestUser } from "../service/service";
-import Spinner from "./Spinner";
 import Default from '../assets/default-image.png'
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserInfo } from "../selector/userSelector";
 import { socket } from "../socket";
 import { RootState } from "../store/store";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
-import moment from "moment";
 import { addChat } from "../slices/chatSlice";
 import { Chat } from "../pages/Home/Home";
-import { useEffect, useRef } from "react";
 import LoadingRightHome from "./LoadingRightHome";
 type RightHomeProps = {
     currentUser:UserInfo

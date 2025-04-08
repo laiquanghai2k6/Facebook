@@ -2,7 +2,7 @@ import HomeItem from "./HomeItem";
 import Like from '../assets/facebook-reactions.png'
 import Comment from '../assets/chat.png'
 import Share from '../assets/share.png'
-import { Key, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ModalComment from "./ModalComment";
 import LikePostEmoji from '../assets/like-post.png'
 import LikePost from "./LikePost";
@@ -12,9 +12,7 @@ import Wow from '../assets/wow.png'
 import Sad from '../assets/sad.png'
 import Angry from '../assets/angry.png'
 import { Angrys, Hahas, Likes, Loves, PostShareType, PostType, Sads, Wows } from "../slices/postSlice";
-import { useMutation } from "@tanstack/react-query";
 import { requestPost } from "../service/service";
-import { create, forEach } from "lodash";
 import ModalShare from "./ModalShare";
 import ModalCommentShare from "./ModalCommentShare";
 import { useSelector } from "react-redux";
@@ -191,7 +189,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                 return [...update].sort((a, b) => b.num - a.num)
             })
 
-            const response = await requestPost.put('/updateEmoji', data)
+            await requestPost.put('/updateEmoji', data)
             
         } else {
             const data = {

@@ -17,7 +17,6 @@ import InteractPostComment from "./InteractPostComment";
 import CommentInputReply from "./CommentInputReply";
 import { UserInfo } from "../slices/userSlice";
 import { useQuery } from "@tanstack/react-query";
-import InteractPost from "./InteractPost";
 import { useDispatch } from "react-redux";
 import { clearComment, CommentType } from "../slices/commentSlice";
 import SkeletonComment from "./LoadingComment";

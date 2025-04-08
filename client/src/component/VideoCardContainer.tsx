@@ -1,9 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import VideoCard from "./VideoCard";
 import { requestPost } from "../service/service";
 import { PostRequest } from "./MidHome";
 import { useRef } from "react";
-import { entries } from "lodash";
 import LoadingPost from "./LoadingPost";
 import { PostShareType } from "../slices/postSlice";
 import PostShare from "./PostShare";

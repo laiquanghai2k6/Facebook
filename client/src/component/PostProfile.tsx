@@ -1,9 +1,8 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
-import { User, UserInfo } from "../slices/userSlice";
 import { requestPost } from "../service/service";
 import LoadingPost from "./LoadingPost";
-import { PostShareType, PostType } from "../slices/postSlice";
+import { PostShareType } from "../slices/postSlice";
 import { useCallback, useRef } from "react";
 import { PostRequest } from "./MidHome";
 import PostShare from "./PostShare";

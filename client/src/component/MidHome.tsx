@@ -1,18 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { User } from "../slices/userSlice";
+import React, { useCallback, useRef, useState } from "react";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
 import ModalCreatePost from "./ModalCreatePost";
-import { VariableSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { requestPost } from "../service/service";
 import { PostShareType, PostType } from "../slices/postSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-import { Virtuoso } from 'react-virtuoso';
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
+// import { Virtuoso } from 'react-virtuoso';
+import { useInfiniteQuery } from "@tanstack/react-query";
 import LoadingPost from "./LoadingPost";
 import PostShare from "./PostShare";
 type MidHomeProps = {

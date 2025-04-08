@@ -1,15 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
 import Comment from "./Comment";
-import CommentInput from "./CommentInput";
 
 import { PostType } from "../slices/postSlice";
-import { requestComment, requestUser } from "../service/service";
 import { CommentType } from "../slices/commentSlice";
-import Spinner from "./Spinner";
-import { shallowEqual, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import SkeletonComment from "./LoadingComment";
-import { useQuery } from "@tanstack/react-query";
 import { UserInfo } from "../slices/userSlice";
 import { selectUserInfo } from "../selector/userSelector";
 type CommentListProps = {

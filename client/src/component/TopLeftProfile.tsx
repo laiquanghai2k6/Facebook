@@ -1,10 +1,8 @@
 import ImageChain from "./ImageChain";
-import UserImage from "./UserImage";
 import DefaultImage from '../assets/default-image.png'
 import Camera from '../assets/camera-black.png'
 import { ChangeEvent, useState } from "react";
-import { selectUserInfo } from "../selector/userSelector";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { requestUser } from "../service/service";
 import { setUserImage, User, UserInfo } from "../slices/userSlice";
 import Spinner from "./Spinner";

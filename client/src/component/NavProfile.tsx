@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
-import defaultImage from '../assets/defaul.jpg'
+import { useDispatch } from 'react-redux';
 import { setUserBackground, User, UserInfo } from '../slices/userSlice';
-import { selectUserInfo } from '../selector/userSelector';
 import { requestUser } from '../service/service';
 import { ChangeEvent, useState } from 'react';
 import Camera from '../assets/camera-black.png'

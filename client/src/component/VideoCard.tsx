@@ -1,7 +1,4 @@
-import InteractPost from "./InteractPost";
-import Media from "./Media";
-import TextPost from "./TextPost";
-import UserPost from "./UserPost";
+
 
 const VideoCard = () => {
     console.log('from video')

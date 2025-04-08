@@ -1,10 +1,7 @@
-import React from "react";
 import { Chat } from "../pages/Home/Home";
 import { UserInfo } from "../slices/userSlice";
 import { ConvertDateOnline } from "./RightHome";
 import UserImage from "./UserImage";
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../selector/userSelector";
 
 interface MessengerCardProps {
     chat: Chat,

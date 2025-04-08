@@ -1,4 +1,3 @@
-import { notificationUrl } from './../service/service';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type notiType = {

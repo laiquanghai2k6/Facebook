@@ -1,15 +1,11 @@
-import React, { forwardRef, HTMLAttributes, useEffect, useRef, useState } from "react";
+import React, { HTMLAttributes } from "react";
 import TextPost from "./TextPost";
 import UserPost from "./UserPost";
 import ImagePost from "./ImagePost";
-import imgtest from '../assets/imgtest.jpg'
-import test2 from '../assets/test2.png'
 import InteractPost from "./InteractPost";
 import { PostType } from "../slices/postSlice";
 import VideoPost from "./VideoPost";
-import { CommentType } from "../slices/commentSlice";
 import { requestComment } from "../service/service";
-import Spinner from "./Spinner";
 import { useQuery } from '@tanstack/react-query'
 import LoadingPost from "./LoadingPost";
 

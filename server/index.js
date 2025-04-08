@@ -11,7 +11,7 @@ const notificationRoute = require('./Routers/notificationRoute')
 
 const axios = require('axios')
 const cors = require('cors')
-require('dotenv').config({ path: '../server/.env' });
+require('dotenv').config({ path: './.env' });
 const mongoose = require('mongoose')
 const path = require('path')
 const app = express()

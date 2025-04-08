@@ -5,7 +5,7 @@ import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import UserImage from "./UserImage";
 import { UserInfo } from "../slices/userSlice";
 import Default from '../assets/default-image.png'
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { ConvertDateOnline } from "./RightHome";
 import { notiType } from "../slices/notiSlice";
 import { socket } from "../socket";
@@ -32,7 +32,7 @@ const NotificationCard = ({ noti }: NotificationCardProps) => {
         }
 
     }
-    const { data, isLoading } = useQuery({
+    const { data } = useQuery({
         queryKey: [`pending${noti._id}`],
         queryFn: () => fetchUser()
     })
@@ -68,11 +68,8 @@ const NotificationCard = ({ noti }: NotificationCardProps) => {
                     state: true,
                     type: 'accept'
                 })
-                const dataAdd = {
-                    fromId:noti.fromUserId,
-                    toId:noti.toUserId
-                }
-                const response = await requestNotification.put('/actionFriendRequest', datas)
+            
+                await requestNotification.put('/actionFriendRequest', datas)
                 // const addFriend = await requestUser.put('/addFriend',dataAdd)
                 socket.emit('acceptFriend',{from:noti.fromUserId,to:noti.toUserId})
                 const update = {

@@ -448,9 +448,14 @@ padding-left: 5vw;
   border-radius: 50%;
   background-color: #3b3d3e;
   animation: loadingPost 1.5s infinite;
-
-
-
+}
+.loading-user-image-mes{
+  min-height: 3.25rem;
+  min-width: 3.25rem;
+  user-select: none;
+  border-radius: 50%;
+  background-color: #3b3d3e;
+  animation: loadingPost 1.5s infinite;
 }
 .left-home-items{
   display: flex;
@@ -1555,6 +1560,14 @@ padding-left: 5vw;
   width: 15rem;
   margin-left: 1rem;
   height: 1rem;
+  border-radius: 2rem;
+  animation: loadingPost 1.5s infinite;
+}
+.loading-text-mes{
+  max-width: 20rem;
+  width: 20rem;
+  margin-left: 1rem;
+  height: 2rem;
   border-radius: 2rem;
   animation: loadingPost 1.5s infinite;
 }

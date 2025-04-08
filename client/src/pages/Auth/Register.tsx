@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import  { useCallback, useEffect, useState } from "react";
 import Select from '../../component/Select'
 import Input from "../../component/Input";
 import "react-datepicker/dist/react-datepicker.css";
@@ -88,8 +88,11 @@ const Register = () => {
             }
             isLoading(true)
             const {data} = await requestUser.post('/register',converDateRegister)
-            
+            console.log('datares,',data)
             dispatch(setUser(data as User))
+            navigate('/home')
+            document.documentElement.style.backgroundColor = "#1c1c1d";
+            document.body.style.backgroundColor = "#1c1c1d";
             setError(null)
             isLoading(false)
 

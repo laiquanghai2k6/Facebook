@@ -1,10 +1,8 @@
-import { PostShareType, PostType } from "../slices/postSlice";
+import { PostShareType } from "../slices/postSlice";
 import InteractPost from "./InteractPost";
 import PostShareValue from "./PostShareValue";
 import TextPost from "./TextPost";
 import UserPost from "./UserPost";
-import test from '../assets/test2.png'
-import ImagePost from "./ImagePost";
 import LoadingPost from "./LoadingPost";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCommentLength } from "./Post";

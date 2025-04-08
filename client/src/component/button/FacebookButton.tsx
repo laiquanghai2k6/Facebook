@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, CSSProperties, FC } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import { BasicButton, CancelButton, CreateButton } from "./button.styles";
 
 export enum BUTTON_TYPE{

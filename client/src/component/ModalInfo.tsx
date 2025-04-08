@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import CloseButton from "./button/CloseButton";
 import Hr from "./Hr";
 import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";

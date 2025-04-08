@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import FacebookIcon from "../assets/FacebookIcon.png";
 import Default from '../assets/default-image.png'
 import "react-lazy-load-image-component/src/effects/blur.css";
 interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {

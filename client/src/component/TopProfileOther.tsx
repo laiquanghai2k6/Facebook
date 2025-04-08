@@ -1,6 +1,5 @@
 import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import TopLeftProfile from "./TopLeftProfile";
-import Camera from '../assets/camera-black.png'
 import { UserInfo } from "../slices/userSlice";
 type TopProfileOtherProp={
     user:UserInfo

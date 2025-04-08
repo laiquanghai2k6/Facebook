@@ -3,16 +3,12 @@ import { PostShareType } from "../slices/postSlice";
 import CloseButton from "./button/CloseButton";
 import CommentList from "./CommentList";
 import Hr from "./Hr";
-import ImagePost from "./ImagePost";
-import InteractPostComment from "./InteractPostComment";
 import UserPost from "./UserPost";
-import VideoPost from "./VideoPost";
 import { UserInfo } from "../slices/userSlice";
 import { useQuery } from "@tanstack/react-query";
 import { requestComment, requestUser } from "../service/service";
 import CommentInputReply from "./CommentInputReply";
 import CommentInput from "./CommentInput";
-import TextPost from "./TextPost";
 import PostShareValue from "./PostShareValue";
 import Spinner from "./Spinner";
 import InteractPost from "./InteractPost";
@@ -109,7 +105,7 @@ const ModalCommentShare = ({ post, setModalComment }: ModalCommentShareProps) =>
                 )}
                 {commentReply ? (
 
-                    <CommentInputReply closeCommentReplyInput={closeCommentReplyInput} parentIds={parentId} userReply={userReply} post={post} />
+                    <CommentInputReply setLoading={setLoad} closeCommentReplyInput={closeCommentReplyInput} parentIds={parentId} userReply={userReply} post={post} />
                 ) : (
 
                     <CommentInput setLoading={setLoad} post={post} />

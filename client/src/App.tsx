@@ -1,4 +1,4 @@
-import { Profiler, useEffect, useRef, useState } from 'react'
+import {  useEffect, useRef } from 'react'
 
 import './App.css'
 import Login from './pages/Auth/Login'
@@ -16,22 +16,18 @@ import Profile from './pages/Home/Profile'
 import ProfileOther from './pages/Home/ProfileOther'
 import Video from './pages/Video/Video'
 import ScrollToTop from './component/ScrollToTop'
-import { io, Socket } from 'socket.io-client'
 import { socket } from './socket'
-import { selectUserInfo } from './selector/userSelector'
-import { clearAll, fullMessengerCard, setCurrentOnline, setMessengerCard, UserOnline } from './slices/messengerSlice'
-import { UserQuickChat, UserQuickChatID } from './component/RightHome'
-import { requestUser } from './service/service'
+import { clearAll, setCurrentOnline, setMessengerCard, UserOnline } from './slices/messengerSlice'
+import {  UserQuickChatID } from './component/RightHome'
 import { Message } from './component/MessengerDownCard'
 import { addMessage } from './slices/messageSlice'
-import { increaseUnRead, setChat, setUnRead, updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
+import { increaseUnRead, updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
 import { acceptFriend, addNoti, clearNoti, deleteNoti, notiType, rejectFriend, setNumberNoti } from './slices/notiSlice'
 
 function App() {
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
-  const currentNumNoti = useSelector((state:RootState)=>state.notification.unReadNoti)
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
@@ -39,16 +35,15 @@ function App() {
   }, [currentMessengerCard])
   useEffect(() => {
     const isUserSocket = user._id != ""
-
     if (isUserSocket) {
-
-      socket.connect()
       document.documentElement.style.backgroundColor = "#1c1c1d";
       document.body.style.backgroundColor = "#1c1c1d";
+      socket.connect()
+     
       dispatch(setNumberNoti(user.numberNoti))
       socket.on('connect', () => {
         socket.emit('uploadCurrentUserId', user._id, socket.id)
-        socket.on('getCurrentUserOnline', ({userOnline,isOffline}) => {
+        socket.on('getCurrentUserOnline', ({userOnline}) => {
           dispatch(setCurrentOnline(userOnline as UserOnline))
         })
       })
@@ -112,7 +107,7 @@ function App() {
           }
         }
       })
-      socket.on('noticeSeenMessage',({isSeen,seenWhatAt,chatId,fromUser})=>{
+      socket.on('noticeSeenMessage',({isSeen,seenWhatAt,chatId})=>{
           const updateSeenDispatch:UpdateSeen= {
             isSeen:isSeen,
             seenWhatAt:parseInt(seenWhatAt),
@@ -139,11 +134,6 @@ function App() {
    
       if (socket) {
         if (user._id != "") {
-          const dataNoti = {
-            userId:user._id,
-            numberNoti:currentNumNoti,
-            type:'set'
-          }
           socket.off()
           socket.disconnect()
         }

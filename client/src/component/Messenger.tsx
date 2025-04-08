@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useRef } from "react";
+import React, {   useEffect, useRef } from "react";
 import Input from "./Input";
 import MessengerCard from "./MessengerCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,9 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import { requestUser } from "../service/service";
 import { UserInfo } from "../slices/userSlice";
 import { Chat } from "../pages/Home/Home";
-import { UserQuickChat, UserQuickChatID } from "./RightHome";
+import {  UserQuickChatID } from "./RightHome";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
-import { descreaseUnRead } from "../slices/chatSlice";
+import LoadingChat from "./LoadingChat";
 
 
 interface MessengerProps {
@@ -43,7 +43,6 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
     const recipientUser = currentChat.map((chat)=>{
         return chat.user[0] == currentUser._id ? chat.user[1] : chat.user[0]
     })
-    
     const FetchMessengerUser = async ()=>{
        const response = await Promise.all(
         recipientUser.map(async (userId)=>{
@@ -61,6 +60,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
     const currentMessengerCard = useSelector((state:RootState)=>state.messengerCard)
     const OpenCard = (chat:Chat,index:number,unRead:boolean)=>{
         const width = window.innerWidth;
+       unRead
         const isCardExist = currentMessengerCard.messengerCard.find((cards)=>cards.chatId == chat._id)
         let newCard:UserQuickChatID|null = null
         if(data){
@@ -99,17 +99,24 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
             <p style={{ color: 'white', fontWeight: 'bold', fontSize: '1.5rem' }}>Đoạn chat</p>
             <Input className={'home-input'} type="text" style={{ width: '22.5rem', margin: '1rem 1.25rem 1rem 1.25rem', fontSize: '1rem' }} placeholder="Tìm kiếm trên messenger" />
             <div className="messenger-card-container">
-                {currentChat.map((chat,i)=>{
-                    if(data?.[i] && data){
+                {isLoading ?(
+                    <LoadingChat />
+                ) :(
 
-                        return(
-                            <MessengerCard CLick={(unRead:boolean)=>{
-                                
-                                OpenCard(chat,i,unRead)
-                            }} key={i} user={data[i]} chat={chat} />
-                        )
-                    }else return<div key={i}></div>
-                })}
+                    currentChat.map((chat,i)=>{
+                        if(data?.[i] && data){
+    
+                            return(
+                                <MessengerCard CLick={(unRead:boolean)=>{
+                                    
+                                    OpenCard(chat,i,unRead)
+                                }} key={i} user={data[i]} chat={chat} />
+                            )
+                        }else return<div key={i}></div>
+                    })
+                )
+                }
+                    
                
 
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, InputHTMLAttributes, useState } from "react";
+import React, {  ChangeEventHandler, useState } from "react";
 import { FaRegEye ,FaRegEyeSlash } from "react-icons/fa";
 
 interface InputPasswordProps{

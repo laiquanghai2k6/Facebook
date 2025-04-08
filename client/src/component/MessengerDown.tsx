@@ -1,10 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { User } from "../slices/userSlice";
 import MessengerDownCard from "./MessengerDownCard";
 import { RootState } from "../store/store";
 import { useEffect, useRef } from "react";
 import { cleatLast } from "../slices/messengerSlice";
-import { UserQuickChat } from "./RightHome";
 type MessengerDownProps={
     
 }

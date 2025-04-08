@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 
 import NotificationCard from "./NotificationCard";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { clearNoti, setNumberNoti } from "../slices/notiSlice";
-import { requestUser } from "../service/service";
+import { useDispatch} from "react-redux";
+import {  notiType, setNoti, setNumberNoti } from "../slices/notiSlice";
+import { requestNotification, requestUser } from "../service/service";
+import { useQuery } from "@tanstack/react-query";
+import LoadingChat from "./LoadingChat";
 
 
 
@@ -16,7 +17,6 @@ interface NotificationCardProps{
 
 const Notification:React.FC<NotificationCardProps> = ({closeNotification,currentUserId}) => {
     const notiRef = useRef<null |HTMLDivElement>(null)
-    const currentNoti = useSelector((state:RootState)=>state.notification.notification)
     const dispatch = useDispatch()
     useEffect(()=>{
 
@@ -36,26 +36,33 @@ const Notification:React.FC<NotificationCardProps> = ({closeNotification,current
         }
         requestUser.put('/setNumberNoti',update)
         dispatch(setNumberNoti(0))
-
         document.addEventListener('mousedown',handlerClick)
         return ()=>{
             // dispatch(clearNoti())
             document.removeEventListener('mousedown',handlerClick)
         }
     })
+    const FetchNoti = async(UserId:string)=>{
 
+        const response = await requestNotification.get(`getNotification/${UserId}`)
+        dispatch(setNoti(response.data as notiType[]))
+        return response.data as notiType[]
+    }
+    const {data,isLoading } = useQuery({
+        queryKey:['noti',currentUserId],
+        queryFn:()=>FetchNoti(currentUserId)
+    })
     
    
     return (
         <div className="notification-container" ref={notiRef}>
             <p style={{ color: 'white', fontWeight: 'bold', fontSize: '3vh' }}>Thông báo</p>
             <div className="notification-card-container">
-              
-                {currentNoti?.map((noti,i)=>{
+                {isLoading && <LoadingChat />}
+                {data?.map((noti,i)=>{
 
                     return(
                         <NotificationCard key={i} noti={noti} />
-
                     )
                 })}
                 

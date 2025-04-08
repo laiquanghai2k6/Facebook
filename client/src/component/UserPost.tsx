@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
 import UserImage from "./UserImage";
 import { requestUser } from "../service/service";
 
 import Default from '../assets/default-image.png'
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import Spinner from "./Spinner";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { navigateHome } from "../slices/homeNavigateSlice";
@@ -34,7 +32,6 @@ const ConvertDate = (timeDif:number,timePost:number)=>{
     }else if(days < 4){
         return `${days} ngày trước`
     }else{
-        console.log('timePost:',timePost)
         return moment(timePost).format("DD-MM-YY HH:mm:ss")
     }
 
@@ -68,7 +65,6 @@ const UserPost = ({userId,time}:UserPostProps ) => {
             navigate(`/profileOther?userId=${userId}`)
             dispatch(navigateHome(""))
         }
-        console.log('up')
     return ( 
         <div className="user-post-container">
             {isLoading ? (

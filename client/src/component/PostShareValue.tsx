@@ -1,4 +1,3 @@
-import test from '../assets/test2.png'
 import { PostShareType } from '../slices/postSlice';
 import ImagePostShare from "./ImagePostShare";
 import TextPost from './TextPost';

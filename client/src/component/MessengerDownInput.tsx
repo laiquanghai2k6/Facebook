@@ -1,8 +1,8 @@
-import React, { ChangeEvent, KeyboardEvent, TextareaHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent,  useEffect, useRef, useState } from 'react';
 import Camera from '../assets/camera.png'
 import Send from '../assets/send.png'
 import SendBlue from '../assets/send-blue.png'
-import { UserQuickChat, UserQuickChatID } from './RightHome';
+import {  UserQuickChatID } from './RightHome';
 import { socket } from '../socket';
 import { UserOnline } from '../slices/messengerSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import { selectUserInfo } from '../selector/userSelector';
 import { requestChat, requestMessage } from '../service/service';
 import { useMutation } from '@tanstack/react-query';
 import { Message } from './MessengerDownCard';
-import test from '../assets/test2.png'
 import { addMessage } from '../slices/messageSlice';
 import { updateLastMessage, UpdateMessage } from '../slices/chatSlice';
 interface MessengerDownInputProps {

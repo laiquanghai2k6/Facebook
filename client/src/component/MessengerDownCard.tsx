@@ -15,7 +15,6 @@ import { requestChat, requestMessage } from "../service/service";
 import { selectUserInfo } from "../selector/userSelector";
 import { socket } from "../socket";
 import { UserOnline } from "../slices/messengerSlice";
-import { selectSeenChatParam } from "../selector/chatSelector";
 import { descreaseUnRead, UpdateSeen ,updateSeen} from "../slices/chatSlice";
 interface MessengerDownCardProps {
     card: UserQuickChatID,
@@ -34,8 +33,6 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
     const currentUser = useSelector(selectUserInfo)
     const updateMessage = useSelector((state: RootState) => state.message.message)
     const dispatch = useDispatch()
-    const selectSeenParam = selectSeenChatParam(card.chatId)
-    const currentSeenChat = useSelector(selectSeenParam)
 
     useEffect(() => {
         const scroll = scrollRef.current
@@ -71,7 +68,7 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
                 }
                 dispatch(updateSeen(dataUpdate))
 
-                const response = await requestChat.put('/updateSeen', dataUpdate)
+                 await requestChat.put('/updateSeen', dataUpdate)
                 socket.emit('seenMessage',{...dataUpdate,fromUser:currentUser._id,toUser:card._id})
               
             } catch (e) {

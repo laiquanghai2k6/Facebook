@@ -1,5 +1,3 @@
-import { useState } from "react";
-import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import HomeBio from '../assets/home-bio.png'
 import Heart from '../assets/heart.png'
 import GPS from '../assets/pin.png'

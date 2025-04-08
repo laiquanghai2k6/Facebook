@@ -1,14 +1,10 @@
 import UserImage from "./UserImage";
 import Default from '../assets/default-image.png'
 import { CommentType, ReplyComment } from "../slices/commentSlice";
-import { useEffect, useState } from "react";
 import { UserInfo } from "../slices/userSlice";
-import { requestUser } from "../service/service";
 import moment from "moment";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
-import Spinner from "./Spinner";
-import SkeletonComment from "./LoadingComment";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { navigateHome } from "../slices/homeNavigateSlice";
@@ -42,7 +38,9 @@ export const ConvertDate = (timeDif: number,timePost:number) => {
 }
 
 const Comment = ({ setUserReply, dataUser, comment, setParentComment, openCommentReplyInput }: CommentProps) => {
-    const { text, image, type, userId, video, parentId } = comment
+    const { text, image, type, userId, video
+        // , parentId 
+    } = comment
     const timePost = new Date(comment.createdAt).getTime()
     const timeNow = Date.now()
     const timeDif = timeNow - timePost

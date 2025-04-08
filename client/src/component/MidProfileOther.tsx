@@ -1,11 +1,9 @@
 import { useCallback, useState } from "react";
 import MidProfileNavigate from "./MidProfileNavigate";
 import PostProfile from "./PostProfile";
-import InfoProfile from "./InfoProfile";
 import usertest from '../assets/user-test.jpg'
 
 import InfoProfileOther from "./InfoProfileOther";
-import LoadingPost from "./LoadingPost";
 import { User, } from "../slices/userSlice";
 const friendList = [
     'lhm', 'lqh', 'hth', 'ttuan', 'dvu'

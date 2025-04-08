@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import UserImage from "./UserImage";
-import Send from '../assets/send.png'
 import Camera from '../assets/camera.png'
 import HomeItem from "./HomeItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +13,6 @@ import { requestComment } from "../service/service";
 import { PostType } from "../slices/postSlice";
 import { CommentType, setComment } from "../slices/commentSlice";
 import { useMutation } from "@tanstack/react-query";
-import Spinner from "./Spinner";
 
 type CommentInputProps = {
     post: PostType,

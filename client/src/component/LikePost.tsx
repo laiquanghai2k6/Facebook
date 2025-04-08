@@ -6,7 +6,7 @@ import Wow from '../assets/wow.png'
 import Sad from '../assets/sad.png'
 import Angry from '../assets/angry.png'
 import LikePostEmoji from '../assets/like-post.png'
-import React, { ButtonHTMLAttributes, MouseEventHandler } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
 const EmojiArray = [
     LikePostEmoji,

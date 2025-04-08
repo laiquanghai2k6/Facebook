@@ -2,10 +2,7 @@ import { useCallback, useState } from "react";
 import MidProfileNavigate from "./MidProfileNavigate";
 import PostProfile from "./PostProfile";
 import InfoProfile from "./InfoProfile";
-import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import usertest from '../assets/user-test.jpg'
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../selector/userSelector";
 import { User } from "../slices/userSlice";
 const friendList = [
     'lhm', 'lqh', 'hth', 'ttuan', 'dvu'

@@ -5,7 +5,7 @@ import UserImage from "./UserImage";
 import DefaultImage from '../assets/default-image.png'
 import { useNavigate } from "react-router-dom";
 import AddImage from '../assets/add-img.png'
-import { ChangeEvent, ChangeEventHandler, useRef, useState } from "react";
+import { ChangeEvent,  useRef, useState } from "react";
 import CloseButton from "./button/CloseButton";
 import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import Play from '../assets/play.png'

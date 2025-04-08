@@ -8,7 +8,6 @@ import FaVideo from '../assets/video.png'
 import FaStore from '../assets/market.png'
 import FaNewspaper from '../assets/feed.png'
 import HomeItem from "./HomeItem";
-import { User } from "../slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../selector/userSelector";
 import DefaultImage from '../assets/default-image.png'

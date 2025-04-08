@@ -1,5 +1,4 @@
 
-import test from '../assets/test2.png'
 import moment from "moment/min/moment-with-locales";
 
 const MessengerTextRight = ({ text, time, image }: { text: string, time: string, image: string }) => {

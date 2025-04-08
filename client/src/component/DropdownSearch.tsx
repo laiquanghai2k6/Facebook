@@ -1,4 +1,4 @@
-import { User, UserInfo } from "../slices/userSlice";
+import {  UserInfo } from "../slices/userSlice";
 import UserImage from "./UserImage";
 import Default from '../assets/default-image.png'
 import { ClipLoader } from "react-spinners";

@@ -11,20 +11,15 @@ import { IoIosNotifications } from "react-icons/io";
 import UserImage from "./UserImage";
 import { useDispatch, useSelector } from "react-redux";
 import { navigateHome } from '../slices/homeNavigateSlice'
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {  useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../store/store";
 import Messenger from "./Messenger";
-import MessengerDown from "./MessengerDown";
 import Notification from "./Notification";
 import UserSetting from "./UserSetting";
 import Default from '../assets/default-image.png'
-import { selectUserInfo } from "../selector/userSelector";
-import { useQuery } from "@tanstack/react-query";
-import { requestNotification, requestUser } from "../service/service";
+import {  requestUser } from "../service/service";
 import DropdownSearch from "./DropdownSearch";
-import { notiType, setNoti } from "../slices/notiSlice";
-import Spinner from "./Spinner";
 import { User } from "../slices/userSlice";
 
 export const debounce = (callback: Function, delay: number) => {
@@ -54,7 +49,7 @@ const NavBar = ({user}:NavBarProps) => {
     const navigate = useNavigate()
     const numberNoti = useSelector((state: RootState) => state.chats.unRead)
     const notificationIcon = useSelector((state:RootState)=>state.notification.unReadNoti)
-    console.log('numNoti:',notificationIcon)
+    
 
     const currentNavigate = useSelector((state: RootState) => state.homeNavigate.currentHome)
     const NavigateHomeHandler = (e: string) => {

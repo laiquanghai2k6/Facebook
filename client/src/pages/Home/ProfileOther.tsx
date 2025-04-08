@@ -1,20 +1,14 @@
-import { useEffect } from "react";
 import BodyProfileOther from "../../component/BodyProfileOther";
 import NavProfile from "../../component/NavProfile";
-import { useDispatch } from "react-redux";
-import { navigateHome } from "../../slices/homeNavigateSlice";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { User, UserInfo } from "../../slices/userSlice";
+import { useSearchParams } from "react-router-dom";
 
 import { requestUser } from "../../service/service";
-import Spinner from "../../component/Spinner";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPost from "../../component/LoadingPost";
 
 
 
 const ProfileOther = () => {
-    const dispatch = useDispatch()
 
     const [searchParams] = useSearchParams()
     const id = searchParams.get('userId')
@@ -34,7 +28,7 @@ const ProfileOther = () => {
             return null
         }
     }
-   const {data,isLoading} = useQuery({
+   const {data} = useQuery({
     queryKey:['vc',id],
     queryFn:()=>FetchUser(id),
     enabled:!!id
@@ -50,10 +44,8 @@ const ProfileOther = () => {
         <div className="profile">
          
             {data!=null ? (
-
                 <>
                     <NavProfile user={data} type="other" />
-
                     <BodyProfileOther user={data} />
                 </>
             ):(
