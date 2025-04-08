@@ -97,10 +97,10 @@ const NavBar = ({user}:NavBarProps) => {
         <div className="navbar">
             {dropdownSearch && <DropdownSearch isPending={isPending} user={fetchSearch.data} />}
            
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '21vw' }}>
+            <div className="left-nav">
 
                 <img src={FacebookIcon} alt="FacebookIcon" className="facebook-icon" style={{ cursor: 'pointer' }} />
-                <Input style={{ width: '14rem' }} value={fetchSearch.text} onChange={(e) => {
+                <Input style={{ width: 'auto' }} value={fetchSearch.text} onChange={(e) => {
                     if (e.target.value != "") setDropdownSearch(true)
                     else setDropdownSearch(false)
                     setFetchSearch((prev) => ({ ...prev, text: e.target.value }))
@@ -219,11 +219,9 @@ const NavBar = ({user}:NavBarProps) => {
 
                 </div>
                 <UserImage img={user.image == "" ? Default : user.image} width={'2.5rem'} height={'2.5rem'}
-                    onClick={() => {
-                        if (!userSettingOpen) {
-                            setUserSettingOpen(true)
-                        }
-
+                    onClick={(e) => {
+                        e.stopPropagation()
+                            setUserSettingOpen((prev)=>!prev)
                     }}
                     id="user-setting"
 

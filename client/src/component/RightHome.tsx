@@ -169,7 +169,9 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
         <div className="right-home">
             {isLoading && <LoadingRightHome />}
             
-            <p style={{ marginBottom: '1rem' }}>Người liên hệ</p>
+            <p style={{ marginBottom: '1rem',marginTop:'1rem' }}>Người liên hệ</p>
+            <div style={{display:'flex',flexDirection:'column',marginBottom:'5rem'}}>
+
             {data?.map((u, i) => {
                 
                 const isOnline = Object.keys(currentMessengerCard.userOnline).includes(u._id)
@@ -180,6 +182,7 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
                 }
                 if (currentUser._id != u._id) {
                     return (
+                        <>
                         <div key={i} onClick={() => {
                             OpenNewCardMessenger(u)
                         }} className="left-home-items" style={{ justifyContent: 'space-between' }}>
@@ -196,9 +199,12 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
                             )}
 
                         </div>
+                     
+                        </>
                     )
                 }
             })}
+            </div>
 
         </div>
     );
