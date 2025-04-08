@@ -12,7 +12,7 @@ const UserSetting:React.FC<UserSettingProps> = ({closeUserSetting}) => {
         const handlerClick = (event:MouseEvent)=>{
             const element = (event.target as Element)
          
-            if(!element.closest('.user-setting-container') && !element.closest('user-setting')){
+            if(!element.closest('.user-setting-container') && !element.closest('#user-setting')){
 
                 closeUserSetting()
                 console.log('close')
