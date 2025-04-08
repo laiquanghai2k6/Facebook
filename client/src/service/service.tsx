@@ -1,11 +1,11 @@
 
 import axios from 'axios'
-export const userUrl = 'http://localhost:5000/users'
-export const postUrl = 'http://localhost:5000/posts'
-export const commentUrl = 'http://localhost:5000/comments'
-export const chatUrl = 'http://localhost:5000/chats'
-export const messageUrl = 'http://localhost:5000/messages'
-export const notificationUrl = 'http://localhost:5000/notifications'
+export const userUrl = `${import.meta.env.VITE_SERVER_URL}/users`
+export const postUrl = `${import.meta.env.VITE_SERVER_URL}/posts`
+export const commentUrl = `${import.meta.env.VITE_SERVER_URL}/comments`
+export const chatUrl = `${import.meta.env.VITE_SERVER_URL}/chats`
+export const messageUrl = `${import.meta.env.VITE_SERVER_URL}/messages`
+export const notificationUrl = `${import.meta.env.VITE_SERVER_URL}/notifications`
 
 export const requestUser = axios.create({
     baseURL:userUrl,

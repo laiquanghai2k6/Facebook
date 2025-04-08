@@ -30,6 +30,7 @@ function App() {
   const user = useSelector((state: RootState) => state.user.getUser)
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
+
   useEffect(() => {
     currentMessengerCardRef.current = currentMessengerCard.messengerCard 
   }, [currentMessengerCard])
@@ -39,7 +40,6 @@ function App() {
       document.documentElement.style.backgroundColor = "#1c1c1d";
       document.body.style.backgroundColor = "#1c1c1d";
       socket.connect()
-     
       dispatch(setNumberNoti(user.numberNoti))
       socket.on('connect', () => {
         socket.emit('uploadCurrentUserId', user._id, socket.id)
