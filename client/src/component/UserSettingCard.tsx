@@ -1,4 +1,3 @@
-import FacebookIcon from '../assets/FacebookIcon.png'
 import HomeItem from './HomeItem';
 import Logout from '../assets/logout.png'
 import UserImage from './UserImage';
@@ -8,8 +7,6 @@ import Default from '../assets/default-image.png'
 import { useNavigate } from 'react-router-dom';
 import { initialUser, setUser } from '../slices/userSlice';
 import { requestUser } from '../service/service';
-import { socket } from '../socket';
-import { clearAll } from '../slices/messengerSlice';
 const UserSettingCard = () => {
     const user = useSelector(selectUserInfo)
     const dispatch = useDispatch()

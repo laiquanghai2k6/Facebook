@@ -12,7 +12,7 @@ import Play from '../assets/play.png'
 
 import { requestComment } from "../service/service";
 import { PostType } from "../slices/postSlice";
-import { CommentType, ReplyComment, setComment, setReply, updateChildren } from "../slices/commentSlice";
+import {  ReplyComment, setReply, updateChildren } from "../slices/commentSlice";
 import { UserInfo } from "../slices/userSlice";
 
 type CommentInputProps = {

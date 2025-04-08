@@ -1,6 +1,5 @@
-import { UpdateSeen } from './chatSlice';
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { UserQuickChat, UserQuickChatID } from "../component/RightHome";
+import {  UserQuickChatID } from "../component/RightHome";
 
 
 
