@@ -17,7 +17,7 @@ const path = require('path')
 const app = express()
 const atlasUrl = process.env.MONGO_ATLAS_URI
 const port = process.env.PORT || 5000
-const clientUrl= "http://localhost:5173"
+const clientUrl= process.env.CLIENT_URL
 app.use(express.json())
 app.use(cors({
     origin: clientUrl, 
@@ -26,7 +26,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type'],               
 }));
 const requestOffline = axios.create({
-    baseURL:'http://localhost:5000/users',
+    baseURL:`${process.env.CLIENT_URL}/users`,
     withCredentials:true
 })
 app.use('/users',userRoute)
@@ -48,7 +48,7 @@ app.listen(port,()=>{
 let userOnline = {}
 
 const io = new Server({ cors: {
-    origin: "localhost:5173", // Link frontend
+    origin: `${process.env.CLIENT_URL}`, // Link frontend
     methods: ["GET", "POST"]
   }
 })
