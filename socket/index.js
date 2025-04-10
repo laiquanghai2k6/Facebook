@@ -1,14 +1,24 @@
 
 const {Server} = require('socket.io')
-const path = require('path')
 const axios = require('axios')
-
+const express = require('express')
+const http = require('http')
+const cors = require('cors')
+const app = express()
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}))
+const server = http.createServer(app)
 require('dotenv').config({ path: './.env' });
-const io = new Server({ cors: {
-    origin: `${process.env.CLIENT_URL}`, // Link frontend
-    methods: ["GET", "POST"]
-  }
-})
+
+const io = new Server(server, {
+    cors: {
+      origin: process.env.CLIENT_URL,
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  })
 let userOnline = {}
 const requestOffline = axios.create({
     baseURL:`${process.env.SERVER_URL}/users`,
@@ -92,6 +102,8 @@ io.on('connection',(socket)=>{
 
     })
 })
+const PORT = process.env.PORT;
 
-
-io.listen(3000)
+server.listen(PORT, () => {
+    console.log(`✅ Socket server running on port ${PORT}`);
+  });
