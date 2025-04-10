@@ -67,6 +67,7 @@ const updateSeen = async(req,res)=>{
 const getChatOfUser = async (req,res)=>{
     try{
         const {userId} = req.query
+        
         const currentUser = await userModel.exists({_id:userId})
         if(!currentUser) return res.status(400).json('Lỗi tìm user')
         const userChat = await chatModel.find({

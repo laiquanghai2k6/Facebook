@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Login from './pages/Auth/Login'
 import NavBar from './component/NavBar'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import {
+  //  Navigate,
+   Route, Routes, useNavigate } from 'react-router-dom'
 import Register from './pages/Auth/Register'
 import Home from './pages/Home/Home'
 import { useDispatch, useSelector } from 'react-redux'
@@ -194,18 +196,18 @@ function App() {
 
       <ScrollToTop />
       <Routes>
-        <Route path='/' element={
+        {/* <Route path='/' element={
           isLoadingAuth
             ? <LoadingAuth />
             : (isUser ? <Navigate to="/home" /> : <Login />)
-        } />
-        {/* <Route path='/' element={isLoadingAuth ? <LoadingAuth /> : <Login />} /> */}
-        {/* <Route path='/login' element={!isUser && <Login />} /> */}
-        <Route path="/login" element={
+        } /> */}
+        <Route path='/' element={isLoadingAuth ? <LoadingAuth /> : <Login />} /> 
+         <Route path='/login' element={!isUser && <Login />} /> 
+        {/* <Route path="/login" element={
           isLoadingAuth
             ? <LoadingAuth />
             : (!isUser ? <Login /> : <Navigate to="/home" />)
-        } />
+        } /> */}
         {isLoadingAuth ? (
           <Route path="*" element={<LoadingAuth />} />
         ) : (
