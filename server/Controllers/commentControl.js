@@ -67,11 +67,11 @@ const createCommentWithImage = async(req,res)=>{
         const fileBuffer = await sharp(imageFile)
                                 .toFormat('jpeg')
                                 .toBuffer()
-        let newComment
+        
         await cloudinary.uploader.upload_stream({folder:'comments'},async (error,result)=>{
             if(error) return res.status(500).json('Tải ảnh không thành công')
             // fs.unlinkSync(req.file.path)
-            newComment =  new commentModel({
+            const  newComment =  new commentModel({
             image:result.secure_url,
             text:text,
             postId:postId,
@@ -93,19 +93,19 @@ const createCommentWithImage = async(req,res)=>{
 const createCommentWithVideo =async (req,res)=>{
     try{
         const {text,postId,userId,type,parentId} = req.body
-        const videoFile = req.file.path
+        const videoFile = req.file.buffer
         const user = await  userModel.exists({_id:userId})
         const post = await postModel.exists({_id:postId})
         if(!user) return res.status(400).json("Không thấy người dùng")
         if(!post) return res.status(400).json("Không thấy bài viết")
-        const response = await cloudinary.uploader.upload(videoFile,{
+        await cloudinary.uploader.upload_stream({
             resource_type:'video',
             folder:'comments',
             transformation:[{width:1280,height:720,crop:'limit'}]
-    })
-        fs.unlinkSync(req.file.path)
+    },async (error,result)=>{
+        if(error) return res.status(500).json('Tải video không thành công')
         const newComments = await new commentModel({
-            video:response.secure_url,
+            video:result.secure_url,
             text:text,
             postId:postId,
             userId:userId,
@@ -114,6 +114,8 @@ const createCommentWithVideo =async (req,res)=>{
         })
         await newComments.save()
         return res.status(200).json(newComments)
+    }).end(videoFile)
+       
     }catch(e){
         console.log(e)
         return res.status(500).json('Lỗi tạo bình luận với video')

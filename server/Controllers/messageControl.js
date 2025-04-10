@@ -39,7 +39,7 @@ const createMessage = async (req, res) => {
 }
 const createMessageImage = async (req, res) => {
     try {
-        const filePath = req.file.path
+        const filePath = req.file.buffer
         const { chatId, text, senderId } = req.body
         
         const currentChat = await chatModel.exists({_id:chatId})

@@ -157,7 +157,7 @@ const uploadUserImage = async (req, res) => {
     try {
 
         if (!req.file) return res.status(400).json('Không có file ảnh')
-        const filePath = req.file.path
+        const filePath = req.file.buffer
         const currentUser = await userModel.findById(req.body.userId)
 
         const fileBuffer = await sharp(filePath)
@@ -165,7 +165,6 @@ const uploadUserImage = async (req, res) => {
             .toBuffer();
 
         await cloudinary.uploader.upload_stream({ folder: 'user_images' }, async (error, result) => {
-            fs.unlinkSync(req.file.path);
             currentUser.image = result.secure_url
             await currentUser.save()
             if (error) return res.status(400).json(error);
@@ -183,14 +182,13 @@ const uploadUserBackground = async (req, res) => {
     try {
 
         if (!req.file) return res.status(400).json('Tải ảnh không thành công')
-        const filePath = req.file.path
+        const filePath = req.file.buffer
         const currentUser = await userModel.findById(req.body.userId)
         const fileBuffer = await sharp(filePath)
             .toFormat('jpeg')
             .toBuffer()
         await cloudinary.uploader.upload_stream({ folder: 'user_images' }, async (error, result) => {
             if (error) return res.status(400).json('Lỗi api cloudinary')
-            fs.unlinkSync(req.file.path);
             currentUser.backgroundImage = result.secure_url
 
             await currentUser.save()

@@ -19,17 +19,16 @@ const createPost = async (req, res) => {
 }
 const createPostWithImage = async (req, res) => {
     try {
-        const filePath = req.file.path
+        const filePath = req.file.buffer
         const { userId, text, type } = req.body
         const user = await userModel.exists({ _id: userId })
         if (!user) return res.status(400).json('Không thấy người dùng')
-        if (!filePath) return res.status('400').json('Không thấy ảnh')
+        if (!filePath) return res.status(400).json('Không thấy ảnh')
         const fileBuffer = await sharp(filePath)
             .toFormat('jpeg')
             .toBuffer()
         await cloudinary.uploader.upload_stream({ folder: 'posts_image' }, async (error, result) => {
-            if (error) return res.status('400').json('Lỗi cloudinary')
-            fs.unlinkSync(req.file.path)
+            if (error) return res.status(400).json('Lỗi cloudinary')
             const newPost = await new postModel({
                 image: result.secure_url,
                 text: text,
@@ -50,23 +49,27 @@ const createPostWithVideo = async (req, res) => {
     try {
         const user = await userModel.exists({ _id: req.body.userId })
         if (!user) return res.status(400).json("Không thấy người dùng")
-        const filePath = req.file.path
+        const filePath = req.file.buffer
         const { userId, text, type } = req.body
         if (!filePath) return res.status(400).json('Không thấy video')
-        const response = await cloudinary.uploader.upload(filePath, {
+        await cloudinary.uploader.upload_stream({
             resource_type: 'video',
             folder: 'videos',
             transformation: [{ width: 1280, height: 720, crop: 'limit' }]
-        })
-        fs.unlinkSync(filePath)
-        const newPost = postModel({
-            video: response.secure_url,
-            text: text,
-            userId: userId,
-            type: type
-        })
-        await newPost.save()
-        return res.status(200).json(newPost)
+        }, async (err, result) => {
+            if (err) return res.status(500).json('Tải video không thành công')
+
+            const newPost = postModel({
+                video: result.secure_url,
+                text: text,
+                userId: userId,
+                type: type
+            })
+            await newPost.save()
+            return res.status(200).json(newPost)
+
+        }).end(filePath)
+
     } catch (e) {
         console.log(e)
         return res.status(500).json('Lỗi up video')
@@ -80,8 +83,8 @@ const getAllPost = async (req, res) => {
         const skip = (page - 1) * limit
         const cacheKey = `post:page${page}`
         const cache = await client.get(cacheKey)
-        if(cache !=null){
-            console.log('cache page:',page)
+        if (cache != null) {
+            console.log('cache page:', page)
             return res.status(200).json(JSON.parse(cache))
         }
         const posts = await postModel.find({})
@@ -95,8 +98,8 @@ const getAllPost = async (req, res) => {
             page: parseInt(page),
             post: posts
         }
-        await client.set(cacheKey,JSON.stringify(responsePost),{Ex:180})
-        
+        await client.set(cacheKey, JSON.stringify(responsePost), { Ex: 180 })
+
         return res.status(200).json(responsePost)
     } catch (e) {
         console.log(e)
@@ -106,7 +109,7 @@ const getAllPost = async (req, res) => {
 const getPostOfOneUser = async (req, res) => {
     try {
         const { userId, page, limit } = req.query
-        const user = await userModel.exists({_id:userId})
+        const user = await userModel.exists({ _id: userId })
         if (!user) return res.status(400).json('Không tìm thấy user')
         const length = await postModel.countDocuments({ userId: userId })
         const userPost = await postModel.find({ userId: userId })
@@ -153,8 +156,8 @@ const createPostShare = async (req, res) => {
     try {
 
         const { type, video, image, text, textShare, createdOrigin, userId, userIdShare } = req.body
-        const user = await userModel.exists({_id:userId})
-        const userShare = await userModel.exists({_id:userIdShare})
+        const user = await userModel.exists({ _id: userId })
+        const userShare = await userModel.exists({ _id: userIdShare })
 
         if (!user || !userShare) return res.status(400).json('Không tìm thấy user')
         const newPostShared = new postModel({
@@ -219,7 +222,7 @@ const updateEmoji = async (req, res) => {
             )
 
         }
-        
+
         return res.status(200).json(updatePost)
 
 
