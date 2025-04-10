@@ -28,6 +28,7 @@ import { setToken } from './slices/tokenSlice'
 import { requestUser } from './service/service'
 import { setUser, User } from './slices/userSlice'
 import LoadingAuth from './pages/Auth/LoadingAuth'
+import { divide } from 'lodash'
 
 function App() {
 
@@ -56,7 +57,7 @@ function App() {
         dispatch(setUser(getUser.data as User))
         document.documentElement.style.backgroundColor = "#1c1c1d";
         document.body.style.backgroundColor = "#1c1c1d";
-        navigate('/home')
+        // navigate('/home')
         setIsLoadingAuth(false)
       } catch (e) {
         setIsLoadingAuth(false)
@@ -207,6 +208,7 @@ function App() {
           <Route path="*" element={<LoadingAuth />} />
         ) : (
           <>
+           <Route path="*" element={<div>ádsad</div>} />
             <Route path='/register' element={<Register />} />
             <Route path='/home' element={isUser ? <Home /> : <Login />} />
             <Route path='/video' element={isUser ? <Video /> : <Login />} />

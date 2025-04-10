@@ -98,6 +98,7 @@ io.on('connection',(socket)=>{
         console.log('online:')
         console.log(userOnline)
         io.emit("getCurrentUserOnline", {userOnline:userOnline,isOffline:true});
+        console.log('update offline')
         await requestOffline.put('/updateLastOnline',data)  
 
     })
