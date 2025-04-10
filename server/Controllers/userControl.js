@@ -96,7 +96,7 @@ const loginUser = async (req, res) => {
     const accessToken = createAccessToken(user._id)
     const refreshToken = createRefreshToken(user._id)
     res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
         sameSite: 'None',
         maxAge: 7 * 24 * 3600 * 1000,
@@ -307,7 +307,7 @@ const handlerRefreshToken = async (req, res) => {
 const LogOutUser = (req, res) => {
     console.log('logOut')
     res.clearCookie('refreshToken', {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'None',
         secure: true
     })
