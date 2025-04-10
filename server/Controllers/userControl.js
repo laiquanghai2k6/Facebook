@@ -236,7 +236,6 @@ const setUserProfileInfo = async (req, res) => {
     }
 }
 const updateLastOnline = async (req, res) => {
-
     try {
         const currentUser = await userModel.exists({ _id: req.body.userId })
 
@@ -331,5 +330,13 @@ const LogOutUser = (req, res) => {
     })
     return res.status(200).json({ message: 'Đăng xuất thành công' })
 }
+const getFriendOfUser = async (req,res)=>{
+    const {userId} = req.query
+    const isUser = await userModel.exists({_id:userId})
+    if(!isUser) return res.status(404).json({error:'Không tìm thấy user'})
+    const currentUserFriend = await userModel.findById(userId)
+    .select('friend')
+    .lean()
 
-module.exports = { getUserWithToken, LogOutUser, handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }
+}
+module.exports = {getFriendOfUser, getUserWithToken, LogOutUser, handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

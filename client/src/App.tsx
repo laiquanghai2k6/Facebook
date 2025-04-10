@@ -28,7 +28,6 @@ import { setToken } from './slices/tokenSlice'
 import { requestUser } from './service/service'
 import { setUser, User } from './slices/userSlice'
 import LoadingAuth from './pages/Auth/LoadingAuth'
-import { divide } from 'lodash'
 
 function App() {
 
@@ -36,7 +35,6 @@ function App() {
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
   const [isLoadingAuth, setIsLoadingAuth] = useState(true)
-  const navigate = useNavigate()
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
