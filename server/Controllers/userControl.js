@@ -98,7 +98,7 @@ const loginUser = async (req, res) => {
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: 'Strict',
+        sameSite: 'None',
         maxAge: 7 * 24 * 3600 * 1000
     })
     return res.status(200).json({accessToken,user})
@@ -307,7 +307,7 @@ const LogOutUser = (req, res) => {
     console.log('logOut')
     res.clearCookie('refreshToken', {
         httpOnly: true,
-        sameSite: 'Strict',
+        sameSite: 'None',
         secure: true
     })
     return res.status(200).json({ message: 'Đăng xuất thành công' })

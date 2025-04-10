@@ -25,6 +25,7 @@ export type Chat={
 const Home = () => {
      const dispatch= useDispatch()
      const user = useSelector(selectUserInfo)
+     console.log('currentUser:',user)
      const FetchChat = async()=>{
           try{
 
