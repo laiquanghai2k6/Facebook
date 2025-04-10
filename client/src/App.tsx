@@ -30,7 +30,6 @@ import { setUser, User } from './slices/userSlice'
 import LoadingAuth from './pages/Auth/LoadingAuth'
 
 function App() {
-  console.log('inApp0')
 
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
@@ -40,11 +39,9 @@ function App() {
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
-    console.log('inApp1')
 
     const getAccessToken = async () => {
       try {
-        console.log('inApp2')
 
         const token = await axios.get(`${import.meta.env.VITE_SERVER_URL}/users/handlerRefreshToken`, {
           withCredentials: true
