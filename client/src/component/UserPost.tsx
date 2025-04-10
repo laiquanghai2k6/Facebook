@@ -57,9 +57,10 @@ const UserPost = ({userId,time}:UserPostProps ) => {
     }
 
         const {data,isLoading} = useQuery({
-            queryKey:['userId',userId],
+            queryKey:['userIdInf',userId],
             queryFn:()=>fetchOwnerPost(),
         })
+        console.log('currenTUser:',data)
 
         const NavigateOtherProfile = ()=>{
             navigate(`/profileOther?userId=${userId}`)

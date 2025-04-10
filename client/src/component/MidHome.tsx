@@ -70,7 +70,6 @@ const MidHome: React.FC<MidHomeProps> = () => {
           if (node) observer.current.observe(node);
         },[hasNextPage]);
     
-
     return (
         <div className="mid-home" >
             {createPostModal && <ModalCreatePost setCreatePostModal={modalClose} />}

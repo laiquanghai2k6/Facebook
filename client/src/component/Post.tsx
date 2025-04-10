@@ -23,7 +23,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
         queryKey: ['posts', post?._id],
         queryFn: () => fetchCommentLength(post?._id)
     })
-
     return (
         <>
             {isLoading || !post ? <LoadingPost />

@@ -7,7 +7,7 @@ const clientUrl = require('..')
 const { cloudinary } = require('../Cloud/clounary.js')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-
+const client = require('../redisF/redisClient.js')
 const createAccessToken = (userId) => {
     return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }
@@ -67,6 +67,14 @@ const getUser = async (req, res) => {
             .select("name image backgroundImage lastOnline")
             .lean()
         if (!user) return res.status(400).json("Lỗi tìm người dùng")
+        
+        const cacheKey = `userInfo:${req.params.userId}`;
+        const cached = await client.get(cacheKey);
+        if (cached != null){
+            console.log('cachedInfo ',cacheKey)
+            return res.status(200).json(JSON.parse(cached));
+        }
+        await client.set(cacheKey, JSON.stringify(user), { EX: 180 });
         return res.status(200).json(user)
     } catch (e) {
         console.log(e)
@@ -78,7 +86,17 @@ const getUserProfile = async (req, res) => {
         const user = await userModel.findById(req.params.userId)
             .select("-password")
             .lean()
+        
         if (!user) return res.status(400).json("Lỗi tìm người dùng")
+        const cacheKey = `userProfile:${req.params.userId}`
+        const cache = await client.get(cacheKey)
+      
+        if(cache != null){
+            console.log('cachedProfile ',cacheKey)
+            return res.status(200).json(JSON.parse(cache))
+        }
+        
+        await client.set(cacheKey,JSON.stringify(user),{Ex:180})
         return res.status(200).json(user)
     } catch (e) {
         console.log(e)
@@ -100,20 +118,20 @@ const loginUser = async (req, res) => {
         secure: true,
         sameSite: 'None',
         maxAge: 7 * 24 * 3600 * 1000,
-        path:'/'
+        path: '/'
     })
-    return res.status(200).json({accessToken,user})
+    return res.status(200).json({ accessToken, user })
     // return res.status(200).json(user)
 }
-const getUserWithToken = async(req,res)=>{
-    try{
+const getUserWithToken = async (req, res) => {
+    try {
 
         const user = await userModel.findById(req.userId).lean()
         return res.status(200).json(user)
 
-    }catch(e){
+    } catch (e) {
         console.log(e)
-        return res.status(500).json({error:'Lỗi không thể đăng nhập'})
+        return res.status(500).json({ error: 'Lỗi không thể đăng nhập' })
     }
 }
 const registerUser = async (req, res) => {
@@ -286,7 +304,7 @@ const setNumberNoti = async (req, res) => {
 }
 const handlerRefreshToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
-    if (!refreshToken) return res.status(401).json({error:'chưa có refreshToken '})
+    if (!refreshToken) return res.status(401).json({ error: 'chưa có refreshToken ' })
     try {
         const decoded = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         // console.log('decode:',decoded.userId)
@@ -314,4 +332,4 @@ const LogOutUser = (req, res) => {
     return res.status(200).json({ message: 'Đăng xuất thành công' })
 }
 
-module.exports = { getUserWithToken,LogOutUser,handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }
+module.exports = { getUserWithToken, LogOutUser, handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

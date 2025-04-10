@@ -3,7 +3,7 @@ const userModel = require("../Models/userModel")
 const { cloudinary } = require('../Cloud/clounary')
 const fs = require('fs')
 const sharp = require("sharp")
-
+const client = require('../redisF/redisClient')
 const createPost = async (req, res) => {
 
     const { userId, text, type } = req.body
@@ -78,6 +78,12 @@ const getAllPost = async (req, res) => {
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
         const skip = (page - 1) * limit
+        const cacheKey = `post:page${page}`
+        const cache = await client.get(cacheKey)
+        if(cache !=null){
+            console.log('cache page:',page)
+            return res.status(200).json(JSON.parse(cache))
+        }
         const posts = await postModel.find({})
             .sort({ createdAt: -1 })
             .skip(skip)
@@ -89,6 +95,8 @@ const getAllPost = async (req, res) => {
             page: parseInt(page),
             post: posts
         }
+        await client.set(cacheKey,JSON.stringify(responsePost),{Ex:180})
+        
         return res.status(200).json(responsePost)
     } catch (e) {
         console.log(e)
