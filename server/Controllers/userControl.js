@@ -99,7 +99,8 @@ const loginUser = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: 'None',
-        maxAge: 7 * 24 * 3600 * 1000
+        maxAge: 7 * 24 * 3600 * 1000,
+        path:'/'
     })
     return res.status(200).json({accessToken,user})
     // return res.status(200).json(user)
