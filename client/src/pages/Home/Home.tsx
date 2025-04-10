@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import LeftHome from "../../component/LeftHome";
-import MessengerDown from "../../component/MessengerDown";
 import MidHome from "../../component/MidHome";
 
 import RightHome from "../../component/RightHome";

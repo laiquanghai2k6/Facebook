@@ -1,4 +1,4 @@
-import axios, { AxiosInstance }from "axios";
+import  { AxiosInstance }from "axios";
 import { store } from "../store/store";
 import { setToken } from "../slices/tokenSlice";
 import { requestUser } from "./service";

@@ -8,7 +8,7 @@ import { requestChat, requestMessage, requestNotification, requestUser } from ".
 import { socket } from "../socket";
 import { selectUserInfo } from "../selector/userSelector";
 import { addNoti } from "../slices/notiSlice";
-import { UserQuickChat, UserQuickChatID } from "./RightHome";
+import { UserQuickChatID } from "./RightHome";
 import { Chat } from "../pages/Home/Home";
 import { addChat } from "../slices/chatSlice";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
