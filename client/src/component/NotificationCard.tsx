@@ -68,9 +68,14 @@ const NotificationCard = ({ noti }: NotificationCardProps) => {
                     state: true,
                     type: 'accept'
                 })
-            
+                
+                    const dataAdd = {
+                        fromId:noti.fromUserId,
+                        toId:noti.toUserId
+                    }
+                
                 await requestNotification.put('/actionFriendRequest', datas)
-                // const addFriend = await requestUser.put('/addFriend',dataAdd)
+                await requestUser.put('/addFriend',dataAdd)
                 socket.emit('acceptFriend',{from:noti.fromUserId,to:noti.toUserId})
                 const update = {
                     userId:noti.fromUserId,

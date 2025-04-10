@@ -12,7 +12,6 @@ const ProfileOther = () => {
 
     const [searchParams] = useSearchParams()
     const id = searchParams.get('userId')
-    console.log('id:',id)
     if (!id) {
         return (<>áddas</>)
     }
@@ -33,7 +32,6 @@ const ProfileOther = () => {
     queryFn:()=>FetchUser(id),
     enabled:!!id
    }) 
-
 
 
 

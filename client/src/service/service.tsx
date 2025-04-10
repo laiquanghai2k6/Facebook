@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import { interceptorAxios } from './interceptorAxios'
 export const userUrl = `${import.meta.env.VITE_SERVER_URL}/users`
 export const postUrl = `${import.meta.env.VITE_SERVER_URL}/posts`
 export const commentUrl = `${import.meta.env.VITE_SERVER_URL}/comments`
@@ -35,3 +36,4 @@ export const requestNotification = axios.create({
     withCredentials:true
 
 })
+interceptorAxios(requestUser);

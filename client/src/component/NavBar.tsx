@@ -21,6 +21,7 @@ import Default from '../assets/default-image.png'
 import {  requestUser } from "../service/service";
 import DropdownSearch from "./DropdownSearch";
 import { User } from "../slices/userSlice";
+import MessengerDown from "./MessengerDown";
 
 export const debounce = (callback: Function, delay: number) => {
     let time: NodeJS.Timeout | undefined = undefined
@@ -230,6 +231,8 @@ const NavBar = ({user}:NavBarProps) => {
 
 
             </div>
+         <MessengerDown />
+
         </div>);
 }
 

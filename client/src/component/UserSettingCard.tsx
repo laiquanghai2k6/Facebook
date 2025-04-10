@@ -25,6 +25,7 @@ const UserSettingCard = () => {
         }
     }
     const signOut = async () => {
+        await requestUser.get('/logoutUser')
         await updateLastOnline()
         dispatch(setUser(initialUser.getUser))
         navigate('/login')

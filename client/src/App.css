@@ -1229,7 +1229,8 @@ html {
   justify-content: space-between;
   border-bottom: 1px solid #2f3031;
   align-items: center;
-  padding: 0.5rem
+  padding: 0.5rem;
+  z-index:2000
 }
 
 
@@ -1370,9 +1371,20 @@ html {
   margin-top: 7rem;
 
 }
+.messenger-card-user{
+  cursor:pointer;
+   display: flex;
+   flex-direction: column;
+   margin-left: 1rem ;
+   border-radius: 0.2rem;
+   padding:0.2rem 1rem 0.2rem 0.2rem
+}
+.messenger-card-user:hover{
+  background-color: #4b4b4d;
+}
 
 .profile {
-  /* overflow: auto; */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background-color: #1c1c1d;
@@ -1456,6 +1468,13 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.top-left-profile {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 20rem;
 }
 
 .top-profile-camera {
@@ -1617,6 +1636,7 @@ html {
   border-color: #0866ff transparent #0866ff transparent;
   animation: spin 1.3s linear infinite;
 }
+
 
 .loading-name-post {
 
@@ -2082,8 +2102,9 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: 0;
+    margin-left: 2rem;
     margin-top: 2.5rem;
+
   }
 
   .top-profile-direct {

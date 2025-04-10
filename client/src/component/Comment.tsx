@@ -67,7 +67,7 @@ const Comment = ({ setUserReply, dataUser, comment, setParentComment, openCommen
                         <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column', marginLeft: '0.5rem' }} >
                             <div className="comment-info-container">
 
-                                <p onClick={NavigateOtherProfile} style={{ display: 'block', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
+                                <p onClick={NavigateOtherProfile} style={{ display: 'block',cursor:'pointer', width: 'fit-content', fontSize: '1rem', fontWeight: 'bold' }}>{`${dataUser?.name}`}</p>
                                 {text != "" && <p className="text-comment">{text}</p>}
                             </div>
                             {video != "" && (

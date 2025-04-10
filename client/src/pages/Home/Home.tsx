@@ -76,7 +76,6 @@ const Home = () => {
          <LeftHome  />
          <MidHome  />
          <RightHome currentUser={user} />
-         <MessengerDown />
          
     </div>
       );

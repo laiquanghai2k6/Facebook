@@ -7,6 +7,7 @@ import { messengerSlice } from "../slices/messengerSlice";
 import { chatSlice } from "../slices/chatSlice";
 import { messengeSlice } from "../slices/messageSlice";
 import { notiSlice } from "../slices/notiSlice";
+import { tokenSlice } from "../slices/tokenSlice";
 
 
 export const store = configureStore({
@@ -18,7 +19,8 @@ export const store = configureStore({
         messengerCard:messengerSlice.reducer,
         chats:chatSlice.reducer,
         message:messengeSlice.reducer,
-        notification:notiSlice.reducer
+        notification:notiSlice.reducer,
+        accessToken:tokenSlice.reducer
 
     }
 })

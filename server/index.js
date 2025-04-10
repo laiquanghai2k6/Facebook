@@ -11,6 +11,7 @@ const notificationRoute = require('./Routers/notificationRoute')
 const cors = require('cors')
 require('dotenv').config({ path: './.env' });
 const mongoose = require('mongoose')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 const atlasUrl = process.env.MONGO_ATLAS_URI
@@ -21,9 +22,9 @@ app.use(cors({
     origin: clientUrl, 
     credentials: true,
     methods: ['GET', 'POST','PUT','DELETE'],
-    allowedHeaders: ['Content-Type'],               
+    allowedHeaders: ['Content-Type','Authorization'],               
 }));
-
+app.use(cookieParser())
 app.use('/users',userRoute)
 app.use('/posts',postRoute)
 app.use('/comments',commentRoute)

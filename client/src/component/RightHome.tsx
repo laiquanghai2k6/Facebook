@@ -10,6 +10,7 @@ import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
 import { addChat } from "../slices/chatSlice";
 import { Chat } from "../pages/Home/Home";
 import LoadingRightHome from "./LoadingRightHome";
+import React from "react";
 type RightHomeProps = {
     currentUser:UserInfo
 }
@@ -182,7 +183,7 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
                 }
                 if (currentUser._id != u._id) {
                     return (
-                        <>
+                        <React.Fragment key={u._id}>
                         <div key={i} onClick={() => {
                             OpenNewCardMessenger(u)
                         }} className="left-home-items" style={{ justifyContent: 'space-between' }}>
@@ -200,7 +201,7 @@ const RightHome: React.FC<RightHomeProps> = ({currentUser}) => {
 
                         </div>
                      
-                        </>
+                        </React.Fragment>
                     )
                 }
             })}

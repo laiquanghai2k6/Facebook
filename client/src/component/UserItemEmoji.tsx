@@ -70,21 +70,13 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
                 }
                 setLastRequest(isAdd)
                 const response = await requestNotification.post('/createFriendNotification', data)
-
-                console.log('res:', response.data)
-
                 dispatch(addNoti(response.data.notificationRequest))
-
                 socket.emit('sendNotiFrom', response.data.notificationOpponent)
-
-
                 const update = {
                     userId: userId,
                     type: 'inc'
                 }
                 requestUser.put('/setNumberNoti', update)
-
-
                 console.log('request')
                 setLastRequest(isAdd)
             } catch (e) {
@@ -95,11 +87,6 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
         }
         if (!isAdd && lastRequest != false) {
             try {
-                // const data = {
-                //     toUserId: userId,
-                //     fromUserId: currentUser._id,
-
-                // }
                  await requestNotification.delete(`/deleteFriendRequest/${userId}/${currentUser._id}`)
 
 
@@ -110,18 +97,12 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
                     type: 'dec'
                 }
                 requestUser.put('/setNumberNoti', update)
-
-
-                // console.log('cancel', res.data)
+                console.log('cancel')
                 setLastRequest(isAdd)
             } catch (e) {
-
+                console.log(e)
+                alert('Lỗi hủy kết bạn')
             }
-            // isAdd = false
-            // last = true
-
-
-
         }
     }
     const CreateRequest = useMemo(() => {

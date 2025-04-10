@@ -6,7 +6,16 @@ const sharp = require('sharp')
 const clientUrl = require('..')
 const { cloudinary } = require('../Cloud/clounary.js')
 const fs = require('fs')
+const jwt = require('jsonwebtoken')
 
+const createAccessToken = (userId) => {
+    return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+}
+
+// Tạo refresh token
+const createRefreshToken = (userId) => {
+    return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+}
 const searchUser = async (req, res) => {
     try {
         const user = await userModel.aggregate([
@@ -22,11 +31,11 @@ const searchUser = async (req, res) => {
             }, {
                 $limit: 6
             }, {
-                $project: { 
-                    _id:1,
-                    image:1,
-                    name:1,
-                 }
+                $project: {
+                    _id: 1,
+                    image: 1,
+                    name: 1,
+                }
             }
         ])
         return res.status(200).json(user)
@@ -42,7 +51,7 @@ const getAllUserRandom = async (req, res) => {
         const user = await userModel.aggregate(
             [
                 { $sample: { size: countDocument } },
-                { $project: { name: 1, image: 1, _id: 1, backgroundImage: 1,lastOnline:1 } }
+                { $project: { name: 1, image: 1, _id: 1, backgroundImage: 1, lastOnline: 1 } }
             ]
         )
         return res.status(200).json(user)
@@ -67,7 +76,7 @@ const getUser = async (req, res) => {
 const getUserProfile = async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId)
-            .select("-password -lastOnline")
+            .select("-password")
             .lean()
         if (!user) return res.status(400).json("Lỗi tìm người dùng")
         return res.status(200).json(user)
@@ -80,18 +89,36 @@ const getUserProfile = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body
     const user = await userModel.findOne({ email }).lean()
-
+    if (!email || !password) return res.status(400).json('Vui lòng điền đầy đủ')
     if (!user) return res.status(400).json('Người dùng không tồn tại')
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) return res.status(400).json('Sai mật khẩu')
-        
-    return res.status(200).json(user)
+    const accessToken = createAccessToken(user._id)
+    const refreshToken = createRefreshToken(user._id)
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict',
+        maxAge: 7 * 24 * 3600 * 1000
+    })
+    return res.status(200).json({accessToken,user})
+    // return res.status(200).json(user)
 }
+const getUserWithToken = async(req,res)=>{
+    try{
 
+        const user = await userModel.findById(req.userId).lean()
+        return res.status(200).json(user)
+
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({error:'Lỗi không thể đăng nhập'})
+    }
+}
 const registerUser = async (req, res) => {
     const { email, password, name, gender, birth } = req.body
 
-    let user = await userModel.exists({ email:email })
+    let user = await userModel.exists({ email: email })
     if (user) return res.status(400).json('Đã tồn tại người dùng')
     if (password.length < 6) return res.status(400).json('Mật khẩu 6 chữ cái trở lên')
     if (!validator.isEmail(email)) return res.status(400).json('Email định dạng sai')
@@ -190,35 +217,35 @@ const setUserProfileInfo = async (req, res) => {
     }
 }
 const updateLastOnline = async (req, res) => {
-    
+
     try {
-        const currentUser = await userModel.exists({_id:req.body.userId})
-        
+        const currentUser = await userModel.exists({ _id: req.body.userId })
+
         if (!currentUser) return res.status(400).json("Error")
         await userModel.findOneAndUpdate({
-            _id:req.body.userId
+            _id: req.body.userId
         }, {
             lastOnline: req.body.time
         })
         return res.status(200).json('good')
-        
-    }catch (e){
+
+    } catch (e) {
         console.log(e)
         return res.status(400).json('Lỗi time')
     }
 }
 
 
-const addFriend = async (req,res)=>{
-    try{
-        const {fromId,toId} = req.body
+const addFriend = async (req, res) => {
+    try {
+        const { fromId, toId } = req.body
         const fromUser = await userModel.findById(fromId)
         const toUser = await userModel.findById(toId)
         if (fromId === toId) {
             return res.status(400).json({ error: "Bạn không thể kết bạn với chính mình" });
         }
-        if(!fromUser || !toUser) 
-        return res.status(404).json({error:'Lỗi không thấy người kết bạn'})
+        if (!fromUser || !toUser)
+            return res.status(404).json({ error: 'Lỗi không thấy người kết bạn' })
         if (fromUser.friend.includes(toId) || toUser.friend.includes(fromId)) {
             return res.status(400).json({ error: "Hai người đã là bạn bè" });
         }
@@ -227,34 +254,63 @@ const addFriend = async (req,res)=>{
         await fromUser.save()
         await toUser.save()
         return res.status(200).json({ message: "Kết bạn thành công" });
-    }catch(e){
+    } catch (e) {
         console.log(e)
-        return res.status(500).json({error:'Lỗi kết bạn'})
+        return res.status(500).json({ error: 'Lỗi kết bạn' })
     }
 }
 
-const setNumberNoti = async (req,res)=>{
-    try{
-        const {userId,numberNoti,type} = req.body
+const setNumberNoti = async (req, res) => {
+    try {
+        const { userId, numberNoti, type } = req.body
         const currentUser = await userModel.findById(userId)
-        if(!currentUser)
-            return res.status(404).json({error:'Lỗi không thấy người dùng'})
-        console.log('type:',type)
-        console.log('num:',numberNoti)
-        console.log('userId:',userId)
-        if(type == 'set')
-        currentUser.numberNoti = numberNoti
-        if(type =='inc')
-        currentUser.numberNoti = currentUser.numberNoti+1
-        if(type == 'dec')
-        currentUser.numberNoti = currentUser.numberNoti-1
+        if (!currentUser)
+            return res.status(404).json({ error: 'Lỗi không thấy người dùng' })
+        console.log('type:', type)
+        console.log('num:', numberNoti)
+        console.log('userId:', userId)
+        if (type == 'set')
+            currentUser.numberNoti = numberNoti
+        if (type == 'inc')
+            currentUser.numberNoti = currentUser.numberNoti + 1
+        if (type == 'dec')
+            currentUser.numberNoti = currentUser.numberNoti - 1
 
         await currentUser.save()
         return res.status(200).json({ message: "cập nhật thông báo thành công" });
-    }catch(e){
+    } catch (e) {
         console.log(e)
-        return res.status(500).json({error:'Lỗi cập nhật thông báo'})
+        return res.status(500).json({ error: 'Lỗi cập nhật thông báo' })
+    }
+}
+const handlerRefreshToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+    if (!refreshToken) return res.status(401).json({error:'chưa có refreshToken '})
+    try {
+        const decoded = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        // console.log('decode:',decoded.userId)
+        const userId = decoded.userId
+        const currentUser = await userModel.exists({ _id: userId })
+        if (!currentUser) return res.status(404).json({ error: 'Người dùng không tồn tại' })
+        const accessToken = jwt.sign(
+            { userId },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '15m' }
+        )
+        return res.status(200).json(accessToken)
+    } catch (e) {
+        return res.status(403)
     }
 }
 
-module.exports = {setNumberNoti, getUser,addFriend,updateLastOnline,getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }
+const LogOutUser = (req, res) => {
+    console.log('logOut')
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        sameSite: 'Strict',
+        secure: true
+    })
+    return res.status(200).json({ message: 'Đăng xuất thành công' })
+}
+
+module.exports = { getUserWithToken,LogOutUser,handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

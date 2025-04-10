@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, User } from "../../slices/userSlice";
 import Spinner from "../../component/Spinner";
+import { setToken } from "../../slices/tokenSlice";
 
 
 type loginData = {
@@ -36,12 +37,13 @@ const Login = (): JSX.Element => {
             setLoading(true)
 
 
-            const {data} = await requestUser.post('/login', loginData)
+            const response = await requestUser.post('/login', loginData)
             setLoginData((prev) => ({ ...prev, error: '' }))
             
-            dispatch(setUser(data as User))
+            dispatch(setUser(response.data.user as User))
+            dispatch(setToken(response.data.accessToken))
             setLoading(false)
-             document.documentElement.style.backgroundColor = "#1c1c1d";
+            document.documentElement.style.backgroundColor = "#1c1c1d";
             document.body.style.backgroundColor = "#1c1c1d";
             navigate('/home')
 
