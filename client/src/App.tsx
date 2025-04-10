@@ -30,6 +30,8 @@ import { setUser, User } from './slices/userSlice'
 import LoadingAuth from './pages/Auth/LoadingAuth'
 
 function App() {
+  console.log('inApp0')
+
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
