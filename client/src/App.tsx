@@ -181,9 +181,7 @@ function App() {
     }
   }, [user])
 
-  if (isLoadingAuth) {
-    return <LoadingAuth />
-  }
+ 
   return (
     <div className='container'>
       {isUser && <NavBar user={user} />}

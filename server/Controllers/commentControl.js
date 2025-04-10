@@ -57,7 +57,7 @@ const createComment = async(req,res)=>{
 }
 const createCommentWithImage = async(req,res)=>{
     try{
-        const imageFile = req.file.path
+        const imageFile = req.file.buffer
         if(!imageFile) return res.status(400).json('Không thấy ảnh') 
         const {text,postId,userId,type,parentId} = req.body
         const user = await  userModel.exists({_id:userId})
@@ -70,7 +70,7 @@ const createCommentWithImage = async(req,res)=>{
         let newComment
         await cloudinary.uploader.upload_stream({folder:'comments'},async (error,result)=>{
             if(error) return res.status(500).json('Tải ảnh không thành công')
-            fs.unlinkSync(req.file.path)
+            // fs.unlinkSync(req.file.path)
             newComment =  new commentModel({
             image:result.secure_url,
             text:text,
