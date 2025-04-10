@@ -38,9 +38,11 @@ function App() {
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
+    console.log('inApp1')
+
     const getAccessToken = async () => {
       try {
-        console.log('inApp')
+        console.log('inApp2')
 
         const token = await axios.get(`${import.meta.env.VITE_SERVER_URL}/users/handlerRefreshToken`, {
           withCredentials: true
