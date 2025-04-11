@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { setUserBackground, User, UserInfo } from '../slices/userSlice';
 import { requestUser } from '../service/service';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Camera from '../assets/camera-black.png'
 import Spinner from './Spinner';
 type NavProfileProp = {
@@ -12,6 +12,7 @@ type NavProfileProp = {
 const NavProfile = ({ type = "own", user }: NavProfileProp) => {
 
     const dispatch = useDispatch()
+    const [currentImage,setCurrentImage] = useState("")
     const [loading, isLoading] = useState(false)
     const uploadBackground = async (e: ChangeEvent<HTMLInputElement>) => {
         try {
@@ -23,6 +24,8 @@ const NavProfile = ({ type = "own", user }: NavProfileProp) => {
                 const response = await requestUser.post('/uploadBackgroundImage', data)
                 dispatch(setUserBackground(response.data))
                 isLoading(false)
+                const url = URL.createObjectURL(e.target.files?.[0] as File)
+                setCurrentImage(url)
             } else {
                 alert('Vui lòng chọn ảnh')
             }
@@ -31,6 +34,9 @@ const NavProfile = ({ type = "own", user }: NavProfileProp) => {
             alert('Tải ảnh không thành công')
         }
     }
+    useEffect(()=>{
+        setCurrentImage(user.backgroundImage)
+    },[user])
     return (
         <div className="nav-profile">
             {loading && <Spinner />}
@@ -52,7 +58,7 @@ const NavProfile = ({ type = "own", user }: NavProfileProp) => {
                 )}
 
                 <div className="image-post">
-                    {user.backgroundImage != "" && <img src={user.backgroundImage} className='image-background' />}
+                    {currentImage != "" && <img src={currentImage} className='image-background' />}
 
                 </div>
             </div>

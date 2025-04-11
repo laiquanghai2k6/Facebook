@@ -1,7 +1,7 @@
 import ImageChain from "./ImageChain";
 import DefaultImage from '../assets/default-image.png'
 import Camera from '../assets/camera-black.png'
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { requestUser } from "../service/service";
 import { setUserImage, User, UserInfo } from "../slices/userSlice";
@@ -17,6 +17,7 @@ type TopLeftProfileProps = {
 const TopLeftProfile = ({ type = "own", user, friends, isLoadingFriend }: TopLeftProfileProps) => {
     const [loading, isLoading] = useState(false)
 
+    const [currentImage,setCurrentImage] = useState("")
 
     const dispatch = useDispatch()
     const openSetImage = () => {
@@ -33,19 +34,24 @@ const TopLeftProfile = ({ type = "own", user, friends, isLoadingFriend }: TopLef
             const response = await requestUser.post('/uploadUserImage', formData)
             dispatch(setUserImage(response.data))
             isLoading(false)
+            const url = URL.createObjectURL(e.target.files?.[0] as File)
+            setCurrentImage(url)
 
         } catch (e: any) {
             alert(e.response.data)
         }
 
     }
+     useEffect(()=>{
+            setCurrentImage(user.image)
+    },[user])
 
     return (
         <div className='top-left-profile'>
             {loading && <Spinner />}
             <div className='icon-round-background' style={{ width: '10rem', height: '10rem' }}>
 
-                <img src={user.image == "" ? DefaultImage : user.image} style={{
+                <img src={currentImage == "" ? DefaultImage : currentImage} style={{
                     width: '115%',
                     height: '115%',
                     objectFit: 'cover',
@@ -64,7 +70,6 @@ const TopLeftProfile = ({ type = "own", user, friends, isLoadingFriend }: TopLef
                 <input onChange={(e) => uploadImage(e)} type="file" id="input-file-profile" style={{ display: 'none' }} />
 
             </div>
-            {/* <UserImage height={'20vh'} width={'20vh'} /> */}
             <div className='top-profile-right-image'>
                 <p style={{ fontSize: '1.75rem', color: 'white', fontWeight: 'bold' }}>{user.name}</p>
                 <p style={{ fontSize: '1rem', color: '#a2aeb8' }}>{friends?.length} Người bạn</p>
