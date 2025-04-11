@@ -188,7 +188,8 @@ const InteractPostComment = ({type,lengthComment,post}:InteractPostCommentProps)
         }
     }
     const emojiHandler =async (img: string) => {
-        const current = img.split('/').pop()?.split('.')[0]
+        const currentB = img.split('/').pop()?.split('.')[0]
+        const current = currentB?.split('-')[0]
         
         const emojis = document.querySelector('.emoji-appear')
         if (emojis) {
