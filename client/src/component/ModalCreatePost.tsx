@@ -318,14 +318,14 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
         <div className="modal-create-post-container">
             {(videoMutation.isPending || imageMutation.isPending||nomarlMutation.isPending) && <Spinner />}
             <div className="modal-create-post-box">
-                <p style={{ alignSelf: 'center', top: '0', position: 'absolute', marginTop: '2vh', fontSize: '2.5vh', justifySelf: 'flex-start', fontWeight: 'bold' }}>Tạo bài viết</p>
+                <p style={{ alignSelf: 'center', top: '0', position: 'absolute', marginTop: '1rem', fontSize: '1.25rem', justifySelf: 'flex-start', fontWeight: 'bold' }}>Tạo bài viết</p>
                 <Hr />
                 <CloseButton onClick={() => setCreatePostModal()} />
-                <div className="left-home-items" style={{ width: '20vh' }} onClick={() => navigate('/profile')}>
-                    <UserImage img={user.image == "" ? DefaultImage : user.image} height={'5vh'} width={'5vh'} />
+                <div className="left-home-items" style={{ minWidth: '10rem',width:'fit-content' }} onClick={() => navigate('/profile')}>
+                    <UserImage img={user.image == "" ? DefaultImage : user.image} height={'2.5rem'} width={'2.5rem'} />
                     <p className="left-home-text">{`${user.name}`}</p>
                 </div>
-                <textarea ref={contentRef} spellCheck={false} className="create-post-input" style={{ height: '10vh' }} id="text-comment-input" rows={1} placeholder={`${user.name} ơi, bạn đang nghĩ gì`}></textarea>
+                <textarea ref={contentRef} spellCheck={false} className="create-post-input" style={{ height: '5rem',fontSize:'1rem' }} id="text-comment-input" rows={1} placeholder={`${user.name} ơi, bạn đang nghĩ gì`}></textarea>
                 <div className="create-post-image" onClick={() => {
                     document.getElementById('input-create-post')?.click()
 

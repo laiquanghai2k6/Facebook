@@ -761,7 +761,8 @@ html {
 
 .modal-create-post-container {
   position: fixed;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
   display: flex;
@@ -770,6 +771,7 @@ html {
   top: 0;
   left: 0;
   z-index: 3000;
+  overflow-y: auto;
 }
 
 
@@ -822,11 +824,13 @@ html {
   border-radius: 0.5rem;
   padding-top: 3.5rem;
   background-color: #252728;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
   -ms-overflow-style: none !important;
   position: fixed;
-
+  
+  max-height: 80vh;
 }
 
 .modal-share-post-box {
@@ -1001,20 +1005,16 @@ html {
 
 .create-post-image {
 
+
   background-color: #333334;
-  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
-  font-size: 1.9vh;
+  border-radius: 0.5rem;
   padding: 0.5rem;
-  outline: none;
-  border: none;
-  min-height: 15vh;
-  word-wrap: break-word;
   margin: 0.5rem;
-  flex: 1;
-  background-color: '#333334';
-  resize: none;
+  min-height: 7.5rem;
+  height: auto;
+  width: 100%;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
