@@ -151,7 +151,14 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(user.password, salt)
     await user.save()
-    return res.status(200).json(user)
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        maxAge: 7 * 24 * 3600 * 1000,
+        path: '/'
+    })
+    return res.status(200).json({ accessToken, user })
 }
 const uploadUserImage = async (req, res) => {
     try {

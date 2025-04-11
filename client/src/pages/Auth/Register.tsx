@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, User } from "../../slices/userSlice";
 import Spinner from "../../component/Spinner";
+import { setToken } from "../../slices/tokenSlice";
 
 
 
@@ -87,8 +88,9 @@ const Register = () => {
                 password: registerInfo.password
             }
             isLoading(true)
-            const {data} = await requestUser.post('/register',converDateRegister)
-            dispatch(setUser(data as User))
+            const response = await requestUser.post('/register',converDateRegister)
+            dispatch(setUser(response.data.user as User))
+            dispatch(setToken(response.data.accessToken))
             navigate('/home')
             document.documentElement.style.backgroundColor = "#1c1c1d";
             document.body.style.backgroundColor = "#1c1c1d";
