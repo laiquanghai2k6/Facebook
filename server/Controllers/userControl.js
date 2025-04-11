@@ -151,6 +151,8 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(user.password, salt)
     await user.save()
+    const accessToken = createAccessToken(user._id)
+    const refreshToken = createRefreshToken(user._id)
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
