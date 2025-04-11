@@ -29,7 +29,6 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
                 console.log()
                 if (!messengerRef.current.contains(event.target as Node) &&(event.target as HTMLElement).className !='icon-round-background' && (event.target as HTMLElement).className!="home-icon-right-mes"&&svgElement?.classList[0]!="home-icon-right-mes2") {
                     closeMessenger();
-
                 }
 
             }
@@ -53,7 +52,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
        return response as UserInfo[]
     }
     const {data,isLoading} = useQuery({
-        queryKey:['messenger-user'],
+        queryKey:['messenger-user',currentChat[0]._id],
         queryFn:()=>FetchMessengerUser(),
         refetchOnWindowFocus: false
     })
@@ -90,6 +89,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
         }
       
         closeMessenger()
+        
     }
     return (
 

@@ -39,16 +39,25 @@ export const chatSlice = createSlice({
             state.chats = action.payload
         },
         addChat:(state,action:PayloadAction<Chat>)=>{
-            state.chats = [...state.chats,action.payload]
+            state.chats = [action.payload,...state.chats]
         },
         updateLastMessage:(state,action:PayloadAction<UpdateMessage>)=>{
             const {lastMessage,updatedAt,chatId,seen1,seen2} = action.payload
             
             const index = state.chats.findIndex((chat)=>chat._id == chatId )
+            console.log('in 1')
+            console.log('seen1 in redux',seen1)
             if (index !== -1) {
-                if(seen1!=undefined && seen2!=undefined){
-                    state.chats[index] = {...state.chats[index],seen1:seen1,seen2:seen2,lastMessage:lastMessage,updatedAt:updatedAt}
+            console.log('in 2')
 
+                if(seen1!=undefined && seen2!=undefined){
+                    console.log('in 3')
+                    state.chats[index] = {...state.chats[index],seen1:seen1,seen2:seen2,lastMessage:lastMessage,updatedAt:updatedAt}
+                    const tempIndex = state.chats[index]
+                    const tempArray = state.chats
+                    tempArray.splice(index,1)
+                    tempArray.unshift(tempIndex)
+                    state.chats = tempArray
                 }else
                 state.chats[index] = {...state.chats[index],lastMessage:lastMessage,updatedAt:updatedAt}
             }
@@ -77,9 +86,6 @@ export const chatSlice = createSlice({
                     numberUnRead:state.unRead.numberUnRead-1,
                     userId:state.unRead.userId.filter((u)=>u!=action.payload)
                 }
-                
-            
-            
         }
    
     }

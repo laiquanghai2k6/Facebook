@@ -7,7 +7,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Register from './pages/Auth/Register'
 import Home from './pages/Home/Home'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from './store/store'
+import { RootState, store } from './store/store'
 
 import Shop from './pages/Home/Shop'
 import Group from './pages/Home/Group'
@@ -17,11 +17,11 @@ import ProfileOther from './pages/Home/ProfileOther'
 import Video from './pages/Video/Video'
 import ScrollToTop from './component/ScrollToTop'
 import { socket } from './socket'
-import { clearAll, setCurrentOnline, setMessengerCard, UserOnline } from './slices/messengerSlice'
+import { clearAll, setCurrentOnline, setMessengerCard, UpdateOffline, updateOfflineCard, UserOnline } from './slices/messengerSlice'
 import { UserQuickChatID } from './component/RightHome'
 import { Message } from './component/MessengerDownCard'
 import { addMessage } from './slices/messageSlice'
-import { increaseUnRead, updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
+import { addChat, increaseUnRead, updateLastMessage, UpdateMessage, updateSeen, UpdateSeen } from './slices/chatSlice'
 import { acceptFriend, addNoti, clearNoti, deleteNoti, notiType, rejectFriend, setNumberNoti } from './slices/notiSlice'
 import axios from 'axios'
 import { setToken } from './slices/tokenSlice'
@@ -34,6 +34,7 @@ function App() {
   const dispatch = useDispatch()
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
+
   const [isLoadingAuth, setIsLoadingAuth] = useState(true)
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
@@ -74,8 +75,16 @@ function App() {
       dispatch(setNumberNoti(user.numberNoti))
       socket.on('connect', () => {
         socket.emit('uploadCurrentUserId', user._id, socket.id)
-        socket.on('getCurrentUserOnline', ({ userOnline }) => {
+        socket.on('getCurrentUserOnline', ({ userOnline, isOffline, userOffline }) => {
           dispatch(setCurrentOnline(userOnline as UserOnline))
+          if (isOffline && userOffline) {
+            const time = Date.now()
+            const updateOffline: UpdateOffline = {
+              lastOnline: time,
+              userId: userOffline
+            }
+            dispatch(updateOfflineCard(updateOffline))
+          }
         })
       })
 
@@ -83,6 +92,21 @@ function App() {
 
 
       socket.on('receiveMessage', ({ from, fromUser, user, seen1, seen2, message, name, image, createdAt, imageUser, chatId }) => {
+        const currentChat = store.getState().chats.chats
+
+        const isExistChat = currentChat.find((chat) => chat._id == chatId)
+        if (!isExistChat) {
+          const time = new Date().toString()
+          dispatch(addChat({
+            _id: chatId,
+            user: user,
+            lastMessage: message,
+            senderId: fromUser,
+            seen1: seen1,
+            seen2: seen2,
+            updatedAt: time
+          }))
+        }
 
         const width = window.innerWidth;
         const isCardExist = currentMessengerCardRef.current.find((card) => card.chatId == chatId)
@@ -177,7 +201,7 @@ function App() {
       document.body.style.backgroundColor = "#f0f2f5";
     }
   }, [user])
- 
+
   return (
     <div className='container'>
       {isUser && <NavBar user={user} />}
@@ -200,7 +224,7 @@ function App() {
           <Route path="*" element={<LoadingAuth />} />
         ) : (
           <>
-           <Route path="*" element={<div>ádsad</div>} />
+            <Route path="*" element={<div>ádsad</div>} />
             <Route path='/register' element={<Register />} />
             <Route path='/home' element={isUser ? <Home /> : <Login />} />
             <Route path='/video' element={isUser ? <Video /> : <Login />} />

@@ -50,8 +50,9 @@ const getAllUserRandom = async (req, res) => {
         const countDocument = await userModel.countDocuments().lean()
         const user = await userModel.aggregate(
             [
-                { $sample: { size: countDocument } },
-                { $project: { name: 1, image: 1, _id: 1, backgroundImage: 1, lastOnline: 1 } }
+                
+                {$sort: { lastOnline: -1 }},
+                { $project: { name: 1, image: 1, _id: 1, backgroundImage: 1, lastOnline: 1 } },
             ]
         )
         return res.status(200).json(user)

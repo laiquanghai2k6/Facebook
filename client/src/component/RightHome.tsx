@@ -10,7 +10,7 @@ import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
 import { addChat } from "../slices/chatSlice";
 import { Chat } from "../pages/Home/Home";
 import LoadingRightHome from "./LoadingRightHome";
-import React, { useRef } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 type RightHomeProps = {
     currentUser: UserInfo
 }
@@ -56,10 +56,11 @@ const RightHome: React.FC<RightHomeProps> = ({ currentUser }) => {
     const dispatch = useDispatch()
     const currentChat = useSelector((state: RootState) => state.chats.chats)
     const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
-
+    const [prevData,setPrevData] = useState<UserQuickChat[]>([])
     const FetchUser = async () => {
         try {
             const response = await requestUser('/getAllUserRandom')
+            
             return response.data as Array<UserQuickChat>
         } catch (e) {
             console.log(e)
@@ -71,8 +72,7 @@ const RightHome: React.FC<RightHomeProps> = ({ currentUser }) => {
         queryFn: () => FetchUser(),
         staleTime: 5000,
         enabled: Object.keys(currentMessengerCard.userOnline).length > 0,
-        refetchOnWindowFocus: false
-
+        refetchOnWindowFocus: false,
     })
     const openingUserIds = useRef<Set<string>>(new Set())
 
@@ -113,12 +113,13 @@ const RightHome: React.FC<RightHomeProps> = ({ currentUser }) => {
                 // console.log('resposne in Hree',response.data.user)
                 socket.emit('sendMessage', {
                     fromUser: currentUser._id,
-                    from: socket.id,
+                    from: currentMessengerCard.userOnline[currentUser._id],
                     toSocketId: currentMessengerCard.userOnline[user._id],
+                    toUserId:user._id,
                     message: `Xin chào ${user.name}`,
                     createdAt: now,
-                    name: user.name,
-                    imageUser: user.image,
+                    name: currentUser.name,
+                    imageUser: currentUser.image,
                     image: "",
                     chatId: chatId,
                     isNew: true,
@@ -177,17 +178,27 @@ const RightHome: React.FC<RightHomeProps> = ({ currentUser }) => {
         }
         openingUserIds.current.delete(user._id)
     }
-
+    const onlineIds = new Set(Object.keys(currentMessengerCard.userOnline));
+    
+    useEffect(() => {
+        if (data) {
+          const onlineUser = data.filter((d) => onlineIds.has(d._id));
+          const offlineUser = data.filter((d) => !onlineIds.has(d._id));
+          const dataUser = [...onlineUser, ...offlineUser];
+          setPrevData(dataUser);
+        }
+      }, [data]);
+    
     return (
         <div className="right-home">
-            {isLoading && <LoadingRightHome />}
+
 
             <p style={{ marginBottom: '1rem', marginTop: '1rem' }}>Người liên hệ</p>
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '5rem' }}>
 
-                {data?.map((u, i) => {
+                {prevData?.map((u, i) => {
 
-                    const isOnline = Object.keys(currentMessengerCard.userOnline).includes(u._id)
+                    const isOnline = onlineIds.has(u._id)
                     let convertDate = ""
                     if (!isOnline && u.lastOnline) {
                         const time = new Date().getTime()
@@ -218,7 +229,7 @@ const RightHome: React.FC<RightHomeProps> = ({ currentUser }) => {
                     }
                 })}
             </div>
-
+            {isLoading && prevData.length==0 && <LoadingRightHome />}
         </div>
     );
 }

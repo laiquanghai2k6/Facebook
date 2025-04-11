@@ -18,10 +18,13 @@ import Messenger from "./Messenger";
 import Notification from "./Notification";
 import UserSetting from "./UserSetting";
 import Default from '../assets/default-image.png'
-import {  requestUser } from "../service/service";
+import {  requestChat, requestUser } from "../service/service";
 import DropdownSearch from "./DropdownSearch";
 import { User } from "../slices/userSlice";
 import MessengerDown from "./MessengerDown";
+import { setChat, setUnRead, UnRead } from "../slices/chatSlice";
+import { useQuery } from "@tanstack/react-query";
+import { Chat } from "../pages/Home/Home";
 
 export const debounce = (callback: Function, delay: number) => {
     let time: NodeJS.Timeout | undefined = undefined
@@ -92,7 +95,49 @@ const NavBar = ({user}:NavBarProps) => {
         }
     }, [dropdownSearch])
   
-    
+    const FetchChat = async()=>{
+        try{
+
+             const response = await requestChat.get(`/getChatOfUser?userId=${user._id}`)
+             return response.data as Chat[]
+        }catch(e){
+             alert('Lỗi tải đoạn chat')
+        }
+   }
+   
+   const {data} = useQuery({
+        queryKey:['chats'],
+        queryFn:()=>FetchChat()
+   })
+   useEffect(()=>{
+      
+        if(data){
+             dispatch(setChat(data))
+             const init:UnRead={
+                  numberUnRead:0,userId:[]
+             }
+             const numberUnRead = data.reduce((prev:UnRead,chat)=>{
+                  
+                  const isUser1 = chat.user[0] == user._id 
+                  if(isUser1){
+                       if(!chat.seen1){
+                            const newPrev:UnRead={
+                                 numberUnRead:prev.numberUnRead+1,
+                                 userId:[...prev.userId,chat.senderId]
+                            }
+                            return newPrev
+                       }
+                       return prev
+                  }else{
+                       if(!chat.seen2){
+                            return {numberUnRead:prev.numberUnRead+1,userId:[...prev.userId,chat.senderId]}
+                       }
+                       return prev
+                  }
+             },init)
+             dispatch(setUnRead(numberUnRead))
+        }
+   },[data])
 
     return (
         <div className="navbar">

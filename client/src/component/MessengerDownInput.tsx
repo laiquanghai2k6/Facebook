@@ -134,8 +134,8 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                         image:image,
                         chatId:chatId,
                         user:card.user,
-                        seen2At:isUser1 ? false : true,
-                        seen1At:isUser1 ? true : false,
+                        seen2:isUser1 ? false : true,
+                        seen1:isUser1 ? true : false,
                     })
         
                 }
@@ -196,8 +196,8 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
                         image:image,
                         chatId:chatId,
                         user:card.user,
-                        seen2At:isUser1 ? false:true,
-                        seen1At:isUser1 ? true : false,
+                        seen2:isUser1 ? false:true,
+                        seen1:isUser1 ? true : false,
                     })
                 }
                 if(isUser1){

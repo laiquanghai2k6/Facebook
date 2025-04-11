@@ -10,7 +10,10 @@ type MessengerState ={
 export type UserOnline = {
     [userId:string]:string
 }
-
+export type UpdateOffline = {
+    userId:string,
+    lastOnline:number
+}
 const initialState:MessengerState = {
     messengerCard:[],
     userOnline:{}
@@ -43,9 +46,15 @@ const initialState:MessengerState = {
         cleatLast:(state)=>{
             state.messengerCard = state.messengerCard.slice(0,-1)
         },
+        updateOfflineCard:(state,action:PayloadAction<UpdateOffline>)=>{
+            const currentIndex = state.messengerCard.findIndex((mes)=>mes._id == action.payload.userId)
+            if(currentIndex != -1){
+                state.messengerCard[currentIndex].lastOnline = action.payload.lastOnline
+            }
+        }
 
 
     }
  })
 
- export const {cleatLast,setMessengerCard,setCurrentOnline,clearAll,closeMessengerCard,fullMessengerCard} = messengerSlice.actions
+ export const {cleatLast,updateOfflineCard,setMessengerCard,setCurrentOnline,clearAll,closeMessengerCard,fullMessengerCard} = messengerSlice.actions

@@ -112,8 +112,7 @@ const OpenNewCardMessenger = async ( ) => {
         const chat = currentChat.find((chats)=>chats._id == chatId )
         const isCardExist = currentMessengerCard.messengerCard.find((cards) => cards._id == user._id)
         const isUser1 = isCardExist?.user[0] == currentUser._id
-        if(isUser1) console.log('im 1')
-        else console.log('im2')
+      
         const newCard: UserQuickChatID = {
             _id: user._id,
             name: user.name,

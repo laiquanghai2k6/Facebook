@@ -34,7 +34,7 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
     const currentUser = useSelector(selectUserInfo)
     const updateMessage = useSelector((state: RootState) => state.message.message)
     const dispatch = useDispatch()
-
+    console.log('currentCard:',card)
     useEffect(() => {
         const scroll = scrollRef.current
         if (scroll) {

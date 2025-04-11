@@ -42,7 +42,7 @@ io.on('connection',(socket)=>{
     socket.on('requestUserOnline',()=>{
         socket.emit('getUserOnline',userOnline)
     })
-    socket.on('sendMessage',({from,seen1At,toUserId,seen2At,user,fromUser,isNew,toSocketId,chatId,image,imageUser,message,createdAt,name})=>{
+    socket.on('sendMessage',({from,seen1,toUserId,seen2,user,fromUser,isNew,toSocketId,chatId,image,imageUser,message,createdAt,name})=>{
      
         const receiverSocketIds = userOnline[toUserId] || [];
 
@@ -58,8 +58,8 @@ io.on('connection',(socket)=>{
                 image:image,
                 chatId:chatId,
                 user:user,
-                seen1:seen1At,
-                seen2:seen2At
+                seen1:seen1,
+                seen2:seen2
             })
         })
        
@@ -100,7 +100,7 @@ io.on('connection',(socket)=>{
         if(currentUserId != "") delete userOnline[currentUserId]
         console.log('online:')
         console.log(userOnline)
-        io.emit("getCurrentUserOnline", {userOnline:userOnline,isOffline:true});
+        io.emit("getCurrentUserOnline", {userOnline:userOnline,isOffline:true,userOffline:currentUserId});
         console.log('update offline')
         try {
           const a = await requestOffline.put('/updateLastOnline', data)
