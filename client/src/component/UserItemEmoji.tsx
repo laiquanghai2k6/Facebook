@@ -43,7 +43,7 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
     const currentUser = useSelector(selectUserInfo)
     const FetchUser = async (id: string) => {
         try {
-            const response = await requestUser(`/getUser/${id}`)
+            const response = await requestUser.get(`getUser/${id}`)
             return response.data as UserInfo
         } catch (e) {
             console.log(e)
@@ -116,7 +116,7 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
         queryFn: () => FetchUser(userId)
     })
 
-
+    console.log('dataa:',data)
 
     return (
         <>
@@ -133,7 +133,7 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
                     className='icon-round-background' style={{ width: '2.5rem', height: '2.5rem' }} >
                     <img
                         ref={ref}
-                        src={(isVisible && data?.image) ? data.image : Default}
+                        src={data?.image ? data?.image : Default}
                         style={{
                             width: '115%',
                             height: '115%',
