@@ -39,11 +39,11 @@ const MidProfile = ({ user, friends, isLoading }: MidProfileProp) => {
                         {Array.from({ length: friends?.length / 2 }, (_, i) => (
                             <div style={{ display: 'flex', flexDirection: 'row', userSelect: 'none' }}>
                                 <div className="friend-card-left" onClick={()=>navigateProfile(friends?.[i * 2]._id)}>
-                                    <UserImage img={friends?.[i * 2].image ? friends?.[i * 2].image : Default} height={'5rem'} width={'5rem'} />
+                                    <UserImage id="image-friend"  img={friends?.[i * 2].image ? friends?.[i * 2].image : Default} height={'5rem'} width={'5rem'} />
                                     <p style={{ fontSize: '1.5rem', color: 'white', marginLeft: '1rem' }}>{friends?.[i * 2].name}</p>
                                 </div>
                                 <div className="friend-card-right" onClick={()=>navigateProfile(friends?.[i * 2+1]._id)} >
-                                    <UserImage img={friends?.[i * 2 + 1].image ? friends?.[i * 2 + 1].image : Default} height={'5rem'} width={'5rem'} />
+                                    <UserImage id="image-friend"  img={friends?.[i * 2 + 1].image ? friends?.[i * 2 + 1].image : Default} height={'5rem'} width={'5rem'} />
 
                                     <p style={{ fontSize: '1.5rem', color: 'white', marginLeft: '1rem' }}>{friends?.[i * 2 + 1].name}</p>
                                 </div>
@@ -53,7 +53,7 @@ const MidProfile = ({ user, friends, isLoading }: MidProfileProp) => {
                         {friends?.length % 2 == 1 && (
                             <div style={{ display: 'flex', flexDirection: 'row', userSelect: 'none', width: '100%' }}>
                                 <div className="friend-card-left" onClick={()=>navigateProfile(friends?.[friends?.length - 1]._id)}>
-                                    <UserImage img={friends?.[friends?.length - 1].image ? friends?.[friends?.length - 1].image : Default} height={'5rem'} width={'5rem'} />
+                                    <UserImage id="image-friend" img={friends?.[friends?.length - 1].image ? friends?.[friends?.length - 1].image : Default} height={'5rem'} width={'5rem'} />
                                     <p style={{ fontSize: '1.5rem', color: 'white', marginLeft: '1rem' }}>{friends?.[friends?.length - 1].name}</p>
                                 </div>
                                 <div className="friend-card-right-fake">

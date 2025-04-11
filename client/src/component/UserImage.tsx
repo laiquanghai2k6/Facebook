@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Default from '../assets/default-image.png'
 import "react-lazy-load-image-component/src/effects/blur.css";
 interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    width: number | string;
-    height: number | string;
+    width?: number | string;
+    height?: number | string;
     minWidth?: number | string;
     minHeight?: number | string;
     className?: string;
@@ -33,10 +33,10 @@ export const useLazyLoad = () => {
 
     return [ref, isVisible] as const;
 };
-const UserImage = ({ img, width, height,classNameImg, className = 'icon-round-background', minHeight, minWidth, children, ...other }: UserImageProps) => {
+const UserImage = ({ img,id, width, height,classNameImg, className = 'icon-round-background', minHeight, minWidth, children, ...other }: UserImageProps) => {
     const [ref, isVisible] = useLazyLoad();
     return (
-        <div className={className} style={{ width: width, height: height, minHeight: minHeight, minWidth: minWidth }} {...other}>
+        <div id={id} className={className} style={{ width: width, height: height, minHeight: minHeight, minWidth: minWidth }} {...other}>
             <img
                 className={classNameImg}
                 ref={ref}

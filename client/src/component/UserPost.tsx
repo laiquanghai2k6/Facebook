@@ -69,7 +69,7 @@ const UserPost = ({userId,time}:UserPostProps ) => {
         }
     return ( 
         <div className="user-post-container">
-            {isLoading ? (
+            {isLoading || !data ? (
 
                 <div className="loading-user-image"></div>
             ):(
@@ -77,8 +77,7 @@ const UserPost = ({userId,time}:UserPostProps ) => {
             <UserImage onClick={NavigateOtherProfile} img={data?.image == "" ? Default : data?.image} width={'2.5rem'} height={'2.5rem'} />
             )}
             <div style={{flex:'1' ,flexDirection:'column',justifyContent:'space-between',marginLeft:'1vh'}}>
-              
-                    <p  onClick={NavigateOtherProfile} style={{fontSize:'1rem',fontWeight:'bold',cursor:'pointer'}}>{`${data?.name}`}</p>
+                    <p  onClick={NavigateOtherProfile} style={{fontSize:'1rem',fontWeight:'bold',cursor:'pointer'}}>{`${data?.name ? data?.name : ""}`}</p>
                     <p style={{fontSize:'0.9rem',color:'#b0b3b8',fontWeight:'bold'}}>{formatDate}</p>
             </div>
         </div>
