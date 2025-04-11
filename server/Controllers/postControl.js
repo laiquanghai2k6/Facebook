@@ -88,12 +88,12 @@ const getAllPost = async (req, res) => {
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
         const skip = (page - 1) * limit
-        const cacheKey = `post:page${page}`
-        const cache = await client.get(cacheKey)
-        if (cache != null) {
-            console.log('cache page:', page)
-            return res.status(200).json(JSON.parse(cache))
-        }
+        // const cacheKey = `post:page${page}`
+        // const cache = await client.get(cacheKey)
+        // if (cache != null) {
+            // console.log('cache page:', page)
+            // return res.status(200).json(JSON.parse(cache))
+        // }
         const posts = await postModel.find({})
             .sort({ createdAt: -1 })
             .skip(skip)
@@ -105,7 +105,7 @@ const getAllPost = async (req, res) => {
             page: parseInt(page),
             post: posts
         }
-        await client.set(cacheKey, JSON.stringify(responsePost), { Ex: 180 })
+        // await client.set(cacheKey, JSON.stringify(responsePost), { Ex: 180 })
 
         return res.status(200).json(responsePost)
     } catch (e) {

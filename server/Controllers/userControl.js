@@ -69,13 +69,13 @@ const getUser = async (req, res) => {
             .lean()
         if (!user) return res.status(400).json("Lỗi tìm người dùng")
         
-        const cacheKey = `userInfo:${req.params.userId}`;
-        const cached = await client.get(cacheKey);
-        if (cached != null){
-            console.log('cachedInfo ',cacheKey)
-            return res.status(200).json(JSON.parse(cached));
-        }
-        await client.set(cacheKey, JSON.stringify(user), { EX: 180 });
+        // const cacheKey = `userInfo:${req.params.userId}`;
+        // const cached = await client.get(cacheKey);
+        // if (cached != null){
+        //     console.log('cachedInfo ',cacheKey)
+        //     return res.status(200).json(JSON.parse(cached));
+        // }
+        // await client.set(cacheKey, JSON.stringify(user), { EX: 180 });
         return res.status(200).json(user)
     } catch (e) {
         console.log(e)
@@ -89,15 +89,15 @@ const getUserProfile = async (req, res) => {
             .lean()
         
         if (!user) return res.status(400).json("Lỗi tìm người dùng")
-        const cacheKey = `userProfile:${req.params.userId}`
-        const cache = await client.get(cacheKey)
+        // const cacheKey = `userProfile:${req.params.userId}`
+        // const cache = await client.get(cacheKey)
       
-        if(cache != null){
-            console.log('cachedProfile ',cacheKey)
-            return res.status(200).json(JSON.parse(cache))
-        }
+        // if(cache != null){
+            // console.log('cachedProfile ',cacheKey)
+            // return res.status(200).json(JSON.parse(cache))
+        // }
         
-        await client.set(cacheKey,JSON.stringify(user),{Ex:180})
+        // await client.set(cacheKey,JSON.stringify(user),{Ex:180})
         return res.status(200).json(user)
     } catch (e) {
         console.log(e)
