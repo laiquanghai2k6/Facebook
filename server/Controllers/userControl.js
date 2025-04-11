@@ -247,6 +247,9 @@ const updateLastOnline = async (req, res) => {
         const currentUser = await userModel.exists({ _id: req.body.userId })
 
         if (!currentUser) return res.status(400).json("Error")
+        console.log('id:',req.body.userId)
+        console.log('id:',req.body.time)
+
         await userModel.findOneAndUpdate({
             _id: req.body.userId
         }, {

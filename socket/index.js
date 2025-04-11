@@ -106,7 +106,7 @@ io.on('connection',(socket)=>{
           const a = await requestOffline.put('/updateLastOnline', data)
           console.log('a:',a)
       } catch (err) {
-          console.error("Lỗi khi update lastOnline:", err.message)
+          console.log("Lỗi khi update lastOnline:", err.message)
       }
 
     })
