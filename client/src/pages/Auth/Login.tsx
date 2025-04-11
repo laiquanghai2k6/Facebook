@@ -72,8 +72,8 @@ const Login = (): JSX.Element => {
                     />
                     <InputPassword id="password-login" onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))} />
                     {loginData.error != '' && <Error text={loginData.error} />}
-                    <FacebookButton ButtonType={BUTTON_TYPE.basic} type='submit' isLoading={false} text="Đăng nhập" onClick={submitHandler} />
-                    <h4 style={{ color: '#0866ff', fontWeight: '400', marginTop: '1.5rem', cursor: 'pointer' }}> Quên mật khẩu?</h4>
+                    <FacebookButton  ButtonType={BUTTON_TYPE.basic} type='submit' isLoading={false} text="Đăng nhập" onClick={submitHandler} />
+                    {/* <h4 style={{ color: '#0866ff', fontWeight: '400', marginTop: '1.5rem', cursor: 'pointer' }}> Quên mật khẩu?</h4> */}
                     <hr style={{ marginTop: '1.5rem', border: "0.5px solid #dadde1", width: "90%" }}></hr>
                     <FacebookButton onClick={navigateCreate} ButtonType={BUTTON_TYPE.create} style={{ marginTop: '1vh' }} isLoading={false} text="Tạo tài khoản mới" />
 

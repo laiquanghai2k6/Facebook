@@ -14,6 +14,10 @@ export const BasicButton = styled.button`
     &:hover{
     background-color:rgb(45, 126, 255);
     }
+    @media (max-width: 870px) {
+    width:90%;
+    font-size: 1.5rem;
+  }
     
 `
 export const CreateButton = styled(BasicButton)`

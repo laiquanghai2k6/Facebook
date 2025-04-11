@@ -108,13 +108,13 @@ const Register = () => {
         <div className="register-container">
             {loading && <Spinner />}
             <div className="register">
-                <p style={{ color: '#0866ff', fontWeight: '800', fontSize: '4.5rem', paddingBottom: '2.5rem' }}>facebook</p>
+                <p className="facebook-text-register">facebook</p>
                 <div className="register-form">
                     <h2 style={{ marginTop: '1.5rem' }}>Tạo tài khoản mới</h2>
                     <hr style={{ width: '100%', border: '0.2px solid #dadde1', marginTop: '0.75rem' }} />
                     <div className="register-name">
-                        <Input tabIndex={1} className="login-input" onChange={(e) => changeRegisterInfo('firstName', e.target.value)} type="text" style={{ width: '15rem' }} placeholder="Họ" />
-                        <Input tabIndex={2}  className="login-input" onChange={(e) => changeRegisterInfo('lastName', e.target.value)} type="text" style={{ width: '15rem' }} placeholder="Tên" />
+                        <Input tabIndex={1} className="login-input-register" onChange={(e) => changeRegisterInfo('firstName', e.target.value)} type="text"   placeholder="Họ" />
+                        <Input tabIndex={2}  className="login-input-register" onChange={(e) => changeRegisterInfo('lastName', e.target.value)} type="text"  placeholder="Tên" />
                     </div>
                     <p style={{ alignSelf: 'flex-start', marginLeft: '1rem', fontSize: '1.25rem' }}>
                         Ngày sinh

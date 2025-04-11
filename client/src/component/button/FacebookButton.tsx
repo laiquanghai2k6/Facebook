@@ -21,10 +21,10 @@ export interface FacebookButtonProps extends ButtonHTMLAttributes<HTMLButtonElem
     style?:React.CSSProperties
 }
 
-const FacebookButton:FC<FacebookButtonProps> = ({ButtonType,text,isLoading,style,...other}:FacebookButtonProps) => {
+const FacebookButton:FC<FacebookButtonProps> = ({className,ButtonType,text,isLoading,style,...other}:FacebookButtonProps) => {
     const CustomButton = getButton(ButtonType)
     return (<>
-        <CustomButton {...other} style={style}>
+        <CustomButton className={className} {...other} style={style}>
             {text}
         </CustomButton>
     </>  );
