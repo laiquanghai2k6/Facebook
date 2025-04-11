@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Message } from './MessengerDownCard';
 import { addMessage } from '../slices/messageSlice';
 import { updateLastMessage, UpdateMessage } from '../slices/chatSlice';
+import Spinner from './Spinner';
 interface MessengerDownInputProps {
     card: UserQuickChatID,
     userOnline: UserOnline
@@ -245,6 +246,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
             mutationImage.mutate({file:currentFile,text:currentText})
         }else{
             mutationNormal.mutate(currentText)
+            
         }
        
 
@@ -264,6 +266,7 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
     }
     return (
         <div className="messenger-down-card-input">
+            {mutationImage.isPending && <Spinner />}
             {currentImage != "" &&(
 
                 <img src={currentImage} style={{width:'3rem',height:'3rem',marginBottom:'0.2rem',borderRadius:'0.2rem',marginLeft:'3.5rem',marginRight:'auto',objectFit:'cover'}} />
