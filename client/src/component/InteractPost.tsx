@@ -249,7 +249,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
  
     const emojiHandler = async (img: string) => {
         const current = img.split('/').pop()?.split('.')[0]
-
+        console.log('curenE:',current)
         const emojis = document.querySelector('.emoji-appear')
         if (emojis) {
 
