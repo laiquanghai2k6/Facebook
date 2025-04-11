@@ -182,7 +182,6 @@ const NotificationCard = ({ noti }: NotificationCardProps) => {
     }
     if(noti.type == 'success' || noti.type == 'reject'){
       
-        console.log('userN:',dataUser.data)
         return(
             <div className="notification-card">
                 <UserImage img={dataUser.data?.image ? dataUser.data.image : Default} height={'3rem'} width={'3rem'} minHeight={'3rem'} minWidth={'3rem'} />

@@ -259,7 +259,6 @@ const MessengerDownInput: React.FC<MessengerDownInputProps> = ({ userOnline, car
             if(value){
                 sendMessage()
 
-                console.log('currentText',currentText)
             }
         }
     }

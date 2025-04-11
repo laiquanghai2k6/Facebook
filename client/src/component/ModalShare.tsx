@@ -25,7 +25,6 @@ const ModalShare = ({post,setModalShare,type}:ModalShareProps) => {
     const dispatch = useDispatch()
     const shareMutationFunction = async ()=>{
         let time
-        console.log('type:',type)
         if(type == "share"){
             time = (post as PostShareType).createdOrigin
         }else{

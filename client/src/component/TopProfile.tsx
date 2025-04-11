@@ -1,12 +1,15 @@
 import TopLeftProfile from "./TopLeftProfile";
 import { User } from "../slices/userSlice";
+import { Friend } from "./BodyProfile";
 
 
 type TopProfileProps = {
-    user:User
+    user:User,
+    friends:Friend[],
+    isLoading:boolean
 }
 
-const TopProfile = ({user}:TopProfileProps) => {
+const TopProfile = ({user,friends,isLoading}:TopProfileProps) => {
 
 
     
@@ -16,7 +19,7 @@ const TopProfile = ({user}:TopProfileProps) => {
         <div className="top-profile-container">
            
             <div className='top-profile-direct' >
-                <TopLeftProfile user={user} />
+                <TopLeftProfile user={user} friends={friends} isLoadingFriend={isLoading} />
             </div>
      
           

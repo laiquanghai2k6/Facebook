@@ -26,7 +26,6 @@ const ModalCommentShare = ({ post, setModalComment }: ModalCommentShareProps) =>
     const [parentId, setParentId] = useState("")
     const [commentReply, setCommentReply] = useState(false)
     const [userReply, setUserReply] = useState<UserInfo | null>(null)
-    console.log('im hre:', post)
 
     const fetchCommentPost = async () => {
         closeCommentReplyInput()

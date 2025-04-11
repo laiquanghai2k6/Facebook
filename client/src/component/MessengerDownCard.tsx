@@ -16,6 +16,7 @@ import { selectUserInfo } from "../selector/userSelector";
 import { socket } from "../socket";
 import { UserOnline } from "../slices/messengerSlice";
 import { descreaseUnRead, UpdateSeen ,updateSeen} from "../slices/chatSlice";
+import { clearMessage } from "../slices/messageSlice";
 interface MessengerDownCardProps {
     card: UserQuickChatID,
     userOnline:UserOnline
@@ -39,7 +40,9 @@ const MessengerDownCard: React.FC<MessengerDownCardProps> = ({ card,userOnline }
         if (scroll) {
             scroll.scrollTop = scroll.scrollHeight
         }
-
+        return ()=>{
+            dispatch(clearMessage(card.chatId))
+        }
     }, [])
 
 

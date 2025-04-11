@@ -24,7 +24,9 @@ const ConvertDate = (timeDif:number,timePost:number)=>{
     const days = Math.floor(timeDif/86400000)
     // console.log(days)
     if(seconds < 60){
-        return `${seconds} giây trước`
+        if(seconds < 0){
+            return `1 giây trước`
+        }else return `${seconds} giây trước`
     }else if(minutes < 60){
         return `${minutes} phút trước`
     }else if(hour < 24){
@@ -60,7 +62,6 @@ const UserPost = ({userId,time}:UserPostProps ) => {
             queryKey:['userIdInf',userId],
             queryFn:()=>fetchOwnerPost(),
         })
-        console.log('currenTUser:',data)
 
         const NavigateOtherProfile = ()=>{
             navigate(`/profileOther?userId=${userId}`)

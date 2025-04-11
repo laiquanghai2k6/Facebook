@@ -14,6 +14,7 @@ const createPost = async (req, res) => {
         userId: userId,
         type: type
     })
+    await client.del('post:page1')
     await newPost.save()
     return res.status(200).json(newPost)
 }
@@ -35,6 +36,8 @@ const createPostWithImage = async (req, res) => {
                 userId: userId,
                 type: type
             })
+            await client.del('post:page1')
+
             await newPost.save()
             return res.status(200).json(newPost)
         }).end(fileBuffer)
@@ -47,6 +50,7 @@ const createPostWithImage = async (req, res) => {
 }
 const createPostWithVideo = async (req, res) => {
     try {
+
         const user = await userModel.exists({ _id: req.body.userId })
         if (!user) return res.status(400).json("Không thấy người dùng")
         const filePath = req.file.buffer
@@ -65,6 +69,8 @@ const createPostWithVideo = async (req, res) => {
                 userId: userId,
                 type: type
             })
+            await client.del('post:page1')
+
             await newPost.save()
             return res.status(200).json(newPost)
 
@@ -77,6 +83,7 @@ const createPostWithVideo = async (req, res) => {
 }
 const getAllPost = async (req, res) => {
     try {
+
         let { limit, page } = req.query;
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
@@ -171,6 +178,8 @@ const createPostShare = async (req, res) => {
             userIdShare,
 
         })
+        await client.del('post:page1')
+
         await newPostShared.save()
         return res.status(200).json(newPostShared)
     } catch (e) {

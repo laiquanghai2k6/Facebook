@@ -41,12 +41,10 @@ function App() {
 
     const getAccessToken = async () => {
       try {
-
         const token = await axios.get(`${import.meta.env.VITE_SERVER_URL}/users/handlerRefreshToken`, {
           withCredentials: true
         })
 
-        console.log('he')
         const accessToken = token.data
 
         dispatch(setToken(accessToken))
@@ -125,7 +123,6 @@ function App() {
         }
 
 
-        console.log()
         if (!isCardExist) {
 
           if (currentMessengerCardRef.current.length == 0) {
@@ -180,7 +177,6 @@ function App() {
       document.body.style.backgroundColor = "#f0f2f5";
     }
   }, [user])
-
  
   return (
     <div className='container'>

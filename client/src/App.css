@@ -313,7 +313,6 @@ html {
   height: 6.5rem;
   padding: 1rem;
   width: 100%;
-  /* background-color: red; */
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -1463,7 +1462,37 @@ html {
   background-color: #fdfdfd;
   margin-left: -0.5rem;
 }
-
+.image-chain-loading{
+  user-select: none;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 0.15rem solid #252728;
+  background-color: #fdfdfd;
+  margin-left: -0.5rem;
+  animation: loadingPost 1.5s infinite
+}
+.friend-loading-card{
+  height: 80px;
+   width: 80px;
+  border-radius: 50%;
+  animation: loadingPost 1.5s infinite;
+  flex-shrink: 0;
+}
+.friend-name-loading{
+  height: 2rem;
+  width: 100%;
+  margin-left: 1rem;
+  min-width: 2rem;
+  border-radius: 1rem;
+  animation: loadingPost 1.5s infinite
+}
 .top-profile-left {
   display: flex;
   flex-direction: column;
@@ -1506,7 +1535,6 @@ html {
   height: 4rem;
   display: flex;
   flex-direction: row;
-
   justify-content: space-between;
   align-items: center;
 
@@ -1526,14 +1554,11 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: white;
   font-size: 1.25rem;
   font-weight: bold;
-
   cursor: pointer;
-  user-select: none;
-
+  z-index: 10;
 }
 
 .mid-profile-navigate-card-blue {
@@ -1544,7 +1569,6 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: #0866ff;
   font-size: 1.25rem;
   font-weight: bold;
@@ -1698,7 +1722,7 @@ html {
 
 
 
-.mid-profile-navigate-card:hover {
+.mid-profile-navigate-card:hover{
   background-color: #3b3d3e;
   border-radius: 0.5rem;
 }

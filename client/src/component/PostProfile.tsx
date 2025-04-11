@@ -18,7 +18,6 @@ const PostProfile = ({currentUserId}:PostProfileProps) => {
         
         try{
             const limit = 10
-            console.log('userId:',userId)
             const response = await requestPost.get(`/getPostOfOneUser?userId=${userId}&page=${pageParam}&limit=${limit}`)
             return response.data as PostRequest
         }catch(e){

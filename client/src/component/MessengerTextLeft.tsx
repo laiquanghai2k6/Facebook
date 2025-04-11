@@ -13,7 +13,6 @@ interface MessengerTextLeftProps {
 const MessengerTextLeft: React.FC<MessengerTextLeftProps> = ({ text, time, image,imageUser }) => {
     moment.locale("vi");
     const convertTime = moment(time).calendar()
-    console.log('image:',imageUser)
     return (
         <div className="messenger-down-card-text">
 

@@ -11,7 +11,7 @@ app.use(cors({
 }))
 const server = http.createServer(app)
 require('dotenv').config({ path: './.env' });
-
+console.log(process.env.SERVER_URL)
 const io = new Server(server, {
     cors: {
       origin: process.env.CLIENT_URL,
@@ -27,7 +27,7 @@ const requestOffline = axios.create({
 
 io.on('connection',(socket)=>{
     let currentUserId = ''
-    socket.on('uploadCurrentUserId',(userId,socketId)=>{
+    socket.on('uploadCurrentUserId',async (userId,socketId)=>{
         if(!userOnline[userId]){
             userOnline[userId] =[]
         }
@@ -35,6 +35,8 @@ io.on('connection',(socket)=>{
         currentUserId = userId
         console.log('online:')
         console.log(userOnline)
+      
+       
         io.emit('getCurrentUserOnline',{userOnline:userOnline,isOffline:false})
     })
     socket.on('requestUserOnline',()=>{
@@ -90,6 +92,7 @@ io.on('connection',(socket)=>{
     })
     socket.on('disconnect', async ()=>{
         const time = Date.now()
+
         const data = {
             userId:currentUserId ,
             time: time
@@ -99,7 +102,12 @@ io.on('connection',(socket)=>{
         console.log(userOnline)
         io.emit("getCurrentUserOnline", {userOnline:userOnline,isOffline:true});
         console.log('update offline')
-        await requestOffline.put('/updateLastOnline',data)  
+        try {
+          const a = await requestOffline.put('/updateLastOnline', data)
+          console.log('a:',a)
+      } catch (err) {
+          console.error("Lỗi khi update lastOnline:", err.message)
+      }
 
     })
 })

@@ -24,8 +24,6 @@ const CommentList = ({ post, setUserReply, dataUser,currentComment, setParentCom
     const currentUser = useSelector(selectUserInfo)
     const me = useSelector(selectUserInfo)
     const replyComment = currentComment?.filter((cmt)=>cmt.type == 'reply')
-    console.log('currentComment',commentRedux)
-    console.log('replyComment',replyRedux)
 
 
     return (

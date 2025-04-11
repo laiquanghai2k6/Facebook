@@ -12,10 +12,13 @@ import { UserQuickChatID } from "./RightHome";
 import { Chat } from "../pages/Home/Home";
 import { addChat } from "../slices/chatSlice";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
+import { Friend } from "./BodyProfile";
 type TopProfileOtherProp = {
-    user: UserInfo
+    user: UserInfo,
+        friends:Friend[],
+        isLoadingFriend:boolean
 }
-const TopProfileOther = ({ user }: TopProfileOtherProp) => {
+const TopProfileOther = ({ user,friends,isLoadingFriend }: TopProfileOtherProp) => {
 
     const currentNoti = useSelector((state: RootState) => state.notification.notification)
     const isRequestYet = currentNoti.some((noti) => {
@@ -145,7 +148,6 @@ const OpenNewCardMessenger = async ( ) => {
                 setLastRequest(isAdd)
                 const response = await requestNotification.post('/createFriendNotification', data)
 
-                console.log('res:', response.data)
 
                 dispatch(addNoti(response.data.notificationRequest))
 
@@ -196,7 +198,7 @@ const OpenNewCardMessenger = async ( ) => {
     return (
         <div className="top-profile-container">
             <div className='top-profile-direct' >
-                <TopLeftProfile user={user} type="other" />
+                <TopLeftProfile friends={friends} isLoadingFriend={isLoadingFriend} user={user} type="other" />
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     {!isFriend ? (
 

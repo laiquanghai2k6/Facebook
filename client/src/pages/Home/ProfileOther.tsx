@@ -28,15 +28,16 @@ const ProfileOther = () => {
         try {
 
             const resposne = await requestUser(`/getUserProfile/${id}`)
-            console.log('res:', resposne.data)
-            return resposne.data
+            const friend = await requestUser.get(`/getFriendOfUser?userId=${id}`)
+            return {profile:resposne.data,friend:friend.data}
+            
         } catch (e) {
             alert('Không tìm thấy người dùng')
             console.log(e)
             return null
         }
     }
-    const { data } = useQuery({
+    const { data ,isLoading} = useQuery({
         queryKey: ['vc', id],
         queryFn: () => FetchUser(id),
         enabled: !!id
@@ -52,8 +53,8 @@ const ProfileOther = () => {
 
             {data != null ? (
                 <>
-                    <NavProfile user={data} type="other" />
-                    <BodyProfileOther user={data} />
+                    <NavProfile user={data.profile} type="other" />
+                    <BodyProfileOther user={data.profile} friends={data.friend} isLoading={isLoading} />
                 </>
             ) : (
                 <LoadingPost />

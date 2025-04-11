@@ -307,7 +307,6 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                 const update= prev.map((p)=>p.emoji == emojiInMongoDB ? {...p,num:p.num-1} : p)
                 return [...update].sort((a, b) => b.num - a.num)
             })
-            console.log('eto')
             setTotalEmoji(totalEmoji - 1)
 
             await requestPost.put('/updateEmoji', data)

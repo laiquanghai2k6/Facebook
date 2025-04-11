@@ -107,7 +107,6 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
     }
     const CreatePostWithVideo = async(content:string)=>{
         try{
-            console.log('userId:',user._id)
             const data = new FormData()
             data.append('userId', user._id)
             data.append('video', currentFile as File)
@@ -285,7 +284,6 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
         if(contentRef.current?.value){
             content=contentRef.current.value
         }else content =""
-        console.log('content:',content)
         if (!isMedia && currentImage != "") {       
             if (currentFile != undefined) {
                 console.log('img')
@@ -316,7 +314,6 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
  
         }
     }
-    console.log(currentImage)
     return (
         <div className="modal-create-post-container">
             {(videoMutation.isPending || imageMutation.isPending||nomarlMutation.isPending) && <Spinner />}

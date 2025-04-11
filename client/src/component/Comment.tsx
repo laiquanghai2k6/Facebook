@@ -26,7 +26,9 @@ export const ConvertDate = (timeDif: number, timePost: number) => {
     const hour = Math.floor(timeDif / 3600000)
     const days = Math.floor(timeDif / 86400000)
     if (seconds < 60) {
-        return `${seconds} giây trước`
+        if(seconds < 0){
+            return `1 giây trước`
+        }else return `${seconds} giây trước`
     } else if (minutes < 60) {
         return `${minutes} phút trước`
     } else if (hour < 24) {

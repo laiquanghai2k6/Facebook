@@ -20,8 +20,12 @@ const initialState:MessengeState = {
     reducers:{
         addMessage:(state,action:PayloadAction<Message>)=>{
             state.message = [action.payload,...state.message]
+        },
+        clearMessage:(state,action:PayloadAction<string>)=>{
+            const filterMessage = state.message.filter((mes)=>mes.chatId != action.payload)
+            state.message = filterMessage
         }
     }
  })
 
- export const {addMessage} = messengeSlice.actions
+ export const {addMessage,clearMessage} = messengeSlice.actions

@@ -26,7 +26,6 @@ type birth = {
 const ModalInfo: React.FC<ModalInfoProps> = ({ closeInfo }) => {
     const profileInfo = useSelector(selectUserProfileInfo)    
     const [loading,isLoading] = useState(false)
-
     const user = useSelector(selectUserInfo)
     const splitDate = profileInfo.birth.split('/')
     const dispatch = useDispatch()
@@ -69,7 +68,6 @@ const ModalInfo: React.FC<ModalInfoProps> = ({ closeInfo }) => {
         isLoading(true)
         
         await requestUser.post('/setUserProfileInfo', data)
-        console.log('done')
         dispatch(setUserLive({
             live,
             from,

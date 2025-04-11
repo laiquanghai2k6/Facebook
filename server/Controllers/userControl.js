@@ -243,7 +243,7 @@ const updateLastOnline = async (req, res) => {
         }, {
             lastOnline: req.body.time
         })
-        return res.status(200).json('good')
+        return res.status(200).json({message:'good'})
 
     } catch (e) {
         console.log(e)
@@ -304,7 +304,7 @@ const handlerRefreshToken = async (req, res) => {
     if (!refreshToken) return res.status(401).json({ error: 'chưa có refreshToken ' })
     try {
         const decoded = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-        // console.log('decode:',decoded.userId)
+        console.log('decode:',decoded.userId)
         const userId = decoded.userId
         const currentUser = await userModel.exists({ _id: userId })
         if (!currentUser) return res.status(404).json({ error: 'Người dùng không tồn tại' })
@@ -335,6 +335,18 @@ const getFriendOfUser = async (req,res)=>{
     const currentUserFriend = await userModel.findById(userId)
     .select('friend')
     .lean()
+    const allUser = await Promise.all(
+        currentUserFriend.friend.map(async (friend)=>{
+            const response = await userModel.findById(friend)
+            .select("name image")
+            .lean()
+            
+            return response
+        })
+    )
+    
+    return res.status(200).json(allUser)
+
 
 }
 module.exports = {getFriendOfUser, getUserWithToken, LogOutUser, handlerRefreshToken, setNumberNoti, getUser, addFriend, updateLastOnline, getUserProfile, getAllUserRandom, searchUser, setUserBio, setUserProfileInfo, loginUser, registerUser, uploadUserImage, uploadUserBackground }

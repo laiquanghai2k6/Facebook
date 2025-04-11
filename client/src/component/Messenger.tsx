@@ -91,7 +91,6 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
       
         closeMessenger()
     }
-    console.log('currentChat:',currentChat)
     return (
 
 
