@@ -25,6 +25,7 @@ import MessengerDown from "./MessengerDown";
 import { setChat, setUnRead, UnRead } from "../slices/chatSlice";
 import { useQuery } from "@tanstack/react-query";
 import { Chat } from "../pages/Home/Home";
+import { NotUpdateYet } from "./LeftHome";
 
 export const debounce = (callback: Function, delay: number) => {
     let time: NodeJS.Timeout | undefined = undefined
@@ -235,7 +236,7 @@ const NavBar = ({user}:NavBarProps) => {
                 {mesOpen && <Messenger closeMessenger={closeMessage} />}
                 {notificationOpen && <Notification currentUserId={user._id} closeNotification={closeNotification} />}
                 {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting} />}
-                <div className="icon-round-background">
+                <div className="icon-round-background" onClick={()=>NotUpdateYet()}>
                     <div className="home-icon-right">
                         <CgMenuGridO style={{ fontSize: '2rem' }} className="home-icon-right-mes4" />
                     </div>

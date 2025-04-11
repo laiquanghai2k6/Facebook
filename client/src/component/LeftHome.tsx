@@ -16,13 +16,18 @@ import { navigateHome } from "../slices/homeNavigateSlice";
 type LeftHomeProps={
   
 }
-
+export const NotUpdateYet = ()=>{
+    alert("Chức năng sẽ cập nhật sau")
+}
 
 const LeftHome:React.FC<LeftHomeProps> = () => {
     const user = useSelector(selectUserInfo)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
+    const GoToFriend = ()=>{
+        navigate('/profile')
+    }
+  
     return (
         <div className="left-home">
             
@@ -33,13 +38,17 @@ const LeftHome:React.FC<LeftHomeProps> = () => {
                 <UserImage img={user.image == "" ? DefaultImage : user.image} height={'2.5rem'} width={'2.5rem'} />
                 <p className="left-home-text">{`${user.name}`}</p>
             </div>
-            <HomeItem img={FaUsers} text="Bạn bè" styleContainer={{padding:'0.5rem 0'}} />
-            <HomeItem img={FaClock} text="Kỷ niệm" styleContainer={{padding:'0.5rem 0'}}/>
-            <HomeItem img={FaBookmark} text="Đã lưu" styleContainer={{padding:'0.5rem 0'}} />
-            <HomeItem img={FaUsersCog} text="Nhóm" styleContainer={{padding:'0.5rem 0'}} />
-            <HomeItem img={FaVideo} text="Video"  styleContainer={{padding:'0.5rem 0'}}/>
-            <HomeItem img={FaStore} text="Market place" styleContainer={{padding:'0.5rem 0'}} /> 
-            <HomeItem img={FaNewspaper} text="Bảng feed" styleContainer={{padding:'0.5rem 0'}} /> 
+            <HomeItem
+            onClick={()=>GoToFriend(
+
+            )}
+            img={FaUsers} text="Bạn bè" styleContainer={{padding:'0.5rem 0'}} />
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaClock} text="Kỷ niệm" styleContainer={{padding:'0.5rem 0'}}/>
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaBookmark} text="Đã lưu" styleContainer={{padding:'0.5rem 0'}} />
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaUsersCog} text="Nhóm" styleContainer={{padding:'0.5rem 0'}} />
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaVideo} text="Video"  styleContainer={{padding:'0.5rem 0'}}/>
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaStore} text="Market place" styleContainer={{padding:'0.5rem 0'}} /> 
+            <HomeItem onClick={()=>NotUpdateYet()} img={FaNewspaper} text="Bảng feed" styleContainer={{padding:'0.5rem 0'}} /> 
 
 
     

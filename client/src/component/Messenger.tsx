@@ -52,7 +52,7 @@ const Messenger: React.FC<MessengerProps> = ({ closeMessenger }) => {
        return response as UserInfo[]
     }
     const {data,isLoading} = useQuery({
-        queryKey:['messenger-user',currentChat[0]._id],
+        queryKey:['messenger-user',currentChat[0]?._id],
         queryFn:()=>FetchMessengerUser(),
         refetchOnWindowFocus: false
     })
