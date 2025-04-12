@@ -3,19 +3,20 @@ import React, { useEffect, useRef } from "react";
 import NotificationCard from "./NotificationCard";
 
 import { useDispatch} from "react-redux";
-import {  notiType, setNoti, setNumberNoti } from "../slices/notiSlice";
-import { requestNotification, requestUser } from "../service/service";
-import { useQuery } from "@tanstack/react-query";
+import {  notiType,  setNumberNoti } from "../slices/notiSlice";
+import {  requestUser } from "../service/service";
 import LoadingChat from "./LoadingChat";
 
 
 
 interface NotificationCardProps{
     closeNotification:Function,
-    currentUserId:string
+    currentUserId:string,
+    data:notiType[],
+    isLoading:Boolean
 }
 
-const Notification:React.FC<NotificationCardProps> = ({closeNotification,currentUserId}) => {
+const Notification:React.FC<NotificationCardProps> = ({data,isLoading,closeNotification,currentUserId}) => {
     const notiRef = useRef<null |HTMLDivElement>(null)
     const dispatch = useDispatch()
     useEffect(()=>{
@@ -42,16 +43,7 @@ const Notification:React.FC<NotificationCardProps> = ({closeNotification,current
             document.removeEventListener('mousedown',handlerClick)
         }
     })
-    const FetchNoti = async(UserId:string)=>{
-
-        const response = await requestNotification.get(`getNotification/${UserId}`)
-        dispatch(setNoti(response.data as notiType[]))
-        return response.data as notiType[]
-    }
-    const {data,isLoading } = useQuery({
-        queryKey:['noti',currentUserId],
-        queryFn:()=>FetchNoti(currentUserId)
-    })
+    
     
    
     return (

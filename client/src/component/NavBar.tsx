@@ -18,7 +18,7 @@ import Messenger from "./Messenger";
 import Notification from "./Notification";
 import UserSetting from "./UserSetting";
 import Default from '../assets/default-image.png'
-import {  requestChat, requestUser } from "../service/service";
+import {  requestChat, requestNotification, requestUser } from "../service/service";
 import DropdownSearch from "./DropdownSearch";
 import { User } from "../slices/userSlice";
 import MessengerDown from "./MessengerDown";
@@ -26,6 +26,7 @@ import { setChat, setUnRead, UnRead } from "../slices/chatSlice";
 import { useQuery } from "@tanstack/react-query";
 import { Chat } from "../pages/Home/Home";
 import { NotUpdateYet } from "./LeftHome";
+import { notiType, setNoti } from "../slices/notiSlice";
 
 export const debounce = (callback: Function, delay: number) => {
     let time: NodeJS.Timeout | undefined = undefined
@@ -139,6 +140,21 @@ const NavBar = ({user}:NavBarProps) => {
              dispatch(setUnRead(numberUnRead))
         }
    },[data])
+   const FetchNoti = async(UserId:string)=>{
+
+    const response = await requestNotification.get(`getNotification/${UserId}`)
+    return response.data as notiType[]
+}
+const notiQuery = useQuery({
+    queryKey:['noti',user._id],
+    queryFn:()=>FetchNoti(user._id)
+})
+useEffect(()=>{
+    if(notiQuery.data){
+    dispatch(setNoti(notiQuery.data as notiType[]))
+
+    }
+},[notiQuery.data])
 
     return (
         <div className="navbar">
@@ -234,7 +250,7 @@ const NavBar = ({user}:NavBarProps) => {
             </div>
             <div className="home-icon-right-container">
                 {mesOpen && <Messenger closeMessenger={closeMessage} />}
-                {notificationOpen && <Notification currentUserId={user._id} closeNotification={closeNotification} />}
+                {notificationOpen && <Notification isLoading={notiQuery.isLoading} data={notiQuery.data ? notiQuery.data : []} currentUserId={user._id} closeNotification={closeNotification} />}
                 {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting} />}
                 <div className="icon-round-background" onClick={()=>NotUpdateYet()}>
                     <div className="home-icon-right">

@@ -116,7 +116,6 @@ const UserItemEmoji = ({ userId, emoji }: UserItemEmojiProps) => {
         queryFn: () => FetchUser(userId)
     })
 
-    console.log('dataa:',data)
 
     return (
         <>

@@ -1831,6 +1831,7 @@ html {
   width: 100%;
   padding: 1.5rem;
   height: 3rem;
+  margin-top: 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

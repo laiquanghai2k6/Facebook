@@ -27,7 +27,6 @@ export const notiSlice = createSlice({
     initialState,
     reducers:{
         setNumberNoti:(state,action:PayloadAction<number>)=>{
-            
             state.unReadNoti = action.payload
         },
         setNoti:(state,action:PayloadAction<notiType[]>)=>{

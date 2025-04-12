@@ -2,7 +2,7 @@ import FacebookButton, { BUTTON_TYPE } from "./button/FacebookButton";
 import TopLeftProfile from "./TopLeftProfile";
 import { UserInfo } from "../slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RootState } from "../store/store";
 import { requestChat, requestMessage, requestNotification, requestUser } from "../service/service";
 import { socket } from "../socket";
@@ -13,6 +13,7 @@ import { Chat } from "../pages/Home/Home";
 import { addChat } from "../slices/chatSlice";
 import { fullMessengerCard, setMessengerCard } from "../slices/messengerSlice";
 import { Friend } from "./BodyProfile";
+import { navigateHome } from "../slices/homeNavigateSlice";
 type TopProfileOtherProp = {
     user: UserInfo,
         friends:Friend[],
@@ -29,6 +30,7 @@ const TopProfileOther = ({ user,friends,isLoadingFriend }: TopProfileOtherProp) 
     const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
     
     const isFriend = currentNoti.some((noti) => noti.toUserId == user._id && noti.type == 'success')
+ 
     const isReject = currentNoti.some((noti) => noti.toUserId == user._id && noti.type == 'reject')
     const [isAdd, setIsAdd] = useState(!isRequestYet)
     const [lastRequest, setLastRequest] = useState(isRequestYet)
@@ -44,7 +46,11 @@ const TopProfileOther = ({ user,friends,isLoadingFriend }: TopProfileOtherProp) 
             },delay)
         }
     }
-const OpenNewCardMessenger = async ( ) => {
+    useEffect(()=>{
+        dispatch(navigateHome(""))
+
+    },[])
+    const OpenNewCardMessenger = async ( ) => {
         const isExistChat = currentChat.find((chat) => chat.user[0] == user._id || chat.user[1] == user._id)
         let chatId = ""
         let userChat = []
@@ -193,7 +199,7 @@ const OpenNewCardMessenger = async ( ) => {
     }
      const CreateRequest = useMemo(() => {
             return debounce(requestApi, 1000)
-        }, [])
+    }, [])
     return (
         <div className="top-profile-container">
             <div className='top-profile-direct' >
