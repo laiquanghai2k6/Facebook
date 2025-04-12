@@ -357,8 +357,8 @@ const InteractPostComment = ({type,lengthComment,post}:InteractPostCommentProps)
                     emoji: 'angry',
                     isInc: true
                 }
-                const response6 = await requestPost.put('/updateEmoji', data6)
-                console.log(response6.data)
+                await requestPost.put('/updateEmoji', data6)
+                
                 setEmoji((prev)=>{
                     const update= prev.map((p)=>p.emoji == 'angry' ? {...p,num:p.num+1} : p)
                     return [...update].sort((a, b) => b.num - a.num)

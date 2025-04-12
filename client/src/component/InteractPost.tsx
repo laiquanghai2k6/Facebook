@@ -418,7 +418,7 @@ const InteractPost = ({ post, lengthComment, type,isModal }: InteractPostProps) 
                     emoji: 'angry',
                     isInc: true
                 }
-                const response6 = await requestPost.put('/updateEmoji', data6)
+                 await requestPost.put('/updateEmoji', data6)
                 setEmoji((prev)=>{
                     const update= prev.map((p)=>p.emoji == 'angry' ? {...p,num:p.num+1} : p)
                     return [...update].sort((a, b) => b.num - a.num)
