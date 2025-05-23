@@ -7,7 +7,7 @@ const clientUrl = require('..')
 const { cloudinary } = require('../Cloud/clounary.js')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-const client = require('../redisF/redisClient.js')
+// const client = require('../redisF/redisClient.js')
 const createAccessToken = (userId) => {
     return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }

@@ -98,7 +98,10 @@ const ModalCreatePost = ({ setCreatePostModal }: ModalCreatePostProps) => {
             data.append('image', currentFile as File)
             data.append('text', content)
             data.append('type', 'own')
+            console.log('dataForm:',data)
             const response = await requestPost.post('/createPostWithImage', data)
+            console.log('response:',response)
+
             return response.data
         }catch(e){
             console.log(e)

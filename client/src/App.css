@@ -1947,7 +1947,7 @@ html {
 @media (max-height:625px) {
 
   .home-input {
-    display: none;
+    width: 100%;
   }
 }
 .wrap-image{

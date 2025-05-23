@@ -3,7 +3,7 @@ const userModel = require("../Models/userModel")
 const { cloudinary } = require('../Cloud/clounary')
 const fs = require('fs')
 const sharp = require("sharp")
-const client = require('../redisF/redisClient')
+// const client = require('../redisF/redisClient')
 const createPost = async (req, res) => {
 
     const { userId, text, type } = req.body
@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
         userId: userId,
         type: type
     })
-    await client.del('post:page1')
+    // await client.del('post:page1')
     await newPost.save()
     return res.status(200).json(newPost)
 }
@@ -23,6 +23,7 @@ const createPostWithImage = async (req, res) => {
         const filePath = req.file.buffer
         const { userId, text, type } = req.body
         const user = await userModel.exists({ _id: userId })
+        console.log('inCreate:',text)
         if (!user) return res.status(400).json('Không thấy người dùng')
         if (!filePath) return res.status(400).json('Không thấy ảnh')
         const fileBuffer = await sharp(filePath)
@@ -30,13 +31,15 @@ const createPostWithImage = async (req, res) => {
             .toBuffer()
         await cloudinary.uploader.upload_stream({ folder: 'posts_image' }, async (error, result) => {
             if (error) return res.status(400).json('Lỗi cloudinary')
+                console.log('complete')
             const newPost = await new postModel({
                 image: result.secure_url,
                 text: text,
                 userId: userId,
                 type: type
             })
-            await client.del('post:page1')
+            console.log('newPost:',newPost)
+            // await client.del('post:page1')
 
             await newPost.save()
             return res.status(200).json(newPost)
