@@ -28,7 +28,7 @@ const NotificationCard = ({ noti }: NotificationCardProps) => {
             const userInfo = await requestUser.get(`/getUser/${noti.fromUserId}`)
             return userInfo.data as UserInfo
         } catch (e) {
-
+            console.log(e)
         }
 
     }
