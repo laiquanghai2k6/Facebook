@@ -35,7 +35,7 @@ function App() {
   const currentMessengerCard = useSelector((state: RootState) => state.messengerCard)
   const user = useSelector((state: RootState) => state.user.getUser)
 
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true)
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false)
   const isUser = user._id != ""
   const currentMessengerCardRef = useRef<Array<UserQuickChatID>>([])
   useEffect(() => {
@@ -60,6 +60,8 @@ function App() {
         setIsLoadingAuth(false)
         console.log('RefreshToken hết hạn hoặc chưa có');
       }
+        setIsLoadingAuth(false)
+
     }
     getAccessToken()
   }, [])
@@ -170,6 +172,7 @@ function App() {
         dispatch(updateSeen(updateSeenDispatch))
       })
       socket.on('sendNotiToUser', (noti: notiType) => {
+        console.log('i hear u',noti)
         dispatch(addNoti(noti))
       })
       socket.on('deleteNoti', (userId) => {
@@ -201,7 +204,7 @@ function App() {
       document.body.style.backgroundColor = "#f0f2f5";
     }
   }, [user])
-
+  console.log('isLoadingAuth',isLoadingAuth)
   return (
     <div className='container'>
       {isUser && <NavBar user={user} />}
@@ -213,8 +216,7 @@ function App() {
             ? <LoadingAuth />
             : (isUser ? <Navigate to="/home" /> : <Login />)
         } />
-        {/* <Route path='/' element={isLoadingAuth ? <LoadingAuth /> : <Login />} /> */}
-        {/* <Route path='/login' element={!isUser && <Login />} /> */}
+        
         <Route path="/login" element={
           isLoadingAuth
             ? <LoadingAuth />

@@ -45,7 +45,7 @@ const Notification:React.FC<NotificationCardProps> = ({data,isLoading,closeNotif
     })
     
     
-   
+    console.log('dataNoti:',data)
     return (
         <div className="notification-container" ref={notiRef}>
             <p style={{ color: 'white', fontWeight: 'bold', fontSize: '3vh' }}>Thông báo</p>

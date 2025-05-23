@@ -33,8 +33,9 @@ export const notiSlice = createSlice({
             state.notification = action.payload
         },
         addNoti:(state,action:PayloadAction<notiType>)=>{
-            if(action.payload.type != 'request') state.unReadNoti +=1
-            state.notification = [...state.notification,action.payload]
+            if(action.payload.type != 'request')
+            state.unReadNoti +=1
+            state.notification = [action.payload, ...state.notification];
         },
         deleteNoti:(state,action:PayloadAction<string>)=>{
             

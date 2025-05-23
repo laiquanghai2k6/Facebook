@@ -796,8 +796,8 @@ html {
   display: flex;
   margin-top: 10rem;
   flex-direction: column;
-  min-width: 41.5rem;
-  width: auto;
+  width: 41.5rem;
+  
   height: auto;
   min-height: 50%;
   padding-bottom: 1rem;
@@ -1976,7 +1976,7 @@ html {
   body {
     overflow-x: hidden;
   }
-
+  
   .left-nav {
     flex: 1
   }
@@ -2269,7 +2269,9 @@ html {
     height: 6px;
   } */
 
-
+.modal-info-box{
+    width: 100%;
+  }
 
 }
 

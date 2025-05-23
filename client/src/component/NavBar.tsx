@@ -145,6 +145,7 @@ const NavBar = ({user}:NavBarProps) => {
     const response = await requestNotification.get(`getNotification/${UserId}`)
     return response.data as notiType[]
 }
+const notis = useSelector((state:RootState)=>state.notification.notification)
 const notiQuery = useQuery({
     queryKey:['noti',user._id],
     queryFn:()=>FetchNoti(user._id)
@@ -152,7 +153,7 @@ const notiQuery = useQuery({
 useEffect(()=>{
     if(notiQuery.data){
     dispatch(setNoti(notiQuery.data as notiType[]))
-
+        console.log('notiQuery data')
     }
 },[notiQuery.data])
 
@@ -250,7 +251,7 @@ useEffect(()=>{
             </div>
             <div className="home-icon-right-container">
                 {mesOpen && <Messenger closeMessenger={closeMessage} />}
-                {notificationOpen && <Notification isLoading={notiQuery.isLoading} data={notiQuery.data ? notiQuery.data : []} currentUserId={user._id} closeNotification={closeNotification} />}
+                {notificationOpen && <Notification isLoading={notiQuery.isLoading} data={notis} currentUserId={user._id} closeNotification={closeNotification} />}
                 {userSettingOpen && <UserSetting closeUserSetting={closeUserSetting} />}
                 <div className="icon-round-background" onClick={()=>NotUpdateYet()}>
                     <div className="home-icon-right">

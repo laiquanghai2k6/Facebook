@@ -6,12 +6,12 @@ import { requestUser } from "./service";
 
 
 export const interceptorAxios = (instance:AxiosInstance)=>{
-    console.log('inApp')
+  
 
     instance.interceptors.request.use((config)=>{
 
         const token = store.getState().accessToken.accessToken
-        if (token) {
+        if (token){
             config.headers['Authorization'] = `Bearer ${token}`
         }
           return config
